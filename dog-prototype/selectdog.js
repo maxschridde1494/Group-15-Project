@@ -1,4 +1,8 @@
-import { currentScreen, loadAbi, orangeSkin, yellowSkin, whiteSkin } from "main";
+import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, whiteSkin } from "main";
+import { 
+    Button,
+    ButtonBehavior 
+} from 'buttons';
 
 let backgroundPhoto = new Texture("assets/background.png");
 
@@ -58,8 +62,13 @@ export var text1Template = Column.template($ => ({
 }));
 
 let mainButton1 = new Content({ 
-    top: 150, left: 115, height: 100, width: 100, 
+    top: 150, left: 115, height: 100, width: 100, active: true,
     skin: dog1Skin, 
+    Behavior: class extends ButtonBehavior {
+        onTap(button){
+          loadErikConfirmationPage(); 
+        }
+    }
 });
 
 var text2label = new Label({left:0, right:0, height:40, string:"Snowball", style: new Style({ font: "bold 15px", color: "#000000" })});
@@ -83,13 +92,23 @@ export var text3Template = Column.template($ => ({
 }));
 
 let mainButton2 = new Content({ 
-    top: 270, left: 115, height: 100, width: 100, 
+    top: 270, left: 115, height: 100, width: 100, active: true,
     skin: dog2Skin, 
+    Behavior: class extends ButtonBehavior {
+        onTap(button){
+          loadErikConfirmationPage(); 
+        }
+    }
 });
 
 let mainButton3 = new Content({ 
-    top: 390, left: 115, height: 100, width: 100, 
+    top: 390, left: 115, height: 100, width: 100, active: true,
     skin: dog3Skin, 
+    Behavior: class extends ButtonBehavior {
+        onTap(button){
+          loadErikConfirmationPage(); 
+        }
+    }
 });
 
 let mainCon = new Content({ 

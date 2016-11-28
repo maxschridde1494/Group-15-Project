@@ -3,10 +3,13 @@ export let yellowSkin = new Skin({fill: "#ffd359"});
 export let whiteSkin = new Skin({fill: "white"});
 
 export var currentScreen = null;
+let remotePins;
 
+import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
+import { ConfirmationContainer } from "confirmation";
 import { 
     Button,
     ButtonBehavior 
@@ -17,6 +20,12 @@ export function loadEric(){
         application.remove(currentScreen);
     }
     currentScreen = new MainContainerTemplate();
+    application.add(currentScreen);
+}
+
+export function loadErikConfirmationPage() {
+    application.remove(currentScreen);
+    currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
 
@@ -51,12 +60,29 @@ class AppBehavior extends Behavior{
     }
     onLaunch(application){
         loadEric();
+        let discoveryInstance = Pins.discover(
+            connectionDesc => {
+                if (connectionDesc.name == "pins-share-led") {
+                    trace("Connecting to remote pins\n");
+                    remotePins = Pins.connect(connectionDesc);
+                }
+            }, 
+            connectionDesc => {
+                if (connectionDesc.name == "pins-share-led") {
+                    trace("Disconnected from remote pins\n");
+                    remotePins = undefined;
+                }
+            }
+        );
     }
     onQuit(application) {
         
     }
     onToggle(application){
         trace("Toggled\n");
+    }
+    onToggleLight(application, value) {
+        if (remotePins) remotePins.invoke("/led/write", value);
     }
 }
 application.behavior = new AppBehavior();
