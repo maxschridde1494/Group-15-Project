@@ -1,12 +1,12 @@
 {
     "title":"DogWalkerDevice",
     "description":"This template builds an app that traces \"Hello, World!\" and breaks into the debugger.",
-    "id":"dogwalkerdevice.project.kinoma.marvell.com",
+    "id":"dogwalker.device.app",
     "tags":[
         "emptySample"
     ],
     "Create":{
-        "main":"main"
+        "main":"src/main"
     },
     "Element":{
         "main":"main"
