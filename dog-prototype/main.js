@@ -8,7 +8,7 @@ function loadGabe(){
 }
 
 function loadEric(){
-    application.remove(currentScreen);
+    //application.remove(currentScreen);
     currentScreen = MainContainerTemplate();
     application.add(currentScreen);
 }
