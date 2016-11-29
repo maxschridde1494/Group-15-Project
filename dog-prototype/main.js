@@ -94,6 +94,38 @@ class AppBehavior extends Behavior{
                 }
             }
         );
+        // trace("starting write\n");
+        // var uri = mergeURI(application.url, "license.txt");
+        // var licenseText = Files.readText(uri);
+        // trace(licenseText + "\n");
+        // var uri2 = mergeURI(Files.documentsDirectory, "input.txt");
+        // Files.writeText(uri2, licenseText);
+        // trace('written\n');
+        // trace('about to read\n');
+        // var readText = Files.readText(uri2);
+        // trace("read text: " + readText + "\n");
+        // trace(application.di + "\n");
+        // trace("about to append\n");
+        // var uri = mergeURI(Files.documentsDirectory, "input.txt");
+        // Files.appendText(uri, " Twice.");
+        // var readText = Files.readText(uri);
+        // trace("read text: " + readText + "\n");
+
+        /*JSON*/
+        var dog1 = { name: "Jerry", 
+                     walks: { 
+                        first: {start: "LA", end: "SF"},
+                        second: {start: "Burbank", end: "Calabasas"},
+                     } 
+        };
+        var walk1 = {start: "LA", end: "SF"};
+        var walk2 = {start: "Burbank", end: "Calabasas"};
+        var dogfilename = dog1.name + ".json";
+        var walksfilename = "walks.json";
+        var uriDogs = mergeURI(Files.preferencesDirectory, application.di + "." + dogfilename);
+        Files.writeJSON(uriDogs, dog1);
+        var dog = Files.readJSON(uriDogs);
+        trace(dog.name + " is walking from " + dog.walks.first.start + " to " + dog.walks.first.end + "!\n");
     }
     onQuit(application) {
         application.shared = false;
