@@ -94,38 +94,60 @@ class AppBehavior extends Behavior{
                 }
             }
         );
-        // trace("starting write\n");
-        // var uri = mergeURI(application.url, "license.txt");
-        // var licenseText = Files.readText(uri);
-        // trace(licenseText + "\n");
-        // var uri2 = mergeURI(Files.documentsDirectory, "input.txt");
-        // Files.writeText(uri2, licenseText);
-        // trace('written\n');
-        // trace('about to read\n');
-        // var readText = Files.readText(uri2);
-        // trace("read text: " + readText + "\n");
-        // trace(application.di + "\n");
-        // trace("about to append\n");
-        // var uri = mergeURI(Files.documentsDirectory, "input.txt");
-        // Files.appendText(uri, " Twice.");
-        // var readText = Files.readText(uri);
-        // trace("read text: " + readText + "\n");
 
-        /*JSON*/
+        /*STATE PLAYGROUND --> store JSON objects as .json files in preferencesDirectory*/
+        var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
+        // Clear out the "/dogs/" directory.
+        if (Files.exists(uri)){
+            Files.deleteDirectory(uri, true);
+            Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
+        }
+
+        /*JSON Objects*/
         var dog1 = { name: "Jerry", 
                      walks: { 
                         first: {start: "LA", end: "SF"},
                         second: {start: "Burbank", end: "Calabasas"},
                      } 
         };
-        var walk1 = {start: "LA", end: "SF"};
-        var walk2 = {start: "Burbank", end: "Calabasas"};
-        var dogfilename = dog1.name + ".json";
-        var walksfilename = "walks.json";
-        var uriDogs = mergeURI(Files.preferencesDirectory, application.di + "." + dogfilename);
-        Files.writeJSON(uriDogs, dog1);
-        var dog = Files.readJSON(uriDogs);
-        trace(dog.name + " is walking from " + dog.walks.first.start + " to " + dog.walks.first.end + "!\n");
+        var dog2 = { name: "Schredr", 
+                     walks: { 
+                        first: {start: "Burbank", end: "Calabasas"}
+                     } 
+        };
+        var dog3 = { name: "GG", 
+                     walks: { 
+                        first: {start: "SLO", end: "CAL"}
+                     } 
+        };
+
+        /*write JSON objects to ...dogs/*/
+        var dogs = [dog1, dog2, dog3]
+        for (var i = 0; i < dogs.length; i++){
+            var dogFileName = dogs[i].name + ".json";
+            var uriDog = mergeURI(Files.preferencesDirectory, application.di + ".dogs/" + dogFileName);
+            Files.writeJSON(uriDog, dogs[i]);
+        }
+
+        /*read JSON objects using directory iterator*/
+        // Recursively iterate through the kinoma/apps directory.
+        var iterateDirectory = function(path) {
+            var info, iterator = new Files.Iterator(path);
+            while (info = iterator.getNext()) {
+                trace(path + info.path + "\n");
+                var currURI = path + info.path;
+                var dog = Files.readJSON(currURI);
+                trace("Current Dog: " + dog.name + "\n");
+            }
+        }
+        iterateDirectory(uri);
+
+        /*Example of how to delete a JSON object file*/
+        var deletedURI = uri + dogs[1].name + ".json";
+        Files.deleteFile(deletedURI);
+        trace("\nIterate through again AFTER DELETING " + dogs[1].name + "\n");
+        iterateDirectory(uri);
+
     }
     onQuit(application) {
         application.shared = false;
