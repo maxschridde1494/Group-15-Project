@@ -3,6 +3,8 @@ export let yellowSkin = new Skin({fill: "#ffd359"});
 export let whiteSkin = new Skin({fill: "white"});
 
 export var currentScreen = null;
+export let deviceURL;
+
 let remotePins;
 
 import Pins from "pins";
@@ -14,6 +16,23 @@ import {
     Button,
     ButtonBehavior 
 } from 'buttons';
+
+Handler.bind("/discover", Behavior({
+    onInvoke: function(handler, message){
+        trace("Companion Found the device.\n");
+        deviceURL = JSON.parse(message.requestText).url;
+        handler.invoke(new Message(deviceURL + "respond"), Message.TEXT);    
+    },
+    onComplete: function(handler, message, text){
+        trace("Response was: " + text + "\n");
+    }
+}));
+Handler.bind("/respond", Behavior({
+    onInvoke: function(handler, message){
+        message.responseText = "Device, you found me!";
+        message.status = 200;    
+    }
+}));
 
 export function loadEric(){
     if (currentScreen != null){
@@ -56,7 +75,8 @@ export function loadMax(){
 
 class AppBehavior extends Behavior{
     onDisplayed(application){
-
+        application.shared = true;
+        application.discover("dogwalker.device.app");
     }
     onLaunch(application){
         loadEric();
@@ -76,7 +96,8 @@ class AppBehavior extends Behavior{
         );
     }
     onQuit(application) {
-        
+        application.shared = false;
+        application.forget("dogwalker.device.app");
     }
     onToggle(application){
         trace("Toggled\n");
