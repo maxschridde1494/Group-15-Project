@@ -121,7 +121,7 @@ class AppBehavior extends Behavior{
                      } 
         };
 
-        /*write JSON objects to ...dogs/*/
+        /*write JSON object files to ...dogs/ directory*/
         var dogs = [dog1, dog2, dog3]
         for (var i = 0; i < dogs.length; i++){
             var dogFileName = dogs[i].name + ".json";
