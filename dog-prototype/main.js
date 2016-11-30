@@ -2,6 +2,8 @@ export let orangeSkin = new Skin({fill: "#ff7e3e"});
 export let yellowSkin = new Skin({fill: "#ffd359"});
 export let whiteSkin = new Skin({fill: "white"});
 
+let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
+
 export var currentScreen = null;
 export let deviceURL;
 var analogReader1 = undefined;
@@ -17,6 +19,7 @@ import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
+import { createMapsUrl, getMapsImg } from "maps";
 import { 
     Button,
     ButtonBehavior 
@@ -69,16 +72,26 @@ export function loadActMonitor(){
     application.remove(currentScreen);
     currentScreen = new ActMonitorScreen();
     application.add(currentScreen);
+    let dogIm = new Picture({left: 200, height: 80, bottom: 0, url: "assets/flippedDogMain.png"});
+    application.main.spacer.add(dogIm);
+    application.main.spacer.col.line1.completed.innercol.line.label2.string = "%";
+    application.main.spacer.col.line1.distance.innercol.line.label2.string = "miles";
+    application.main.spacer.col.line2.heartrate.innercol.line.label2.string = "bpm";
+    var staticMapURL = createMapsUrl()
+    getMapsImg(staticMapURL, function(image){
+        let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+        application.main.spacer.col.add(mapIm);
+    });
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
             var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
-                    application.main.spacer.col.line1.completed.label.string = String(Math.round(result*100))});
+                    application.main.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100))});
             var analogReader2 = remotePins.repeat("/analog2/read", 10, function(result){
-                    application.main.spacer.col.line1.distance.label.string = String(Math.round(result*10))});
+                    application.main.spacer.col.line1.distance.innercol.line.label.string = String((result*10).toFixed(1))});
             var analogReader3 = remotePins.repeat("/analog3/read", 10, function(result){
-                    application.main.spacer.col.line2.steps.label.string = String(Math.round(result*1000))});
+                    application.main.spacer.col.line2.steps.innercol.line.label.string = String(Math.round(result*1000))});
             var analogReader4 = remotePins.repeat("/analog4/read", 10, function(result){
-                    application.main.spacer.col.line2.heartrate.label.string = String(Math.round(result*100))});
+                    application.main.spacer.col.line2.heartrate.innercol.line.label.string = String(Math.round(result*100))});
         }
     }
 }

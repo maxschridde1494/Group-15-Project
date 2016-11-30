@@ -70,11 +70,11 @@ var freq2 = Picture.template($ => ({
     left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/freq2.jpg"
 }));
 
-var settingsIcon = Picture.template($ => ({
+export var settingsIcon = Picture.template($ => ({
     left: 5, height: 20, url: "assets/settings.png"
 }));
 
-var backIcon = Picture.template($ => ({
+export var backIcon = Picture.template($ => ({
     left: 10, height: 20, url: "assets/backButton.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
@@ -85,11 +85,11 @@ var backIcon = Picture.template($ => ({
     }
 }));
 
-var selectRouteIcon = Picture.template($ => ({
+export var selectRouteIcon = Picture.template($ => ({
     left: 50, height: 20, url: "assets/select-route.png"
 }));
 
-var nextIcon = Picture.template($ => ({
+export var nextIcon = Picture.template($ => ({
     left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
