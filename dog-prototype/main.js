@@ -19,7 +19,7 @@ import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
-import { createMapsUrl, getMapsImg, parseAddress } from "maps";
+import { createMapsUrl, createMapsURLfromLatLon, createLatLongURLfromAddress, createLatLongURLfromCorner, getMapsImg, getLatLon, parseAddress, parseCorner } from "maps";
 import { 
     Button,
     ButtonBehavior 
@@ -77,10 +77,17 @@ export function loadActMonitor(){
     application.main.spacer.col.line1.completed.innercol.line.label2.string = "%";
     application.main.spacer.col.line1.distance.innercol.line.label2.string = "miles";
     application.main.spacer.col.line2.heartrate.innercol.line.label2.string = "bpm";
-    var staticMapURL = createMapsUrl()
-    getMapsImg(staticMapURL, function(image){
-        let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-        application.main.spacer.col.add(mapIm);
+    var corner = parseCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
+    trace("parsed corner: " + corner + "\n");
+    var latlonURL = createLatLongURLfromAddress(corner);
+    trace("latlon url: " + latlonURL + "\n");
+    getLatLon(latlonURL, function(json){
+        var url = createMapsURLfromLatLon(json.results[0].geometry.location.lat, json.results[0].geometry.location.lng);
+        trace("maps url: " + url + "\n");
+        getMapsImg(url, function(image){
+            let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+            application.main.spacer.col.add(mapIm);
+        })
     });
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
@@ -129,8 +136,6 @@ class AppBehavior extends Behavior{
     }
     onLaunch(application){
         loadEric();
-        var address = parseAddress("911 North Evergreen Street,Burbank,CA");
-        trace("parsed address: " + address + "\n");
         let discoveryInstance = Pins.discover(
             connectionDesc => {
                 if (connectionDesc.name == "pins-share-led") {
