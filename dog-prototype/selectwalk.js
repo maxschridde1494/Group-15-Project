@@ -1,4 +1,5 @@
-import { currentScreen, loadAbi, orangeSkin, yellowSkin, whiteSkin } from "main";
+import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
+import { SettingsOverlay } from "settingsoverlay"; 
 
 var blackBorder = new Skin({fill: "white", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
 
@@ -70,15 +71,21 @@ var freq2 = Picture.template($ => ({
     left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/freq2.jpg"
 }));
 
+//Will need to use as part of the template on most screens
 var settingsIcon = Picture.template($ => ({
-    left: 5, height: 20, url: "assets/settings.png"
+    left: 5, height: 20, url: "assets/settings.png", active: true, 
+    Behavior: class extends Behavior {
+        onTouchEnded(container) {
+            settingsOverlayScreen = new SettingsOverlay(); 
+        	application.add(settingsOverlayScreen);  
+        }
+    }
 }));
 
 var backIcon = Picture.template($ => ({
     left: 10, height: 20, url: "assets/backButton.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
-            trace("Back Screen\n");
             // MOVE TO PREVIOUS SCREEN HERE
             loadEric();
         }

@@ -3,16 +3,21 @@ export let yellowSkin = new Skin({fill: "#ffd359"});
 export let whiteSkin = new Skin({fill: "white"});
 
 export var currentScreen = null;
+export var settingsOverlayScreen = null; 
 export let deviceURL;
 
-let remotePins;
-
+let remotePins; 
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
-import { 
+import { SettingsOverlay } from "settingsoverlay"; 
+import { SettingsScreen} from "settings"; 
+import { RobotScreen } from "robot";  
+import { AccountScreen } from "account";
+import { WebcamScreen} from "webcam";   
+import {  
     Button,
     ButtonBehavior 
 } from 'buttons';
@@ -73,6 +78,30 @@ export function loadMax(){
     application.dashboard.main.dash.views.right.add(estimatesImage);
 }
 
+export function loadSettings(){
+    application.remove(currentScreen);
+    currentScreen = new SettingsScreen();
+    application.add(currentScreen);
+}
+
+export function loadRobot(){
+    application.remove(currentScreen);
+    currentScreen = new RobotScreen();
+    application.add(currentScreen);
+}
+
+export function loadAccount(){
+    application.remove(currentScreen);
+    currentScreen = new AccountScreen();
+    application.add(currentScreen);
+}
+
+export function loadWebcam(imageNumber){
+    application.remove(currentScreen);
+    currentScreen = new WebcamScreen({image: imageNumber});
+    application.add(currentScreen);
+}
+
 class AppBehavior extends Behavior{
     onDisplayed(application){
         application.shared = true;
@@ -80,20 +109,20 @@ class AppBehavior extends Behavior{
     }
     onLaunch(application){
         loadEric();
-        let discoveryInstance = Pins.discover(
-            connectionDesc => {
-                if (connectionDesc.name == "pins-share-led") {
-                    trace("Connecting to remote pins\n");
-                    remotePins = Pins.connect(connectionDesc);
-                }
-            }, 
-            connectionDesc => {
-                if (connectionDesc.name == "pins-share-led") {
-                    trace("Disconnected from remote pins\n");
-                    remotePins = undefined;
-                }
-            }
-        );
+        //let discoveryInstance = Pins.discover(
+        //    connectionDesc => {
+        //        if (connectionDesc.name == "pins-share-led") {
+        //            trace("Connecting to remote pins\n");
+        //            remotePins = Pins.connect(connectionDesc);
+        //        }
+        //    }, 
+        //    connectionDesc => {
+        //        if (connectionDesc.name == "pins-share-led") {
+        //            trace("Disconnected from remote pins\n");
+        //            remotePins = undefined;
+        //        }
+        //    }
+        //);
     }
     onQuit(application) {
         application.shared = false;
@@ -110,12 +139,12 @@ application.behavior = new AppBehavior();
 
 
 let small = new Style({ font: "18px", color: "black" });
-var borderedSkin = new Skin({
+export var borderedSkin = new Skin({
     fill: "white",
     borders: {left: 3, right: 3, top: 3, bottom: 3}, 
     stroke: "#ff7e3e"
-});
-
+});   
+ 
 export let MyButtonTemplate = Button.template($ => ({
     top: 10, bottom: 10, left: 40, right: 40,  skin: borderedSkin,
     contents: [
@@ -124,16 +153,15 @@ export let MyButtonTemplate = Button.template($ => ({
     Behavior: class extends ButtonBehavior {
         onTap(button){
             if ($.string == "Current Walk") {
-                trace("hello" + $.string + "\n"); 
                 loadMax();
             }
             if ($.string == "New Walk") {
-                trace("bello" + $.string + "\n"); 
                 loadGabe();
             }
         }
     }
 }));
+
 export var ButtonColumnTemplate = Column.template($ => ({
     left: 20, right: 20, top: 135, bottom: 180,
     contents: [
@@ -146,7 +174,7 @@ export var ButtonColumnTemplate = Column.template($ => ({
 
 export var MainContainerTemplate = Container.template($ => ({
     contents:[
-        new Picture({url: "assets/background.png", height: 570, bottom: 0}),
+        new Picture({url: "assets/background2.png", height: 570, bottom: 0}),
         new ButtonColumnTemplate()
     ]
 }));

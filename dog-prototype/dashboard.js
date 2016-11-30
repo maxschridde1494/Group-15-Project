@@ -17,7 +17,7 @@ var navBarButton = Container.template($ => ({
             loadEric();
         }
 
-    })
+    }) 
 }));
 
 export var dashboardScreen = Container.template($ => ({
