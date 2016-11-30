@@ -101,8 +101,8 @@ var nextIcon = Picture.template($ => ({
 }));
 
 // Templates
-var navBarSize = 40;
-var NavTop = Line.template($ => ({
+export var navBarSize = 40;
+export var NavTop = Line.template($ => ({
     left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
         new settingsIcon(),
@@ -110,7 +110,7 @@ var NavTop = Line.template($ => ({
     ]
 }));
 
-var NavBot = Line.template($ => ({
+export var NavBot = Line.template($ => ({
     left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
         new backIcon(),

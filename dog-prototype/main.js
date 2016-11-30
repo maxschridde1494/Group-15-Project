@@ -4,11 +4,16 @@ export let whiteSkin = new Skin({fill: "white"});
 
 export var currentScreen = null;
 export let deviceURL;
+var analogReader1 = undefined;
+var analogReader2 = undefined;
+var analogReader3 = undefined;
+var analogReader4 = undefined;
 
-let remotePins;
+export let remotePins;
 
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
+import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
@@ -60,6 +65,37 @@ export function loadAbi(){
     application.add(currentScreen);
 }
 
+export function loadActMonitor(){
+    application.remove(currentScreen);
+    currentScreen = new ActMonitorScreen();
+    application.add(currentScreen);
+    if (remotePins){
+        if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
+            var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
+                    application.main.spacer.col.line1.completed.label.string = String(Math.round(result*100))});
+            var analogReader2 = remotePins.repeat("/analog2/read", 10, function(result){
+                    application.main.spacer.col.line1.distance.label.string = String(Math.round(result*10))});
+            var analogReader3 = remotePins.repeat("/analog3/read", 10, function(result){
+                    application.main.spacer.col.line2.steps.label.string = String(Math.round(result*1000))});
+            var analogReader4 = remotePins.repeat("/analog4/read", 10, function(result){
+                    application.main.spacer.col.line2.heartrate.label.string = String(Math.round(result*100))});
+        }
+    }
+}
+
+export function closeAnalogs(){
+    if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
+        analogReader1.close();
+        analogReader1 = undefined;
+        analogReader2.close();
+        analogReader2 = undefined;
+        analogReader3.close();
+        analogReader3 = undefined;
+        analogReader4.close();
+        analogReader4 = undefined;
+    }
+}
+
 export function loadMax(){
     application.remove(currentScreen);
     var dash = new dashboardScreen();
@@ -95,66 +131,87 @@ class AppBehavior extends Behavior{
             }
         );
 
-        /*STATE PLAYGROUND --> store JSON objects as .json files in preferencesDirectory*/
-        var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
-        // Clear out the "/dogs/" directory.
-        if (Files.exists(uri)){
-            Files.deleteDirectory(uri, true);
-            Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
-        }
+        // /*STATE PLAYGROUND --> store JSON objects as .json files in preferencesDirectory*/
+        // var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
+        // // Clear out the "/dogs/" directory.
+        // if (Files.exists(uri)){
+        //     Files.deleteDirectory(uri, true);
+        //     Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
+        // }
 
-        /*JSON Objects*/
-        var dog1 = { name: "Jerry", 
-                     walks: { 
-                        first: {start: "LA", end: "SF"},
-                        second: {start: "Burbank", end: "Calabasas"},
-                     } 
-        };
-        var dog2 = { name: "Schredr", 
-                     walks: { 
-                        first: {start: "Burbank", end: "Calabasas"}
-                     } 
-        };
-        var dog3 = { name: "GG", 
-                     walks: { 
-                        first: {start: "SLO", end: "CAL"}
-                     } 
-        };
+        // /*JSON Objects*/
+        // var dog1 = { name: "Jerry", 
+        //              walks: { 
+        //                 first: {start: "LA", end: "SF"},
+        //                 second: {start: "Burbank", end: "Calabasas"},
+        //              } 
+        // };
+        // var dog2 = { name: "Schredr", 
+        //              walks: { 
+        //                 first: {start: "Burbank", end: "Calabasas"}
+        //              } 
+        // };
+        // var dog3 = { name: "GG", 
+        //              walks: { 
+        //                 first: {start: "SLO", end: "CAL"}
+        //              } 
+        // };
 
-        /*write JSON object files to ...dogs/ directory*/
-        var dogs = [dog1, dog2, dog3]
-        for (var i = 0; i < dogs.length; i++){
-            var dogFileName = dogs[i].name + ".json";
-            var uriDog = mergeURI(Files.preferencesDirectory, application.di + ".dogs/" + dogFileName);
-            Files.writeJSON(uriDog, dogs[i]);
-        }
+        // write JSON object files to ...dogs/ directory
+        // var dogs = [dog1, dog2, dog3]
+        // for (var i = 0; i < dogs.length; i++){
+        //     var dogFileName = dogs[i].name + ".json";
+        //     var uriDog = mergeURI(Files.preferencesDirectory, application.di + ".dogs/" + dogFileName);
+        //     Files.writeJSON(uriDog, dogs[i]);
+        // }
 
-        /*read JSON objects using directory iterator*/
-        // Recursively iterate through the kinoma/apps directory.
-        var iterateDirectory = function(path) {
-            var info, iterator = new Files.Iterator(path);
-            while (info = iterator.getNext()) {
-                trace(path + info.path + "\n");
-                var currURI = path + info.path;
-                var dog = Files.readJSON(currURI);
-                trace("Current Dog: " + dog.name + "\n");
-            }
-        }
-        iterateDirectory(uri);
+        // /*read JSON objects using directory iterator*/
+        // // Recursively iterate through the kinoma/apps directory.
+        // var iterateDirectory = function(path) {
+        //     var info, iterator = new Files.Iterator(path);
+        //     while (info = iterator.getNext()) {
+        //         trace(path + info.path + "\n");
+        //         var currURI = path + info.path;
+        //         var dog = Files.readJSON(currURI);
+        //         trace("Current Dog: " + dog.name + "\n");
+        //     }
+        // }
+        // iterateDirectory(uri);
 
-        /*Example of how to delete a JSON object file*/
-        var deletedURI = uri + dogs[1].name + ".json";
-        Files.deleteFile(deletedURI);
-        trace("\nIterate through again AFTER DELETING " + dogs[1].name + "\n");
-        iterateDirectory(uri);
+        // /*Example of how to delete a JSON object file*/
+        // var deletedURI = uri + dogs[1].name + ".json";
+        // Files.deleteFile(deletedURI);
+        // trace("\nIterate through again AFTER DELETING " + dogs[1].name + "\n");
+        // iterateDirectory(uri);
 
     }
     onQuit(application) {
         application.shared = false;
         application.forget("dogwalker.device.app");
     }
-    onToggle(application){
-        trace("Toggled\n");
+    onToggleActivitiesMonitorsOn(application){
+        if (remotePins){
+            if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
+                var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
+                        currentScreen.main.spacer.col.line1.completed.label.string = result;
+                // var analogReader2 = 
+                // var analogReader3 = 
+                // var analogReader4 = 
+                });
+            }
+        }
+    }
+    onToggleActivitiesMonitorsOff(application){
+        if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
+            analogReader1.close();
+            analogReader1 = undefined;
+            analogReader2.close();
+            analogReader2 = undefined;
+            analogReader3.close();
+            analogReader3 = undefined;
+            analogReader4.close();
+            analogReader4 = undefined;
+        }
     }
     onToggleLight(application, value) {
         if (remotePins) remotePins.invoke("/led/write", value);
