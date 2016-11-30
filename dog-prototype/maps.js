@@ -2,49 +2,41 @@ const MAPSURLSTART = "https://maps.googleapis.com/maps/api/staticmap?";
 const STATICMAPSAPIKEY = "AIzaSyChcVQ9xCRNiChe9YS68W3czxBzT3xCdMI"; //app name: CS160-Walkie
 const GOOGLEMAPSAPIKEY = "AIzaSyBEktM3Xo6jgBEuIyiKh0kTm8vvgh9meog";
 
-var testLAAddress = "Pershing+Square,Los+Angeles,CA";
-var testAddress1 = "911+North+Evergreen+Street,Burbank,CA";
-var testAddress2 = "Bob's+Big+Boy,Burbank,CA";
-var testAddress3 = "Warner+Brother's+Studio+Tour,Burbank,CA";
-
-var mapsObject;
-
-let textStyle = new Style({ font: "bold 50px", color: "white" });
-let MainContainer = Container.template($ => ({
-    name: 'main',
-    top: 0, bottom: 0, left: 0, right: 0,
-    skin: new Skin({ fill: $.backgroundColor }),
-    contents: [
-        Label($, {
-            top: 70, bottom: 70, left: 70, right: 70,
-            style: textStyle,  string: $.string
-        }),
-    ],
-}));
-
-class AppBehavior extends Behavior {
-    onLaunch(application) {
-        application.add(new MainContainer({ string: "Ready!", backgroundColor: "#7DBF2E" }));
-        var staticMapURL = createMapsUrl()
-        trace("url: " + application.url + "\n");
-        getMapsImg(staticMapURL, function(image){
-            let img = new Picture({left: 5, right: 5, top: 5, bottom: 5, url: image});
-            application.main.add(img)
-        });
-    }
-}
-application.behavior = new AppBehavior();
+var testLAAddress = "Pershing Square,Los Angeles,CA";
+var testAddress1 = "911 North Evergreen Street,Burbank,CA";
+var testAddress2 = "Bob's Big Boy,Burbank,CA";
+var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 
 export function createMapsUrl(){
+    var add1 = parseAddress(testAddress1);
+    var add2 = parseAddress(testAddress2);
     var requestURL = MAPSURLSTART
-                 + "center=" + testAddress1
+                 + "center=" + add1
                  + "&zoom=14" + "&size=400x400"
-                 + "&markers=color:blue|label:S|" + testAddress1
-                 + "&markers=color:green|label:M|" + testAddress3
-                 + "&path=color:0x0000ff80|weight:1|" + testAddress1 + "|" + testAddress3
+                 + "&markers=color:blue|label:S|" + add1
+                 + "&markers=color:green|label:M|" + add2
+                 + "&path=color:0x0000ff80|weight:1|" + add1 + "|" + add2
                  + "&maptype=roadmap"
                  + "&key=" + STATICMAPSAPIKEY;
     return requestURL
+}
+
+export function parseAddress(address){
+    var returnAddress = "";
+    var sectionArray = address.split(",");
+    for (var i = 0; i < sectionArray.length; i++){
+        var finalSplit = sectionArray[i].split(" ");
+        for (var j = 0; j < finalSplit.length; j++){
+            returnAddress += finalSplit[j];
+            if (j != finalSplit.length - 1){
+                returnAddress += "+";
+            }
+        }
+        if (i != sectionArray.length - 1){
+          returnAddress += ",";
+        }
+    }
+    return returnAddress;
 }
 
 export function getMapsImg(url, uiCallback){

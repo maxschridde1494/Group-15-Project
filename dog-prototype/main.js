@@ -19,7 +19,7 @@ import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
-import { createMapsUrl, getMapsImg } from "maps";
+import { createMapsUrl, getMapsImg, parseAddress } from "maps";
 import { 
     Button,
     ButtonBehavior 
@@ -129,6 +129,8 @@ class AppBehavior extends Behavior{
     }
     onLaunch(application){
         loadEric();
+        var address = parseAddress("911 North Evergreen Street,Burbank,CA");
+        trace("parsed address: " + address + "\n");
         let discoveryInstance = Pins.discover(
             connectionDesc => {
                 if (connectionDesc.name == "pins-share-led") {
