@@ -12,7 +12,7 @@ var labelStyle = new Style({font: '20px', fill: "black", horizontal: "left"});
 
 var forwardIcon = Picture.template($ => ({
     left: $.leftDistance, height: 20, top: 15, url: "assets/forwardArrow.png"
-}));
+})); 
 
 var labelTemplate = Label.template($=>({ left: 60, top: 10, string: $.txt,     		style: normalText }))
 
@@ -62,8 +62,8 @@ export var displayWebcam = false;
 function delayLoop () {           //  create a loop function   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
    	  if (!displayWebcam) {
    	  	return
-   	  }
-   	  loadWebcam(i.toString());       i++;                     //  increment the counter      if (i > 25) {            //  if the counter < 10, call the loop function	      i = 0;              //  ..  again which will trigger another       } 
+   	  }      i++;                     //  increment the counter
+      currentScreen.first.url = "assets/dogWalkingGif/tmp-" + i.toString() + ".gif";       if (i > 25) {            //  if the counter < 10, call the loop function	      i = 0;              //  ..  again which will trigger another       } 
       delayLoop(); 
          }, 100)}
 
@@ -75,8 +75,9 @@ var AboutButtons = Line.template($ => ({
     ],
     Behavior: class extends ButtonBehavior {
         onTap(button){
-        	i = 0; 
+        	i = 0;
         	displayWebcam = true; 
+        	loadWebcam(i.toString()); 
         	delayLoop(); 
         }
     }

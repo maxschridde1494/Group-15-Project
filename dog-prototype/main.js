@@ -16,10 +16,10 @@ import { SettingsOverlay } from "settingsoverlay";
 import { SettingsScreen} from "settings"; 
 import { RobotScreen } from "robot";  
 import { AccountScreen } from "account";
-import { WebcamScreen} from "webcam";   
-import {  
+import { WebcamScreen } from "webcam";   
+import {   
     Button,
-    ButtonBehavior 
+    ButtonBehavior  
 } from 'buttons';
 
 Handler.bind("/discover", Behavior({
