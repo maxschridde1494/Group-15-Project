@@ -19,7 +19,8 @@ import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
-import { createMapsUrl, createMapsURLfromLatLon, createLatLongURLfromAddress, createLatLongURLfromCorner, getMapsImg, getLatLon, parseAddress, parseCorner } from "maps";
+import { createMapsUrl, createMapsURLfromLatLon, createLatLongURLfromAddress, 
+    createLatLongURLfromCorner, createMapsURLfromLatLon2, getMapsImg, getLatLonFourCorners, getLatLon, parseAddress, parseCorner } from "maps";
 import { 
     Button,
     ButtonBehavior 
@@ -77,14 +78,16 @@ export function loadActMonitor(){
     application.main.spacer.col.line1.completed.innercol.line.label2.string = "%";
     application.main.spacer.col.line1.distance.innercol.line.label2.string = "miles";
     application.main.spacer.col.line2.heartrate.innercol.line.label2.string = "bpm";
-    var corner = parseCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
-    trace("parsed corner: " + corner + "\n");
-    var latlonURL = createLatLongURLfromAddress(corner);
-    trace("latlon url: " + latlonURL + "\n");
-    getLatLon(latlonURL, function(json){
-        var url = createMapsURLfromLatLon(json.results[0].geometry.location.lat, json.results[0].geometry.location.lng);
-        trace("maps url: " + url + "\n");
-        getMapsImg(url, function(image){
+    var cornerURL1 = createLatLongURLfromCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
+    var cornerURL2 = createLatLongURLfromCorner("W Clark Ave|Evergreen Street,Burbank,CA", "|");
+    var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
+    var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
+    var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
+    getLatLonFourCorners(cornerURLs, function(arr){
+        trace("arr: " + arr + "\n");
+        var mapurl = createMapsURLfromLatLon2(arr)
+        trace(mapurl + "\n");
+        getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
             application.main.spacer.col.add(mapIm);
         })
@@ -177,7 +180,7 @@ class AppBehavior extends Behavior{
         //              } 
         // };
 
-        // write JSON object files to ...dogs/ directory
+        // // write JSON object files to ...dogs/ directory
         // var dogs = [dog1, dog2, dog3]
         // for (var i = 0; i < dogs.length; i++){
         //     var dogFileName = dogs[i].name + ".json";

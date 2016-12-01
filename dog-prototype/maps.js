@@ -12,6 +12,7 @@ var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 var testAddress4 = "CORNER%20W+Clark+Ave+%20AND%20N+Pass+Ave,Burbank,CA";
 
 export function createLatLongURLfromAddress(address){
+    //Generate GEOCODE URL from Address
     var parsedAdd = parseAddress(address);
     var requestURL = GEOCODINGAPIURLSTART
                 + "address=" + parsedAdd 
@@ -19,22 +20,46 @@ export function createLatLongURLfromAddress(address){
     return requestURL;
 }
 export function createLatLongURLfromCorner(address){
+    //Generate GEOCODE URL from Corner / Intersection
     var parsedAdd = parseCorner(address, "|");
-    requestURL = GEOCODINGAPIURLSTART + "address=" + parsedAdd + "&key=" + GEOCODINGAPIKEY;
+    var requestURL = GEOCODINGAPIURLSTART + "address=" + parsedAdd + "&key=" + GEOCODINGAPIKEY;
     return requestURL;
 }
-export function createMapsURLfromLatLon(lat, lon){
-    var requestURL = MAPSURLSTART
-                 + "center=" + lat + "," + lon
-                 + "&zoom=14" + "&size=400x400"
-                 + "&markers=color:blue|label:S|" + lat + "," + lon
-                 + "&maptype=roadmap"
-                 + "&key=" + STATICMAPSAPIKEY;
+// export function createMapsURLfromLatLon(lat, lon){
+//     var requestURL = MAPSURLSTART
+//                  + "center=" + lat + "," + lon
+//                  + "&zoom=14" + "&size=400x400"
+//                  + "&markers=color:blue|label:S|" + lat + "," + lon
+//                  + "&maptype=roadmap"
+//                  + "&key=" + STATICMAPSAPIKEY;
+//     return requestURL
+// }
+export function createMapsURLfromLatLon2(latlonarr){
+    //Generate MAPS URL from list of intersection lat lng coordinates
+    /*input: 
+        - latlonarr: array of [lat,lon] arrays for each marker
+        - centerlat, centerlng -> center point for static map
+    */
+    var requestURL = MAPSURLSTART + "&size=400x400";
+    var colors = ["blue", "red", "green", "yellow"];
+    var labels = ["A","B","C","D"];
+    for (var i = 0; i < latlonarr.length; i++){
+        requestURL += "&markers=color:" + colors[i] + "|label:" + labels[i] +"|" + latlonarr[i][0] + "," + latlonarr[i][1];
+    }
+    requestURL += "&path=color:0x0000ff80|weight:3|";
+    for (var i = 0; i < latlonarr.length; i++){
+        requestURL += latlonarr[i] + "|";
+        if (i == latlonarr.length - 1){
+            requestURL += latlonarr[0];
+        }
+    }
+    requestURL += "&maptype=roadmap&key=" + STATICMAPSAPIKEY;
     return requestURL
 }
-export function createMapsUrl(){
-    var add1 = parseAddress(testAddress1);
-    var add2 = parseAddress(testAddress2);
+export function createMapsUrl(address1, address2){
+    //Generate MAPS URL from two input addresses --> test function
+    var add1 = parseAddress(address1);
+    var add2 = parseAddress(address2);
     var requestURL = MAPSURLSTART
                  + "center=" + add1
                  + "&zoom=14" + "&size=400x400"
@@ -47,6 +72,7 @@ export function createMapsUrl(){
 }
 
 export function parseCorner(address, delimiter){
+    //Generate address portion of GEOCODING URL from text input of INTERSECTION
     var returnAddress = "";
     var sectionArray = address.split(",");
     for (var i=0; i < sectionArray.length; i++){
@@ -77,6 +103,7 @@ export function parseCorner(address, delimiter){
     return returnAddress;
 }
 export function parseAddress(address){
+    //Generate address portion of GEOCODING URL from text input of ADDRESS
     var returnAddress = "";
     var sectionArray = address.split(",");
     for (var i = 0; i < sectionArray.length; i++){
@@ -94,14 +121,82 @@ export function parseAddress(address){
     return returnAddress;
 }
 
-export function getLatLon(url, uiCallback){
-    var message = new Message(url);
+// export function getLatLon(url, uiCallback){
+//     var message = new Message(url);
+//     var promise = message.invoke(Message.JSON);
+//     promise.then(json => {
+//         if (0 == message.error && 200 == message.status){
+//             try {
+//                 trace(json.status + "\n");
+//                 uiCallback(json)
+//             }
+//             catch (e) {
+//                 throw('Web service responded with invalid JSON!\n');
+//             }
+//         }
+//         else{
+//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+//         }
+//     })
+// }
+function latlongHelper(json, arr){
+    var temp = [];
+    temp.push(json.results[0].geometry.location.lat);
+    temp.push(json.results[0].geometry.location.lng);
+    arr.push(temp);
+}
+export function getLatLonFourCorners(urls, uiCallback){
+    //Generate all 4 LAT LNG pairs given list of GEOCODE API URLS
+    var arr = []
+    var message = new Message(urls[0]);
     var promise = message.invoke(Message.JSON);
     promise.then(json => {
         if (0 == message.error && 200 == message.status){
             try {
-                trace(json.status + "\n");
-                uiCallback(json)
+                latlongHelper(json, arr);
+                message = new Message(urls[1]);
+                return message.invoke(Message.JSON);
+            }
+            catch (e) {
+                throw('Web service responded with invalid JSON!\n');
+            }
+        }
+        else{
+            trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+        }
+    }).then(json => {
+        if (0 == message.error && 200 == message.status){
+            try {
+                latlongHelper(json, arr);
+                message = new Message(urls[2]);
+                return message.invoke(Message.JSON);
+            }
+            catch (e) {
+                throw('Web service responded with invalid JSON!\n');
+            }
+        }
+        else{
+            trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+        }
+    }).then(json => {
+        if (0 == message.error && 200 == message.status){
+            try {
+                latlongHelper(json, arr);
+                message = new Message(urls[3]);
+                return message.invoke(Message.JSON);
+            }
+            catch (e) {
+                throw('Web service responded with invalid JSON!\n');
+            }
+        }
+        else{
+            trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+        }
+    }).then(json => {
+        if (0 == message.error && 200 == message.status){
+            try {
+                latlongHelper(json, arr);
+                uiCallback(arr);
             }
             catch (e) {
                 throw('Web service responded with invalid JSON!\n');
@@ -114,6 +209,7 @@ export function getLatLon(url, uiCallback){
 }
 
 export function getMapsImg(url, uiCallback){
+    //Generate GOOGLE STATIC MAPS image
     var message = new Message(url);
     var promise = message.invoke(Message.JSON);
     promise.then(json => {
