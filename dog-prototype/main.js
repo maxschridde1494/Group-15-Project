@@ -27,8 +27,8 @@ import { SettingsScreen} from "settings";
 import { RobotScreen } from "robot";  
 import { AccountScreen } from "account";
 import { WebcamScreen } from "webcam";   
-import { createMapsUrl, createLatLongURLfromAddress, 
-    createLatLongURLfromCorner, createMapsURLfromLatLon2, getMapsImg, getLatLonFourCorners, parseAddress, parseCorner } from "maps";
+import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
+    getMapsImg, getMarkerMapsImg, getLatLonFourCorners, parseAddress, parseCorner } from "maps";
 import { 
     Button,
     ButtonBehavior  
@@ -107,6 +107,7 @@ export function loadActMonitor(){
         }
     }
 }
+// export var markersImArray;
 function getMap(cornersArr, bool, latlonarr){
     getLatLonFourCorners(cornersArr, function(array){
         trace("arr: " + array + "\n");
@@ -115,7 +116,19 @@ function getMap(cornersArr, bool, latlonarr){
         getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
             application.main.spacer.col.add(mapIm);
-        })
+        });
+        // markersImArray = [];
+        // for (var i = 0; i < array.length; i++){
+        //     trace(array[i] + "\n");
+        //     var markerurl = createMapsURLfromLatLon(array[i][0], array[i][1]);
+        //     trace("markerurl: " + markerurl + "\n");
+        //     getMarkerMapsImg(markerurl, function(image){
+        //         let mapmarkerIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+        //         // trace("inside. image: " + mapmarkerIm + "\n");
+        //         markersImArray.push(mapmarkerIm);
+        //     });
+        // };
+        // trace(markersImArray + "\n");
     });
 }
 

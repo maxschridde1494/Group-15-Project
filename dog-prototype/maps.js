@@ -11,6 +11,8 @@ var testAddress2 = "Bob's Big Boy,Burbank,CA";
 var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 var testAddress4 = "CORNER%20W+Clark+Ave+%20AND%20N+Pass+Ave,Burbank,CA";
 
+import { markersImArray } from "main";
+
 export function createLatLongURLfromAddress(address){
     //Generate GEOCODE URL from Address
     var parsedAdd = parseAddress(address);
@@ -207,6 +209,25 @@ export function getLatLonFourCorners(urls, uiCallback){
 }
 
 export function getMapsImg(url, uiCallback){
+    //Generate GOOGLE STATIC MAPS image
+    var message = new Message(url);
+    var promise = message.invoke(Message.JSON);
+    promise.then(json => {
+        if (0 == message.error && 200 == message.status){
+            try{
+                uiCallback(json)
+            }
+            catch (e) {
+                throw('Web service responded with invalid JSON!\n');
+              }
+        }
+        else {
+          trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+        }
+    });
+}
+
+export function getMarkerMapsImg(url, uiCallback){
     //Generate GOOGLE STATIC MAPS image
     var message = new Message(url);
     var promise = message.invoke(Message.JSON);
