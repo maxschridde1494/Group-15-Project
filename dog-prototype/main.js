@@ -19,8 +19,8 @@ import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
-import { createMapsUrl, createMapsURLfromLatLon, createLatLongURLfromAddress, 
-    createLatLongURLfromCorner, createMapsURLfromLatLon2, getMapsImg, getLatLonFourCorners, getLatLon, parseAddress, parseCorner } from "maps";
+import { createMapsUrl, createLatLongURLfromAddress, 
+    createLatLongURLfromCorner, createMapsURLfromLatLon2, getMapsImg, getLatLonFourCorners, parseAddress, parseCorner } from "maps";
 import { 
     Button,
     ButtonBehavior 
