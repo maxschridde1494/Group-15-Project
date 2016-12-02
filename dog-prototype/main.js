@@ -165,12 +165,12 @@ export function loadMax(){
     var dash = new dashboardScreen();
     currentScreen = dash;
     application.add(currentScreen);
-    let dashImage = new Picture({bottom: 5, url: "assets/livefeed.png"});
-    application.dashboard.main.dash.livefeed.add(dashImage);
+    let dashImage = new Picture({left: 0, right: 0, url: "assets/livefeed.png"});
+    application.dashboard.spacer.dash.livefeed.add(dashImage);
     let activitiesImage = new Picture({url: "assets/activitiesmonitor.png"});
-    application.dashboard.main.dash.views.left.add(activitiesImage);
+    application.dashboard.spacer.dash.views.left.add(activitiesImage);
     let estimatesImage = new Picture({url: "assets/estimates.png"});
-    application.dashboard.main.dash.views.right.add(estimatesImage);
+    application.dashboard.spacer.dash.views.right.add(estimatesImage);
 }
 
 export function loadSettings(){
