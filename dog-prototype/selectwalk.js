@@ -98,7 +98,7 @@ var settingsIcon = Picture.template($ => ({
     }
 }));
 
-var backIcon = Picture.template($ => ({
+export var backIcon = Picture.template($ => ({
     left: 10, height: 20, url: "assets/backButton.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
@@ -108,11 +108,11 @@ var backIcon = Picture.template($ => ({
     }
 }));
 
-var selectRouteIcon = Picture.template($ => ({
+export var selectRouteIcon = Picture.template($ => ({
     left: 50, height: 20, url: "assets/select-route.png"
 }));
 
-var nextIcon = Picture.template($ => ({
+export var nextIcon = Picture.template($ => ({
     left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
@@ -124,8 +124,8 @@ var nextIcon = Picture.template($ => ({
 }));
 
 // Templates
-var navBarSize = 40;
-var NavTop = Line.template($ => ({
+export var navBarSize = 40;
+export var NavTop = Line.template($ => ({
     left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
         new settingsIcon(),
@@ -133,7 +133,7 @@ var NavTop = Line.template($ => ({
     ]
 }));
 
-var NavBot = Line.template($ => ({
+export var NavBot = Line.template($ => ({
     left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
         new backIcon(),

@@ -1,7 +1,7 @@
 let headlineStyle = new Style({font: 'bold 25px', color: 'white'});
 let smallHeadlineStyle = new Style({font: 'bold 15px', color: 'white'});
 
-import { currentScreen, loadEric, MainContainerTemplate, ButtonColumnTemplate, 
+import { currentScreen, loadEric, loadActMonitor, MainContainerTemplate, ButtonColumnTemplate, 
             MyButtonTemplate, orangeSkin, yellowSkin, whiteSkin } from "main";
 
 var navBarButton = Container.template($ => ({
@@ -46,8 +46,19 @@ export var dashboardScreen = Container.template($ => ({
                             top: 0, left: 0, right: 0, height: 120,
                             contents:[
                                 new Container({
-                                    name: 'left', left: 27, right: 5,
-                                    contents:[]
+                                    name: 'left', active: true, left: 27, right: 5,
+                                    contents:[],
+                                    behavior: Behavior ({
+                                        onTouchBegan: function(container, data){
+                                            // container.label.skin = whiteSkin;
+                                        },
+                                        onTouchEnded: function(container, data){
+                                            // container.label.skin = $.skin;
+                                            trace("touched\n");
+                                            loadActMonitor();
+                                        }
+
+                                    })
                                 }),
                                 new Container({
                                     name: 'right', left: 5, right: 27,
