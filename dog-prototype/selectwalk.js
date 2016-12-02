@@ -88,7 +88,7 @@ var freq2 = Picture.template($ => ({
 }));
 
 //Will need to use as part of the template on most screens
-var settingsIcon = Picture.template($ => ({
+export var settingsIcon = Picture.template($ => ({
     left: 5, height: 20, url: "assets/settings.png", active: true, 
     Behavior: class extends Behavior {
         onTouchEnded(container) {
