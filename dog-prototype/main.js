@@ -6,10 +6,12 @@ let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
 
 export var currentScreen = null;
 export let deviceURL;
+
 var analogReader1 = undefined;
 var analogReader2 = undefined;
 var analogReader3 = undefined;
 var analogReader4 = undefined;
+var percentWalkComplete = 65;
 
 export let remotePins;
 
@@ -83,19 +85,13 @@ export function loadActMonitor(){
     var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
     var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
     var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
-    getLatLonFourCorners(cornerURLs, function(arr){
-        trace("arr: " + arr + "\n");
-        var mapurl = createMapsURLfromLatLon2(arr)
-        trace(mapurl + "\n");
-        getMapsImg(mapurl, function(image){
-            let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-            application.main.spacer.col.add(mapIm);
-        })
-    });
+    // getMap(cornerURLs, false, "");
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
             var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
-                    application.main.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100))});
+                    application.main.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100));
+                    // updateCurrLocation(result, cornerURLs);
+                });
             var analogReader2 = remotePins.repeat("/analog2/read", 10, function(result){
                     application.main.spacer.col.line1.distance.innercol.line.label.string = String((result*10).toFixed(1))});
             var analogReader3 = remotePins.repeat("/analog3/read", 10, function(result){
@@ -105,6 +101,45 @@ export function loadActMonitor(){
         }
     }
 }
+function getMap(cornersArr, bool, latlonarr){
+    getLatLonFourCorners(cornersArr, function(array){
+        trace("arr: " + array + "\n");
+        var mapurl = createMapsURLfromLatLon2(array, bool, latlonarr);
+        trace(mapurl + "\n");
+        getMapsImg(mapurl, function(image){
+            let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+            application.main.spacer.col.add(mapIm);
+        })
+    });
+}
+
+// function updateCurrLocation(reading, cornersArr){
+//     var val = Math.round(reading*100);
+//     trace("VALUE: " + val + "\n");
+//     if (val <= 25){
+//         if (percentWalkComplete > 25){
+//             getMap(cornersArr, true, cornersArr[0]);
+//             percentWalkComplete = 0;
+//         }
+//     }else if (val > 25 && val <= 50){
+//         trace("In check 2a\n");
+//         if (percentWalkComplete <= 25 || percentWalkComplete > 50){
+//             trace("In check 2b\n");
+//             getMap(cornersArr, true, cornersArr[1]);
+//             percentWalkComplete = 25;
+//         }
+//     }else if (val > 50 && val <= 75){
+//         if (percentWalkComplete <= 50 || percentWalkComplete > 75){
+//             getMap(cornersArr, true, cornersArr[2]);
+//             percentWalkComplete = 50;
+//         }
+//     }else if (val > 75){
+//         if (percentWalkComplete <= 75){
+//             getMap(cornersArr, true, cornersArr[3]);
+//             percentWalkComplete = 75;
+//         }
+//     }
+// }
 
 export function closeAnalogs(){
     if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
@@ -153,88 +188,14 @@ class AppBehavior extends Behavior{
                 }
             }
         );
-
-        // /*STATE PLAYGROUND --> store JSON objects as .json files in preferencesDirectory*/
-        // var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
-        // // Clear out the "/dogs/" directory.
-        // if (Files.exists(uri)){
-        //     Files.deleteDirectory(uri, true);
-        //     Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
-        // }
-
-        // /*JSON Objects*/
-        // var dog1 = { name: "Jerry", 
-        //              walks: { 
-        //                 first: {start: "LA", end: "SF"},
-        //                 second: {start: "Burbank", end: "Calabasas"},
-        //              } 
-        // };
-        // var dog2 = { name: "Schredr", 
-        //              walks: { 
-        //                 first: {start: "Burbank", end: "Calabasas"}
-        //              } 
-        // };
-        // var dog3 = { name: "GG", 
-        //              walks: { 
-        //                 first: {start: "SLO", end: "CAL"}
-        //              } 
-        // };
-
-        // // write JSON object files to ...dogs/ directory
-        // var dogs = [dog1, dog2, dog3]
-        // for (var i = 0; i < dogs.length; i++){
-        //     var dogFileName = dogs[i].name + ".json";
-        //     var uriDog = mergeURI(Files.preferencesDirectory, application.di + ".dogs/" + dogFileName);
-        //     Files.writeJSON(uriDog, dogs[i]);
-        // }
-
-        // /*read JSON objects using directory iterator*/
-        // // Recursively iterate through the kinoma/apps directory.
-        // var iterateDirectory = function(path) {
-        //     var info, iterator = new Files.Iterator(path);
-        //     while (info = iterator.getNext()) {
-        //         trace(path + info.path + "\n");
-        //         var currURI = path + info.path;
-        //         var dog = Files.readJSON(currURI);
-        //         trace("Current Dog: " + dog.name + "\n");
-        //     }
-        // }
-        // iterateDirectory(uri);
-
-        // /*Example of how to delete a JSON object file*/
-        // var deletedURI = uri + dogs[1].name + ".json";
-        // Files.deleteFile(deletedURI);
-        // trace("\nIterate through again AFTER DELETING " + dogs[1].name + "\n");
-        // iterateDirectory(uri);
-
     }
     onQuit(application) {
         application.shared = false;
         application.forget("dogwalker.device.app");
     }
     onToggleActivitiesMonitorsOn(application){
-        if (remotePins){
-            if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
-                var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
-                        currentScreen.main.spacer.col.line1.completed.label.string = result;
-                // var analogReader2 = 
-                // var analogReader3 = 
-                // var analogReader4 = 
-                });
-            }
-        }
     }
     onToggleActivitiesMonitorsOff(application){
-        if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
-            analogReader1.close();
-            analogReader1 = undefined;
-            analogReader2.close();
-            analogReader2 = undefined;
-            analogReader3.close();
-            analogReader3 = undefined;
-            analogReader4.close();
-            analogReader4 = undefined;
-        }
     }
     onToggleLight(application, value) {
         if (remotePins) remotePins.invoke("/led/write", value);

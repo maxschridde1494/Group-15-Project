@@ -53,7 +53,7 @@ var nextIcon = Picture.template($ => ({
 }));
 
 var spacer = Container.template($ => ({
-    name: "spacer", top: 30, bottom: 0, left: 0, right: 0, skin: whiteSkin,
+    name: "spacer", top: 10, bottom: 0, left: 0, right: 0, skin: whiteSkin,
     contents: [
     	new Column({
     		name: "col", top: 0, bottom: 0, left: 0, right: 0,
@@ -76,9 +76,6 @@ var spacer = Container.template($ => ({
     	})
     ]
 }));
-
-// effect = new Effect();
-// effect.outerShadow(.5)
 
 var monitorBox = Container.template($ => ({
 	name: $.name, height: 75, width: 100, left: 5, right: 5, skin: orangeSkinBorder,

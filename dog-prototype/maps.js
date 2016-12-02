@@ -34,17 +34,20 @@ export function createLatLongURLfromCorner(address){
 //                  + "&key=" + STATICMAPSAPIKEY;
 //     return requestURL
 // }
-export function createMapsURLfromLatLon2(latlonarr){
+export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
     //Generate MAPS URL from list of intersection lat lng coordinates
     /*input: 
         - latlonarr: array of [lat,lon] arrays for each marker
         - centerlat, centerlng -> center point for static map
     */
     var requestURL = MAPSURLSTART + "&size=400x400";
-    var colors = ["blue", "red", "green", "yellow"];
-    var labels = ["A","B","C","D"];
-    for (var i = 0; i < latlonarr.length; i++){
-        requestURL += "&markers=color:" + colors[i] + "|label:" + labels[i] +"|" + latlonarr[i][0] + "," + latlonarr[i][1];
+    // var colors = ["blue", "red", "green", "yellow"];
+    // var labels = ["A","B","C","D"];
+    // for (var i = 0; i < latlonarr.length; i++){
+    //     requestURL += "&markers=color:" + colors[i] + "|label:" + labels[i] +"|" + latlonarr[i][0] + "," + latlonarr[i][1];
+    // }
+    if (bool){
+        requestURL += "&markers=color:blue|label:C|" + markerarr[0] + "," + markerarr[1];
     }
     requestURL += "&path=color:0x0000ff80|weight:3|";
     for (var i = 0; i < latlonarr.length; i++){
@@ -147,7 +150,7 @@ function latlongHelper(json, arr){
 }
 export function getLatLonFourCorners(urls, uiCallback){
     //Generate all 4 LAT LNG pairs given list of GEOCODE API URLS
-    var arr = []
+    var arr = [];
     var message = new Message(urls[0]);
     var promise = message.invoke(Message.JSON);
     promise.then(json => {
