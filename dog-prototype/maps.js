@@ -25,15 +25,15 @@ export function createLatLongURLfromCorner(address){
     var requestURL = GEOCODINGAPIURLSTART + "address=" + parsedAdd + "&key=" + GEOCODINGAPIKEY;
     return requestURL;
 }
-// export function createMapsURLfromLatLon(lat, lon){
-//     var requestURL = MAPSURLSTART
-//                  + "center=" + lat + "," + lon
-//                  + "&zoom=14" + "&size=400x400"
-//                  + "&markers=color:blue|label:S|" + lat + "," + lon
-//                  + "&maptype=roadmap"
-//                  + "&key=" + STATICMAPSAPIKEY;
-//     return requestURL
-// }
+export function createMapsURLfromLatLon(lat, lon){
+    var requestURL = MAPSURLSTART
+                 + "center=" + lat + "," + lon
+                 + "&zoom=14" + "&size=400x400"
+                 + "&markers=color:blue|label:C|" + lat + "," + lon
+                 + "&maptype=roadmap"
+                 + "&key=" + STATICMAPSAPIKEY;
+    return requestURL
+}
 export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
     //Generate MAPS URL from list of intersection lat lng coordinates
     /*input: 
@@ -41,11 +41,6 @@ export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
         - centerlat, centerlng -> center point for static map
     */
     var requestURL = MAPSURLSTART + "&size=400x400";
-    // var colors = ["blue", "red", "green", "yellow"];
-    // var labels = ["A","B","C","D"];
-    // for (var i = 0; i < latlonarr.length; i++){
-    //     requestURL += "&markers=color:" + colors[i] + "|label:" + labels[i] +"|" + latlonarr[i][0] + "," + latlonarr[i][1];
-    // }
     if (bool){
         requestURL += "&markers=color:blue|label:C|" + markerarr[0] + "," + markerarr[1];
     }
@@ -59,20 +54,20 @@ export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
     requestURL += "&maptype=roadmap&key=" + STATICMAPSAPIKEY;
     return requestURL
 }
-export function createMapsUrl(address1, address2){
-    //Generate MAPS URL from two input addresses --> test function
-    var add1 = parseAddress(address1);
-    var add2 = parseAddress(address2);
-    var requestURL = MAPSURLSTART
-                 + "center=" + add1
-                 + "&zoom=14" + "&size=400x400"
-                 + "&markers=color:blue|label:S|" + add1
-                 + "&markers=color:green|label:M|" + add2
-                 + "&path=color:0x0000ff80|weight:1|" + add1 + "|" + add2
-                 + "&maptype=roadmap"
-                 + "&key=" + STATICMAPSAPIKEY;
-    return requestURL
-}
+// export function createMapsUrl(address1, address2){
+//     //Generate MAPS URL from two input addresses --> test function
+//     var add1 = parseAddress(address1);
+//     var add2 = parseAddress(address2);
+//     var requestURL = MAPSURLSTART
+//                  + "center=" + add1
+//                  + "&zoom=14" + "&size=400x400"
+//                  + "&markers=color:blue|label:S|" + add1
+//                  + "&markers=color:green|label:M|" + add2
+//                  + "&path=color:0x0000ff80|weight:1|" + add1 + "|" + add2
+//                  + "&maptype=roadmap"
+//                  + "&key=" + STATICMAPSAPIKEY;
+//     return requestURL
+// }
 
 export function parseCorner(address, delimiter){
     //Generate address portion of GEOCODING URL from text input of INTERSECTION

@@ -91,7 +91,7 @@ export function loadActMonitor(){
     var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
     var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
     var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
-    // getMap(cornerURLs, false, "");
+    getMap(cornerURLs, false, "");
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
             var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
