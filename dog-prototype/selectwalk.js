@@ -1,6 +1,6 @@
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
-import { readSavedRoutes } from "maps";
+import { readSavedRoutes, getMapsImg } from "maps";
 
 import {
     FieldScrollerBehavior,
@@ -73,6 +73,11 @@ var freqRouteLabel = Picture.template($ => ({
                 for (var i=0; i<maps.length; i++){
                     trace("saved map name: " + maps[i].name + "\n");
                     trace("saved map url: " + maps[i].url + "\n");
+                    getMapsImg(maps[i].url, function(image){
+                        let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
+                        application.routeScreen.frequentContainer.pic1.empty();
+                        application.routeScreen.frequentContainer.pic1.add(mapIm);
+                    });
                 }
             } else {
                 container.url = "assets/freq-route.png";
@@ -234,23 +239,22 @@ export var NewRouteContainer = Column.template($ => ({
 }));
 
 var FrequentMaps = Container.template($ => ({
-    left: 0, top: 10, right: 0, height:175, skin: blackBorder,
+    name: $.name, left: 0, top: 10, right: 0, height:175, skin: blackBorder,
     contents: [
         $.pic
     ]
 }));
 
 var FrequentContainer = Column.template($ => ({
-    top: 5, left: 10, right: 10, bottom: 5,
+    name: "frequentContainer", top: 5, left: 10, right: 10, bottom: 5,
     contents: [
-        new FrequentMaps({pic: new freq1()}),
-        new FrequentMaps({pic: new freq2()}),
+        new FrequentMaps({name: "pic1", pic: new freq1()}),
+        new FrequentMaps({name: "pic2", pic: new freq2()}),
     ]
 }));
-
 // Screens
 export var RouteScreen = Column.template($ => ({
-    left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
         new NavTop({txt: "Select Route"}),
         new routeLogo(),
