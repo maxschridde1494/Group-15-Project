@@ -11,7 +11,7 @@ var testAddress2 = "Bob's Big Boy,Burbank,CA";
 var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 var testAddress4 = "CORNER%20W+Clark+Ave+%20AND%20N+Pass+Ave,Burbank,CA";
 
-import { markersImArray } from "main";
+import { markersImageArray } from "main";
 
 export function createLatLongURLfromAddress(address){
     //Generate GEOCODE URL from Address
@@ -56,20 +56,6 @@ export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
     requestURL += "&maptype=roadmap&key=" + STATICMAPSAPIKEY;
     return requestURL
 }
-// export function createMapsUrl(address1, address2){
-//     //Generate MAPS URL from two input addresses --> test function
-//     var add1 = parseAddress(address1);
-//     var add2 = parseAddress(address2);
-//     var requestURL = MAPSURLSTART
-//                  + "center=" + add1
-//                  + "&zoom=14" + "&size=400x400"
-//                  + "&markers=color:blue|label:S|" + add1
-//                  + "&markers=color:green|label:M|" + add2
-//                  + "&path=color:0x0000ff80|weight:1|" + add1 + "|" + add2
-//                  + "&maptype=roadmap"
-//                  + "&key=" + STATICMAPSAPIKEY;
-//     return requestURL
-// }
 
 export function parseCorner(address, delimiter){
     //Generate address portion of GEOCODING URL from text input of INTERSECTION
@@ -227,21 +213,65 @@ export function getMapsImg(url, uiCallback){
     });
 }
 
-export function getMarkerMapsImg(url, uiCallback){
-    //Generate GOOGLE STATIC MAPS image
-    var message = new Message(url);
-    var promise = message.invoke(Message.JSON);
-    promise.then(json => {
-        if (0 == message.error && 200 == message.status){
-            try{
-                uiCallback(json)
-            }
-            catch (e) {
-                throw('Web service responded with invalid JSON!\n');
-              }
-        }
-        else {
-          trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
-        }
-    });
-}
+// export function getMarkerMaps(urls, uiCallback){
+//     //Generate all 4 LAT LNG pairs given list of GEOCODE API URLS
+//     var arr = [];
+//     var message = new Message(urls[0]);
+//     var promise = message.invoke(Message.JSON);
+//     promise.then(json => {
+//         if (0 == message.error && 200 == message.status){
+//             try {
+//                 arr.push(json);
+//                 message = new Message(urls[1]);
+//                 return message.invoke(Message.JSON);
+//             }
+//             catch (e) {
+//                 throw('Web service responded with invalid JSON!\n');
+//             }
+//         }
+//         else{
+//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+//         }
+//     }).then(json => {
+//         if (0 == message.error && 200 == message.status){
+//             try {
+//                 arr.push(json);
+//                 message = new Message(urls[2]);
+//                 return message.invoke(Message.JSON);
+//             }
+//             catch (e) {
+//                 throw('Web service responded with invalid JSON!\n');
+//             }
+//         }
+//         else{
+//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+//         }
+//     }).then(json => {
+//         if (0 == message.error && 200 == message.status){
+//             try {
+//                 arr.push(json);
+//                 message = new Message(urls[3]);
+//                 return message.invoke(Message.JSON);
+//             }
+//             catch (e) {
+//                 throw('Web service responded with invalid JSON!\n');
+//             }
+//         }
+//         else{
+//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+//         }
+//     }).then(json => {
+//         if (0 == message.error && 200 == message.status){
+//             try {
+//                 arr.push(json);
+//                 uiCallback(arr);
+//             }
+//             catch (e) {
+//                 throw('Web service responded with invalid JSON!\n');
+//             }
+//         }
+//         else{
+//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+//         }
+//     })
+// }

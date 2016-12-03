@@ -1,5 +1,7 @@
 import { currentScreen, remotePins, closeAnalogs, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
 import { navBarSize, settingsIcon } from "selectwalk";
+import { markersURLArray } from "main";
+import { getMapsImg } from "maps";
 
 let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
 let largeTextStyle = new Style({ font: "bold 30px", color: "white"});
@@ -52,13 +54,36 @@ var nextIcon = Picture.template($ => ({
     }
 }));
 
+var counter = 0;
 var spacer = Container.template($ => ({
     name: "spacer", top: 10, bottom: 0, left: 0, right: 0, skin: whiteSkin,
     contents: [
     	new Column({
     		name: "col", top: 0, bottom: 0, left: 0, right: 0,
     		contents: [
-    			new Line({
+    			new Label({
+                    left: 0, right: 0, height: 20, skin: yellowSkin, active: true, string: "next", style: smallTextStyle,
+                    contents: [],
+                    Behavior: class extends Behavior {
+                        onTouchBegan(container, data){
+                            application.main.spacer.col.map.empty();
+                            trace(markersURLArray + "\n");
+                        }
+                        onTouchEnded(container, data){
+                            trace("counter: " + counter + "\n");
+                            getMapsImg(markersURLArray[counter], function(image){
+                                let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+                                application.main.spacer.col.map.add(mapIm);
+                            });
+                            if (counter == 3){
+                                counter = 0;
+                            }else{
+                                counter++;
+                            }
+                        }
+                    }
+                }),
+                new Line({
     				name: "line1", top: 0, bottom: 0, left: 0, right: 0,
     				contents: [
     					new monitorBox({name: "completed", string: "Completed:"}),
@@ -71,7 +96,12 @@ var spacer = Container.template($ => ({
     					new monitorBox({name: "steps", string: "Steps:"}),
     					new monitorBox({name: "heartrate", string: "Heart Rate:"})
     				]
-    			})
+    			}),
+                new Container({
+                    name: "map", height: 250, left: 0, right: 0,
+                    contents: [
+                    ]
+                })
     		]
     	})
     ]

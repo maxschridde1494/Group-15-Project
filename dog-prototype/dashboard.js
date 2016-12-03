@@ -43,11 +43,11 @@ var spacer = Container.template($ => ({
                         new Container({
                             name: "left", active: true, left: 0, right: 0,top: 0, bottom: 0,
                             contents: [],
-                            behavior: Behavior ({
-                                onTouchEnded: function(container, data){
+                            Behavior: class extends Behavior {
+                                onTouchEnded(container, data){
                                     loadActMonitor();
                                 }
-                            })
+                            }
                         }),
                         new Container({
                             name: "right", left: 0, right: 0, top: 0, bottom: 0,
@@ -55,10 +55,10 @@ var spacer = Container.template($ => ({
                         })
                     ]
                 }),
-                new Line({
-                    name: "livefeed", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
-                    contents: []
-                })
+                // new Line({
+                //     name: "livefeed", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
+                //     contents: []
+                // })
             ]
         })
     ]
