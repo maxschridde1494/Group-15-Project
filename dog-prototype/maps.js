@@ -213,6 +213,35 @@ export function getMapsImg(url, uiCallback){
     });
 }
 
+export function saveRoute(dict){
+    //input is dictionary with 1) name and 2) Google Maps url 
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    Files.ensureDirectory(uri)
+    var routeJson = {
+        name: dict.name,
+        url: dict.url
+    };
+    var routeFileName = routeJson.name + ".json";
+    var uriRoute = mergeURI(Files.preferencesDirectory, application.di + ".routes/" + routeFileName);
+    Files.writeJSON(uriRoute, routeJson);
+}
+export function deleteRoute(routeName){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    var route = uri + routeName + ".json";
+    Files.deleteFile(route);
+}
+export function readSavedRoutes(){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    var mapObjects = [];
+    var info, iterator = new Files.Iterator(uri);
+    while (info = iterator.getNext()){
+        var currPath = uri + info.path;
+        var route = Files.readJSON(currPath);
+        mapObjects.push(route);
+    }
+    return mapObjects;
+}
+
 // export function getMarkerMaps(urls, uiCallback){
 //     //Generate all 4 LAT LNG pairs given list of GEOCODE API URLS
 //     var arr = [];

@@ -28,7 +28,7 @@ import { RobotScreen } from "robot";
 import { AccountScreen } from "account";
 import { WebcamScreen } from "webcam";   
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
-    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner } from "maps";
+    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
 import { 
     Button,
     ButtonBehavior  
@@ -114,6 +114,7 @@ export var markersImageArray = [];
 function getMap(cornersArr, bool, latlonarr){
     getLatLonFourCorners(cornersArr, function(array){
         var mapurl = createMapsURLfromLatLon2(array, bool, latlonarr);
+        saveRoute({name: "test1", url: mapurl});
         getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
             application.main.spacer.col.map.add(mapIm);

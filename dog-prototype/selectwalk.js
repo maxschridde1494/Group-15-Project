@@ -1,5 +1,6 @@
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
+import { readSavedRoutes } from "maps";
 
 import {
     FieldScrollerBehavior,
@@ -68,6 +69,11 @@ var freqRouteLabel = Picture.template($ => ({
         updateRouteSelect(container, value) {
             if (value == 1) {
                 container.url = "assets/freq-route-selected.png";
+                var maps = readSavedRoutes();
+                for (var i=0; i<maps.length; i++){
+                    trace("saved map name: " + maps[i].name + "\n");
+                    trace("saved map url: " + maps[i].url + "\n");
+                }
             } else {
                 container.url = "assets/freq-route.png";
             }
