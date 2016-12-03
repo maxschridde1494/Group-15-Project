@@ -1,5 +1,7 @@
+import { SettingsOverlay } from "settingsoverlay"; 
+
 // import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, titleFont } from "main";
-import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin } from "main";
+import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
 import { SystemKeyboard } from 'keyboard';
 
