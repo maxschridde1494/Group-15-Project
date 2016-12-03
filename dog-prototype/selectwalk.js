@@ -1,29 +1,22 @@
-import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
-import { SettingsOverlay } from "settingsoverlay"; 
+// import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, titleFont } from "main";
+import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin } from "main";
+import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
+import { SystemKeyboard } from 'keyboard';
 
-import {
-    FieldScrollerBehavior,
-    FieldLabelBehavior
-} from 'field';
-import {
-    SystemKeyboard
-} from 'keyboard';
-
-let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray' });
-let fieldStyle = new Style({ color: 'black', font: 'bold 24px', horizontal: 'left',
+/* Fonts and Skins */
+let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray', fill: "white" });
+let fieldStyle = new Style({ color: 'black', font: 'bold 14px', horizontal: 'left',
     vertical: 'middle', left: 5, right: 5, top: 5, bottom: 5 });
-let fieldHintStyle = new Style({ color: '#aaa', font: '24px', horizontal: 'left',
+let fieldHintStyle = new Style({ color: '#aaa', font: '14px', horizontal: 'left',
     vertical: 'middle', left: 5, right: 5, top: 5, bottom: 5 });
-// let whiteSkin = new Skin({ fill: "white" });
 let fieldLabelSkin = new Skin({ fill: ['transparent', 'transparent', '#C0C0C0', '#acd473'] });
 
 var blackBorder = new Skin({fill: "white", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
-
 var titleScreenStyle = new Style({font: 'bold 60px', color: 'blue'});
 var titleStyle = new Style({font: '26px', color: 'black'});
 var labelStyle = new Style({font: '20px', fill: "black", horizontal: "left"});
 
-// Pictures
+/* Pictures */
 var routeLogo = Picture.template($ => ({
     top: 10, height: 30, url: "assets/routeIcon.png"
 }));
@@ -87,53 +80,75 @@ var freq2 = Picture.template($ => ({
     left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/freq2.jpg"
 }));
 
-//Will need to use as part of the template on most screens
 export var settingsIcon = Picture.template($ => ({
-    left: 5, height: 20, url: "assets/settings.png", active: true, 
-    Behavior: class extends Behavior {
-        onTouchEnded(container) {
-            settingsOverlayScreen = new SettingsOverlay(); 
-        	application.add(settingsOverlayScreen);  
-        }
-    }
+    left: 5, height: 20, url: "assets/settings.png"
 }));
 
-export var backIcon = Picture.template($ => ({
+var backIcon = Picture.template($ => ({
     left: 10, height: 20, url: "assets/backButton.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
+            trace("Back Screen\n");
             // MOVE TO PREVIOUS SCREEN HERE
             loadEric();
         }
     }
 }));
 
-export var selectRouteIcon = Picture.template($ => ({
+var selectRouteIcon = Picture.template($ => ({
     left: 50, height: 20, url: "assets/select-route.png"
 }));
 
-export var nextIcon = Picture.template($ => ({
+var home = "Home";
+var city = "Berkeley";
+var state = "CA";
+var stops = [["", ""], ["", ""], ["", ""], ["", ""]];
+export var stopsExport = [];
+var nextIcon = Picture.template($ => ({
     left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("Next Screen\n");
             // MOVE TO NEXT SCREEN HERE
+            var stop1 = stops[0][0] + "|" + stops[0][1];
+            var stop2 = stops[1][0] + "|" + stops[1][1];
+            var stop3 = stops[2][0] + "|" + stops[2][1];
+            var stop4 = stops[3][0] + "|" + stops[3][1];
+            stopsExport = [stop1, stop2, stop3, stop4];
+
+            trace("\nSTOPS\n");
+            trace("Home: " + home + "\n");
+            trace("Stop1: " + stop1 + "\n");
+            trace("Stop2: " + stop2 + "\n");
+            trace("Stop3: " + stop3 + "\n");
+            trace("Stop4: " + stop4 + "\n");
+            trace("City: " + city + "\n");
+            trace("State: " + state + "\n");
+            trace("Stops Export: " + stopsExport + "\n");
+            trace("END STOPS\n");
             loadAbi();
         }
     }
 }));
 
-// Templates
+/* Navigation Bar */
 export var navBarSize = 40;
-export var NavTop = Line.template($ => ({
+var TitleTemplate = Label.template($ => ({
+    left: 0, right: 25, top: 0, bottom: 0,
+    // style: titleFont,
+    styel: titleStyle,
+    string: $.string
+}));
+
+var NavTop = Line.template($ => ({
     left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
         new settingsIcon(),
-        new selectRouteIcon()
+        new TitleTemplate({string: $.txt})
     ]
 }));
 
-export var NavBot = Line.template($ => ({
+var NavBot = Line.template($ => ({
     left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
         new backIcon(),
@@ -149,14 +164,13 @@ var RouteLabels = Line.template($ => ({
     ]
 }));
 
-var startDest = "Home";
-var endDest = "";
+/* New Route */
 
 var MyField = Container.template($ => ({ 
-    height: 36, left: 0, top: 0, right: 0, skin: nameInputSkin, active: true,
+    height: 26, left: 5, top: 0, right: 5, skin: nameInputSkin, active: true,
     contents: [
         Scroller($, { 
-            left: 4, right: 4, top: 4, bottom: 0, active: true, 
+            left: 0, right: 0, top: 0, bottom: 0, active: true, 
             Behavior: FieldScrollerBehavior, clip: true, 
             contents: [
                 Label($, { 
@@ -169,64 +183,91 @@ var MyField = Container.template($ => ({
                             data.name = label.string;
                             label.container.hint.visible = (data.name.length == 0);
                             trace(data.name+"\n");
-                            application.distribute($.targetDest, label.string);
+
+                            if ($.targetID == 'home') home == data.name;
+                            else if ($.targetID == 'stop1') {
+                                if ($.stop == 0) 
+                                    stops[0] = [data.name, stops[0][1]];
+                                else if ($.stop == 1) 
+                                    stops[0] = [stops[0][0], data.name];
+                            }
+                            else if ($.targetID == 'stop2') {
+                                if ($.stop == 0) 
+                                    stops[1] = [data.name, stops[1][1]];
+                                else if ($.stop == 1) 
+                                    stops[1] = [stops[1][0], data.name];
+                            }
+                            else if ($.targetID == 'stop3') {
+                                if ($.stop == 0) 
+                                    stops[2] = [data.name, stops[2][1]];
+                                else if ($.stop == 1) 
+                                    stops[2] = [stops[2][0], data.name];
+                            }
+                            else if ($.targetID == 'stop4') {
+                                if ($.stop == 0) 
+                                    stops[3] = [data.name, stops[3][1]];
+                                else if ($.stop == 1) 
+                                    stops[3] = [stops[3][0], data.name];
+                            }
+                            else if ($.targetID == 'city') {
+                                city == data.name;
+                            }
+                            else if ($.targetID == 'state') {
+                                state == data.name;
+                            }
                         }
                     },
                 }),
                 Label($, {
                     left: 0, right: 0, top: 0, bottom: 0, style: fieldHintStyle,
-                    string: "Tap to add text...", name: "hint"
+                    string: "Tap to enter street name..", name: "hint"
                 }),
             ]
         })
     ]
 }));
 
-var NewRouteBox = Container.template($ => ({
-    left: 50, top: 10, right: 0, height: 36, skin: blackBorder, active: true,
-    contents: [
-        new MyField({name: $.txt, targetDest: $.targetDest})
-    ],
-    Behavior: class extends Behavior {
-        onTouchEnded(content) {
-            SystemKeyboard.hide();
-            content.focus();
-        }
-        onUpdateStart(content, dest) {
-            trace(dest + "\n");
-            startDest = dest;
-            trace("Start: " + startDest + "\n");
-        }
-        onUpdateEnd(content, dest) {
-            trace(dest + "\n");
-            endDest = dest;  
-            trace("End: " + endDest + "\n");
-        }
-    }
+var textLabel = Label.template($ => ({
+    top: 0, bottom: 0, left: 0, right: 0, width: 10,
+    style: fieldStyle, string: $.txt
 }));
 
-var NewRouteMap = Container.template($ => ({
-    left: 0, top: 20, right: 0, height: 250, skin: blackBorder,
+var NewRouteBox = Line.template($ => ({
+    left: 5, top: 10, right: 5, height: 26, active: true,
     contents: [
-        $.map
+        new textLabel({txt: $.txt}),
+        new MyField({name: $.txt, targetID: $.targetID, stop: 0}),
+        new MyField({name: $.txt, targetID: $.targetID, stop: 1})
     ]
 }));
 
 export var NewRouteContainer = Column.template($ => ({
-    top: 0, left: 10, right: 10, bottom: 5, active: true,
+    top: 10, left: 0, right: 0, bottom: 0, active: true,
     contents: [
-        new NewRouteBox({txt: startDest, targetDest: 'onUpdateStart'}),
-        new NewRouteBox({txt: endDest, targetDest: 'onUpdateEnd'}),
-        new NewRouteMap({map: new map1()}),
-    ],
-    Behavior: class extends Behavior {
-        onTouchEnded(content) {
-            SystemKeyboard.hide();
-            content.focus();
-        }
-    }
+        new Line({
+            top: 0, left: 0, right: 0, bottom: 0,
+            contents: [
+                new textLabel({txt: "Home:"}),
+                new MyField({name: "Home", targetID: "home"})
+            ]
+        }),
+        new NewRouteBox({txt: 'stop1', targetID: 'stop1'}),
+        new NewRouteBox({txt: 'stop2', targetID: 'stop2'}),
+        new NewRouteBox({txt: 'stop3', targetID: 'stop3'}),
+        new NewRouteBox({txt: 'stop4', targetID: 'stop4'}),
+        new Line({
+            top: 0, left: 0, right: 0, bottom: 0,
+            contents: [
+                new textLabel({txt: "City:"}),
+                new MyField({name: "Berkeley", targetID: "city"}),
+                new textLabel({txt: "State:"}),
+                new MyField({name: "CA", targetID: "state"})
+            ]
+        })
+    ]
 }));
 
+/* Frequent Route */
 var FrequentMaps = Container.template($ => ({
     left: 0, top: 10, right: 0, height:175, skin: blackBorder,
     contents: [
@@ -242,7 +283,7 @@ var FrequentContainer = Column.template($ => ({
     ]
 }));
 
-// Screens
+/* Select Route Screen */
 export var RouteScreen = Column.template($ => ({
     left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
