@@ -81,7 +81,13 @@ var freq2 = Picture.template($ => ({
 }));
 
 export var settingsIcon = Picture.template($ => ({
-    left: 5, height: 20, url: "assets/settings.png"
+    left: 5, height: 20, url: "assets/settings.png", active: true, 
+    Behavior: class extends Behavior {
+        onTouchEnded(container) {
+            settingsOverlayScreen = new SettingsOverlay(); 
+            application.add(settingsOverlayScreen);  
+        }
+    }
 }));
 
 var backIcon = Picture.template($ => ({
