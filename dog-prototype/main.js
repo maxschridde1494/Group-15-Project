@@ -14,7 +14,6 @@ export var accountEmail = "";
 export var accountPhone = ""; 
 export var accountAddress = ""; 
 
-let remotePins; 
 var analogReader1 = undefined;
 var analogReader2 = undefined;
 var analogReader3 = undefined;
