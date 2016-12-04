@@ -1,7 +1,6 @@
 import { SettingsOverlay } from "settingsoverlay"; 
 
-// import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, titleFont } from "main";
-import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
+import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen, titleFont} from "main";
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
 import { SystemKeyboard } from 'keyboard';
 
@@ -143,8 +142,7 @@ var nextIcon = Picture.template($ => ({
 export var navBarSize = 40;
 var TitleTemplate = Label.template($ => ({
     left: 0, right: 25, top: 0, bottom: 0,
-    // style: titleFont,
-    styel: titleStyle,
+    style: titleFont,
     string: $.string
 }));
 

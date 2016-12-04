@@ -1,8 +1,7 @@
-// import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, 
-//     whiteSkin, titleFont, loadGabe } from "main";
-var titleStyle = new Style({font: '26px', color: 'black'});
 import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, 
-    whiteSkin, loadGabe } from "main";
+    whiteSkin, titleFont, loadGabe } from "main";
+var titleStyle = new Style({font: '26px', color: 'black'});
+
 import { Button, ButtonBehavior } from 'buttons';
 
 var dogLabelStyle = new Style({font: "bold 15px ABeeZee", color: "black" });

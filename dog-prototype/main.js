@@ -1,6 +1,7 @@
 export let orangeSkin = new Skin({fill: "#ff7e3e"});
 export let yellowSkin = new Skin({fill: "#ffd359"});
 export let whiteSkin = new Skin({fill: "white"});
+export let titleFont = new Style({ font: "30px ABeeZee", color: "white" });
 
 let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
 
