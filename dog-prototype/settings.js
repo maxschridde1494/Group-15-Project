@@ -1,6 +1,7 @@
 import { currentScreen, orangeSkin, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { ButtonBehavior } from 'buttons';
+export var displayWebcam = false; 
 
 var peachSkin = new Skin({ fill: "#FFF8EE" });
 var darkPeachSkin = new Skin({ fill: "#FFE4B3" });
@@ -14,7 +15,8 @@ var forwardIcon = Picture.template($ => ({
     left: $.leftDistance, height: 20, top: 15, url: "assets/forwardArrow.png"
 })); 
 
-var labelTemplate = Label.template($=>({ left: 60, top: 10, string: $.txt,     		style: normalText }))
+var labelTemplate = Label.template($=>({ left: 60, top: 10, string: $.txt, 
+    		style: normalText }))
 
 var AccountButtons = Line.template($ => ({
     left: 0, top: 0, bottom: 0, right: 0, active: true, skin: peachSkin, 
@@ -55,17 +57,6 @@ var RobotButtons = Line.template($ => ({
     }
 }));
 
-var i = 0; 
-export var displayWebcam = false; 
-
-//citation: http://stackoverflow.com/questions/3583724/how-do-i-add-a-delay-in-a-javascript-loop
-function delayLoop () {           //  create a loop function   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
-   	  if (!displayWebcam) {
-   	  	return
-   	  }      i++;                     //  increment the counter
-      currentScreen.first.url = "assets/dogWalkingGif/tmp-" + i.toString() + ".gif";       if (i > 25) {            //  if the counter < 10, call the loop function	      i = 0;              //  ..  again which will trigger another       } 
-      delayLoop(); 
-         }, 100)}
 
 var AboutButtons = Line.template($ => ({
     left: 0, top: 0, bottom: 5, right: 0, active: true, skin: darkPeachSkin, 

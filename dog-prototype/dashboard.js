@@ -1,6 +1,7 @@
-import { currentScreen, loadEric, loadActMonitor, MainContainerTemplate, ButtonColumnTemplate, 
+import { currentScreen, loadEric, loadActMonitor, loadWebcam, MainContainerTemplate, ButtonColumnTemplate, 
             MyButtonTemplate, orangeSkin, yellowSkin, whiteSkin } from "main";
 import { navBarSize, settingsIcon } from "selectwalk";
+import { displayWebcam } from "settings";
 
 let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
 let mediumTextStyle = new Style({ font: "bold 22px", color: "white" });
@@ -32,6 +33,22 @@ var backIcon = Picture.template($ => ({
     }
 }));
 
+var delayLoopCounter = 0;
+function delayLoop () {           //  create a loop function
+   setTimeout(function () {    //  call a 3s setTimeout when the loop is called
+      if (!displayWebcam) {
+        return
+      }
+      delayLoopCounter++;                     //  increment the counter
+      currentScreen.first.url = "assets/dogWalkingGif/tmp-" + delayLoopCounter.toString() + ".gif"; 
+      if (delayLoopCounter > 25) {            //  if the counter < 10, call the loop function
+          delayLoopCounter = 0;              //  ..  again which will trigger another 
+      } 
+      delayLoop(); 
+      
+   }, 100)
+}
+
 export var dashboardScreen = Container.template($ => ({
     name: "dashboard", top: 0, bottom: 0, left: 0, right: 0, active: true, skin: yellowSkin,
     contents: [
@@ -48,9 +65,18 @@ export var dashboardScreen = Container.template($ => ({
                     }
                 }),
                 new Container({
-                    name: "livefeed", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
+                    name: "livefeed", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin, active: true,
                     contents:
-                    []
+                    [],
+                    Behavior: class extends Behavior{
+                        onTouchEnded(container,data){
+                            loadWebcam();
+                            delayLoopCounter = 0;
+                            displayWebcam = true; 
+                            loadWebcam(delayLoopCounter.toString()); 
+                            delayLoop(); 
+                        }
+                    }
                 }),
                 new NavBot({txt: "Next"})
                     ]
