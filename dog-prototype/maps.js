@@ -40,7 +40,8 @@ export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
     //Generate MAPS URL from list of intersection lat lng coordinates
     /*input: 
         - latlonarr: array of [lat,lon] arrays for each marker
-        - centerlat, centerlng -> center point for static map
+        - bool: true if want marker on map
+        - markerarr -> lat lon for marker point
     */
     var requestURL = MAPSURLSTART + "&size=400x400";
     if (bool){

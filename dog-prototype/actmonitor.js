@@ -1,7 +1,7 @@
 import { currentScreen, remotePins, closeAnalogs, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
 import { navBarSize, settingsIcon } from "selectwalk";
 import { markersURLArray } from "main";
-import { getMapsImg } from "maps";
+import { getMapsImg, saveRoute, deleteRoute } from "maps";
 
 let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
 let largeTextStyle = new Style({ font: "bold 30px", color: "white"});
@@ -71,6 +71,7 @@ var spacer = Container.template($ => ({
                         }
                         onTouchEnded(container, data){
                             trace("counter: " + counter + "\n");
+                            saveRoute({name: "test" + counter, url: markersURLArray[counter]});
                             getMapsImg(markersURLArray[counter], function(image){
                                 let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
                                 application.main.spacer.col.map.add(mapIm);

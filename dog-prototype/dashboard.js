@@ -45,7 +45,7 @@ var spacer = Container.template($ => ({
                             contents: [],
                             Behavior: class extends Behavior {
                                 onTouchEnded(container, data){
-                                    loadActMonitor();
+                                    loadActMonitor([]); //here, add the corners of the current walk
                                 }
                             }
                         }),

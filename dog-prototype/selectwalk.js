@@ -74,9 +74,11 @@ var freqRouteLabel = Picture.template($ => ({
                     trace("saved map name: " + maps[i].name + "\n");
                     trace("saved map url: " + maps[i].url + "\n");
                     getMapsImg(maps[i].url, function(image){
-                        let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
-                        application.routeScreen.frequentContainer.pic1.empty();
-                        application.routeScreen.frequentContainer.pic1.add(mapIm);
+                        // let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
+                        let mapIm = new freq1({url: image});
+                        application.routeScreen.frequentContainer.add(new FrequentMaps({name: "pic1", pic: mapIm}));
+                        // application.routeScreen.frequentContainer.pic1.empty();
+                        // application.routeScreen.frequentContainer.pic1.add(mapIm);
                     });
                 }
             } else {
@@ -84,18 +86,6 @@ var freqRouteLabel = Picture.template($ => ({
             }
         }
     }
-}));
-
-var map1 = Picture.template($ => ({
-    left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/map1.png"
-}));
-
-var freq1 = Picture.template($ => ({
-    left: 1, right: 1, top: 1, bottom: 1, height: 150, aspect: 'fill', url: "assets/freq1.jpg"
-}));
-
-var freq2 = Picture.template($ => ({
-    left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/freq2.jpg"
 }));
 
 //Will need to use as part of the template on most screens
@@ -238,6 +228,22 @@ export var NewRouteContainer = Column.template($ => ({
     }
 }));
 
+var map1 = Picture.template($ => ({
+    left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/map1.png"
+}));
+
+var freq1 = Picture.template($ => ({
+    left: 0, right: 125, top: 1, bottom: 1, height: 150, aspect: 'fit', url: $.url
+}));
+
+// var freq1 = Picture.template($ => ({
+//     left: 1, right: 1, top: 1, bottom: 1, height: 150, aspect: 'fill', url: "assets/freq1.jpg"
+// }));
+
+// var freq2 = Picture.template($ => ({
+//     left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/freq2.jpg"
+// }));
+
 var FrequentMaps = Container.template($ => ({
     name: $.name, left: 0, top: 10, right: 0, height:175, skin: blackBorder,
     contents: [
@@ -248,8 +254,8 @@ var FrequentMaps = Container.template($ => ({
 var FrequentContainer = Column.template($ => ({
     name: "frequentContainer", top: 5, left: 10, right: 10, bottom: 5,
     contents: [
-        new FrequentMaps({name: "pic1", pic: new freq1()}),
-        new FrequentMaps({name: "pic2", pic: new freq2()}),
+        // new FrequentMaps({name: "pic1", pic: new freq1()}),
+        // new FrequentMaps({name: "pic2", pic: new freq2()}),
     ]
 }));
 // Screens
