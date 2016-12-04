@@ -16,7 +16,8 @@ var locationIcon = Picture.template($ => ({   height: 40, right: 7, left: 10, u
         new EmailLine(),
         new PhoneLine(), 
         new AddressLine(), 
-        new buttonTemplate({string: "Clear Account"})
+        new buttonTemplate({string: "Save Account", top: 50}),
+        new buttonTemplate({string: "Clear Account", top: 0})
             ],    Behavior: class extends Behavior {        onTouchEnded(content) {            SystemKeyboard.hide();            content.focus();        }    }}));
 
 var EmailLine = Line.template($ => ({
@@ -53,18 +54,25 @@ var AddressLine = Line.template($ => ({
                             }                        }                    },                }),                Label($, {                    left: 4, right: 4, top: 4, bottom: 4, style: fieldHintStyle,                    string: $.hint, name: "hint"                }),            ]        })    ]}));
 
 let buttonTemplate = Button.template($ => ({
-    top: 50, bottom: 50, left: 20, right: 20,  skin: borderedSkin,
+    top: $.top, bottom: 10, left: 30, right: 30,  skin: borderedSkin,
     contents: [
         new Label({left: 0, right: 0, string: $.string, style: small})
     ],
     Behavior: class extends ButtonBehavior {
+    	
         onTap(button){
-            accountName = ""; 
-            accountEmail = ""; 
-            accountPhone = ""; 
-            accountAddress = ""; 
-            saveJson(); 
-            loadAccount(); 
+        	if ($.string == "Clear Account") {
+                accountName = ""; 
+            	accountEmail = ""; 
+            	accountPhone = ""; 
+            	accountAddress = ""; 
+            	saveJson(); 
+            	loadAccount(); 
+            }
+        	if ($.string == "Save Account") {
+                saveJson(); 
+            }
+            
         }
     }
 }));//Will need to use as part of the template on most screensvar settingsIcon = Picture.template($ => ({    left: 5, height: 20, url: "assets/settings.png", active: true,     Behavior: class extends Behavior {        onTouchEnded(container) {
