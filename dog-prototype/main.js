@@ -6,6 +6,11 @@ export var currentScreen = null;
 export var settingsOverlayScreen = null; 
 export let deviceURL;
 
+export var accountName = ""; 
+export var accountEmail = ""; 
+export var accountPhone = ""; 
+export var accountAddress = ""; 
+
 let remotePins; 
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
@@ -91,6 +96,12 @@ export function loadRobot(){
 }
 
 export function loadAccount(){
+	var accountUri = mergeURI(Files.preferencesDirectory, application.di + ".account/account.json"); 
+	if (Files.exists(accountUri)){        var account = Files.readJSON(accountUri);
+        accountName = account.name; 
+        accountEmail = account.email; 
+        accountPhone = account.phone; 
+        accountAddress = account.address;     }
     application.remove(currentScreen);
     currentScreen = new AccountScreen();
     application.add(currentScreen);
@@ -146,7 +157,7 @@ export var borderedSkin = new Skin({
 });   
  
 export let MyButtonTemplate = Button.template($ => ({
-    top: 10, bottom: 10, left: 40, right: 40,  skin: borderedSkin,
+    top: 7, bottom: 7, left: 40, right: 40,  skin: borderedSkin,
     contents: [
         new Label({left: 0, right: 0, string: $.string, style: small})
     ],
@@ -158,17 +169,21 @@ export let MyButtonTemplate = Button.template($ => ({
             if ($.string == "New Walk") {
                 loadGabe();
             }
+            if ($.string == "Settings") {
+                loadSettings();
+            }
         }
     }
 }));
 
 export var ButtonColumnTemplate = Column.template($ => ({
-    left: 20, right: 20, top: 135, bottom: 180,
+    left: 20, right: 20, top: 100, bottom: 180,
     contents: [
         new Picture({height: 55, url: "assets/logo.png", bottom: 25}),
         new MyButtonTemplate({string: "Current Walk"}),
         new MyButtonTemplate({string:"New Walk"}),
-        new MyButtonTemplate({string:"Schedule Walk"})
+        new MyButtonTemplate({string:"Schedule Walk"}),
+        new MyButtonTemplate({string:"Settings"})
     ]
 }));
 

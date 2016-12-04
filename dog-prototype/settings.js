@@ -1,4 +1,4 @@
-import { currentScreen, orangeSkin, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam} from "main";
+import { currentScreen, orangeSkin, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { ButtonBehavior } from 'buttons';
 
@@ -84,7 +84,7 @@ var AboutButtons = Line.template($ => ({
 }));
 
 var DogIcon = Picture.template($ => ({
-    right: 0, url: "assets/dogSideways.png"
+    right: -10, height: 270, url: "assets/dogSideways.png"
 }));
 
 //Will need to use as part of the template on most screens
@@ -104,6 +104,9 @@ var settingsText = Picture.template($ => ({
     left: 80, height: 35, url: "assets/settingsText.png"
 }));
 
+var backIcon = Picture.template($ => ({    left: 10, height: 20, url: "assets/backButton.png", active: true,    Behavior: class extends Behavior {        onTouchEnded(container) {            // MOVE TO PREVIOUS SCREEN HERE            loadEric();        }    }}));
+
+
 
 // Templates
 var navBarSize = 40;
@@ -115,6 +118,12 @@ var NavTop = Line.template($ => ({
     ]
 }));
 
+var NavBot = Line.template($ => ({
+    left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
+    contents: [
+        new backIcon()
+    ]
+}));
 
 // Screens
 export var SettingsScreen = Column.template($ => ({
@@ -125,6 +134,7 @@ export var SettingsScreen = Column.template($ => ({
         new DogsButtons(),
         new RobotButtons(),
         new AboutButtons(),
-        new DogIcon()
+        new DogIcon(),
+        new NavBot()
     ]
 }));
