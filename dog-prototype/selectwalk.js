@@ -298,5 +298,11 @@ export var RouteScreen = Column.template($ => ({
         new RouteLabels(),
         $.routeSelect,
         new NavBot({txt: "Next"}),
-    ]
+    ],
+    Behavior: class extends Behavior{
+        onTouchEnded(content){
+            KEYBOARD.hide();
+            content.focus();
+        }
+    }
 }));
