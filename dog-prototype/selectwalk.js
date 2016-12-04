@@ -10,6 +10,13 @@ import {
     SystemKeyboard
 } from 'keyboard';
 
+import {
+    VerticalScroller,
+    VerticalScrollbar,
+    TopScrollerShadow,
+    BottomScrollerShadow
+} from 'scroller';
+
 let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray' });
 let fieldStyle = new Style({ color: 'black', font: 'bold 24px', horizontal: 'left',
     vertical: 'middle', left: 5, right: 5, top: 5, bottom: 5 });
@@ -61,7 +68,7 @@ var freqRouteLabel = Picture.template($ => ({
             if (labelStatus != "Frequent Route") {
                 labelStatus = "Frequent Route";
                 application.remove(currentScreen);
-                currentScreen = new RouteScreen({routeSelect: new FrequentContainer()});
+                currentScreen = new RouteScreenFrequent({routeSelect: new FrequentContainer()});
                 application.add(currentScreen);
                 application.distribute("updateRouteSelect", 1);
             }
@@ -76,7 +83,7 @@ var freqRouteLabel = Picture.template($ => ({
                     getMapsImg(maps[i].url, function(image){
                         // let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
                         let mapIm = new freq1({url: image});
-                        application.routeScreen.frequentContainer.add(new FrequentMaps({name: "pic1", pic: mapIm}));
+                        application.routeScreen.scroller.frequentContainer.add(new FrequentMaps({name: "pic1", pic: mapIm}));
                         // application.routeScreen.frequentContainer.pic1.empty();
                         // application.routeScreen.frequentContainer.pic1.add(mapIm);
                     });
@@ -252,7 +259,7 @@ var FrequentMaps = Container.template($ => ({
 }));
 
 var FrequentContainer = Column.template($ => ({
-    name: "frequentContainer", top: 5, left: 10, right: 10, bottom: 5,
+    name: "frequentContainer", top: 5, left: 10, right: 10,
     contents: [
         // new FrequentMaps({name: "pic1", pic: new freq1()}),
         // new FrequentMaps({name: "pic2", pic: new freq2()}),
@@ -266,6 +273,22 @@ export var RouteScreen = Column.template($ => ({
         new routeLogo(),
         new RouteLabels(),
         $.routeSelect,
+        new NavBot({txt: "Next"}),
+    ]
+}));
+var RouteScreenFrequent = Column.template($ => ({
+    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+    contents: [
+        new NavTop({txt: "Select Route"}),
+        new routeLogo(),
+        new RouteLabels(),
+        VerticalScroller($, {
+            name: "scroller", top: 0, bottom: 0, active: true,
+            contents: [
+                $.routeSelect,
+                VerticalScrollbar()
+            ]
+        }),
         new NavBot({txt: "Next"}),
     ]
 }));
