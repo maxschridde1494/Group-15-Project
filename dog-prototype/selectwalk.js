@@ -83,7 +83,7 @@ var freqRouteLabel = Picture.template($ => ({
                     getMapsImg(maps[i].url, function(image){
                         // let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
                         let mapIm = new freq1({url: image});
-                        application.routeScreen.scroller.frequentContainer.add(new FrequentMaps({name: "pic1", pic: mapIm}));
+                        application.routeScreen.col.scroller.frequentContainer.add(new FrequentMaps({name: "pic1", pic: mapIm}));
                         // application.routeScreen.frequentContainer.pic1.empty();
                         // application.routeScreen.frequentContainer.pic1.add(mapIm);
                     });
@@ -279,16 +279,44 @@ export var RouteScreen = Column.template($ => ({
 var RouteScreenFrequent = Column.template($ => ({
     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
-        new NavTop({txt: "Select Route"}),
-        new routeLogo(),
-        new RouteLabels(),
-        VerticalScroller($, {
-            name: "scroller", top: 0, bottom: 0, active: true,
-            contents: [
-                $.routeSelect,
-                VerticalScrollbar()
+        new Column({
+            name: "col", top: 0, bottom: 0, left: 0, right: 0,
+            contents:[
+                // VerticalScroller($, {
+                //     name: "scroller", top: 0, bottom: 0, active: true,
+                //     contents: [
+                //         $.routeSelect,
+                //         VerticalScrollbar()
+                //     ]
+                // }),
+                new NavTop({txt: "Select Route"}),
+                new routeLogo(),
+                new RouteLabels(),
+                VerticalScroller($, {
+                    name: "scroller", top: 0, bottom: 0, active: true,
+                    contents: [
+                        $.routeSelect,
+                        VerticalScrollbar()
+                    ]
+                }),
+                new NavBot({txt: "Next"})
             ]
-        }),
-        new NavBot({txt: "Next"}),
+        })
     ]
 }));
+// var RouteScreenFrequent = Column.template($ => ({
+//     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+//     contents: [
+//         VerticalScroller($, {
+//             name: "scroller", top: 0, bottom: 0, active: true,
+//             contents: [
+//                 new NavTop({txt: "Select Route"}),
+//                 new routeLogo(),
+//                 new RouteLabels(),
+//                 $.routeSelect,
+//                 new NavBot({txt: "Next"}),
+//                 VerticalScrollbar()
+//             ]
+//         })
+//     ]
+// }));
