@@ -1,132 +1,117 @@
-import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, whiteSkin } from "main";
-import { 
-    Button,
-    ButtonBehavior 
-} from 'buttons';
+import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, 
+    whiteSkin, titleFont, loadGabe } from "main";
+var titleStyle = new Style({font: '26px', color: 'black'});
 
-let backgroundPhoto = new Texture("assets/background.png");
+import { Button, ButtonBehavior } from 'buttons';
 
-let backgroundSkin = new Skin({
-      height: 1136, width: 725,
-      texture: backgroundPhoto,
-      fill: "white",
-      aspect: "fit"
+var dogLabelStyle = new Style({font: "bold 15px ABeeZee", color: "black" });
+
+var dogs = {
+    "Pepper": "assets/dog1.png",
+    "Snowball": "assets/dog2.png",
+    "Big Head": "assets/dog3.png"
+};
+
+function generateDogs() {
+    for (var d in dogs) {
+        trace(d + "\n")
+    }   
+}
+
+var dog1 = new Skin({
+      width: 135, height: 135, fill: "white", aspect: "fit",
+      texture: new Texture(dogs["Pepper"])
 });
 
-let dog1Photo = new Texture("assets/dog1.png");
-
-let dog1Skin = new Skin({
-      width: 150, height: 150,
-      texture: dog1Photo,
-      fill: "white",
-      aspect: "fit"
+var dog2 = new Skin({
+      width: 135, height: 135, fill: "white", aspect: "fit",
+      texture: new Texture(dogs["Snowball"])
 });
 
-let dog2Photo = new Texture("assets/dog2.png");
-
-let dog2Skin = new Skin({
-      width: 150, height: 150,
-      texture: dog2Photo,
-      fill: "white",
-      aspect: "fit"
+var dog3 = new Skin({
+      width: 135, height: 135, fill: "white", aspect: "fit",
+      texture: new Texture(dogs["Big Head"])
 });
 
-let dog3Photo = new Texture("assets/dog3.png");
+var dogButton = Content.template($ => ({ 
+    top: 0, left: 0, right: 0, height: 80, width: 80, active: true,
+    skin: $.dogSkin,
+    Behavior: class extends ButtonBehavior {
+        onTap(button){
+            loadErikConfirmationPage(); 
+        }
+    }
+}));
 
-let dog3Skin = new Skin({
-      width: 150, height: 150,
-      texture: dog3Photo,
-      fill: "white",
-      aspect: "fit"
-});
+var dogContainer = Column.template($ => ({
+    left: 0, right: 0, top: 0, bottom: 0,
+    contents: [
+        new dogButton({dogSkin: $.dogSkin}),
+        new Label({left: 0, right: 0, top: 5, bottom: 5, height: 15, 
+            string: $.string, style: dogLabelStyle})
+    ]
+}));
+
+/* Navigation Bar */
+var settingsIcon = Picture.template($ => ({
+    left: 5, height: 20, url: "assets/settings.png"
+}));
+
+var backIcon = Picture.template($ => ({
+    left: 10, height: 20, url: "assets/backButton.png", active: true,
+    Behavior: class extends Behavior {
+        onTouchEnded(container) {
+            trace("Back Screen\n");
+            // MOVE TO PREVIOUS SCREEN HERE
+            loadGabe();
+        }
+    }
+}));
+
+var navBarSize = 40;
+var TitleTemplate = Label.template($ => ({
+    left: 0, right: 25, top: 0, bottom: 0,
+    style: titleStyle,
+    string: $.string
+}));
+
+var NavTop = Line.template($ => ({
+    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
+    contents: [
+        new settingsIcon(),
+        new TitleTemplate({string: $.txt})
+    ]
+}));
+
+var NavBot = Line.template($ => ({
+    left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
+    contents: [
+        new backIcon(),
+    ]
+}));
 
 export var text0Template = Column.template($ => ({
-    left: 0, right: 0, top: 10,
+    left: 0, right: 0, top: 10, bottom: 10,
     contents: [
         Label($, {  
-            left: 0, right: 0, top: 80, height: 35, 
-            style: new Style({ font: "bold 35px", color: "#000000" }), 
+            left: 0, right: 0, top: 10,
+            style: new Style({ font: "30px ABeeZee", color: 'black' }), 
             string: "Who Is Joining?" 
         }),
     ]
 }));
 
-var text1label = new Label({left:0, right:0, height:40, string:"Pepper", style: new Style({ font: "bold 15px", color: "#000000" })});
-
-
-export var text1Template = Column.template($ => ({
-    left: 0, right: 0, top: 230,
-    contents: [
-        text1label,
-    ]
-}));
-
-let mainButton1 = new Content({ 
-    top: 150, left: 115, height: 100, width: 100, active: true,
-    skin: dog1Skin, 
-    Behavior: class extends ButtonBehavior {
-        onTap(button){
-          loadErikConfirmationPage(); 
-        }
-    }
-});
-
-var text2label = new Label({left:0, right:0, height:40, string:"Snowball", style: new Style({ font: "bold 15px", color: "#000000" })});
-
-
-export var text2Template = Column.template($ => ({
-    left: 0, right: 0, top: 350,
-    contents: [
-        text2label,
-    ]
-}));
-
-var text3label = new Label({left:0, right:0, height:40, string:"Big Head", style: new Style({ font: "bold 15px", color: "#000000" })});
-
-
-export var text3Template = Column.template($ => ({
-    left: 0, right: 0, top: 470,
-    contents: [
-        text3label,
-    ]
-}));
-
-let mainButton2 = new Content({ 
-    top: 270, left: 115, height: 100, width: 100, active: true,
-    skin: dog2Skin, 
-    Behavior: class extends ButtonBehavior {
-        onTap(button){
-          loadErikConfirmationPage(); 
-        }
-    }
-});
-
-let mainButton3 = new Content({ 
-    top: 390, left: 115, height: 100, width: 100, active: true,
-    skin: dog3Skin, 
-    Behavior: class extends ButtonBehavior {
-        onTap(button){
-          loadErikConfirmationPage(); 
-        }
-    }
-});
-
-let mainCon = new Content({ 
-    top: 0, left: 0, height: 880, width: 560, 
-    skin: backgroundSkin, 
-});
-
-export let MainContainer = Container.template($ => ({
-    top: 0, bottom: 0, left: 0, right: 0,
+export var MainContainer = Column.template($ => ({
+    top: 0, bottom: 0, left: 0, right: 0, skin: new Skin({fill: "#ffd359"}),
     active: true, state: 0,
     contents: [
-        mainCon,
+        new NavTop({txt: "Select Dog"}),
         text0Template(),
-        mainButton1,
-        text1Template(),
-        mainButton2,
-        text2Template(),
-        mainButton3,
-        text3Template(),
+        new dogContainer({dogSkin: dog1, string: "Pepper"}),
+        new dogContainer({dogSkin: dog2, string: "Snowball"}),
+        new dogContainer({dogSkin: dog3, string: "Big Head"}),
+        new NavBot({txt: "Next"}),
     ],
 }));
+
+// export var MainContainer = new ScreenTemplate({screenContent: new SelectDog()});

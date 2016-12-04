@@ -1,77 +1,74 @@
-let headlineStyle = new Style({font: 'bold 25px', color: 'white'});
-let smallHeadlineStyle = new Style({font: 'bold 15px', color: 'white'});
-
-import { currentScreen, loadEric, MainContainerTemplate, ButtonColumnTemplate, 
+import { currentScreen, loadEric, loadActMonitor, MainContainerTemplate, ButtonColumnTemplate, 
             MyButtonTemplate, orangeSkin, yellowSkin, whiteSkin } from "main";
+import { navBarSize, settingsIcon } from "selectwalk";
 
-var navBarButton = Container.template($ => ({
-    height: 20, width: 20, left: 5, active: true, exclusiveTouch: true,
-    skin: $.skin,
-    contents: [    ],
-    behavior: Behavior ({
-        onTouchBegan: function(container, data){
-            // container.label.skin = whiteSkin;
-        },
-        onTouchEnded: function(container, data){
-            // container.label.skin = $.skin;
+let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
+let largeTextStyle = new Style({ font: "bold 30px", color: "white"});
+let orangeSkinBorder = new Skin({fill: "#ff7e3e", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
+
+var NavTop = Line.template($ => ({
+    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
+    contents: [
+        new settingsIcon(),
+        new Label({hidden: false, left: 0, right: 0, string: $.string, style: largeTextStyle})
+    ]
+}));
+
+var NavBot = Line.template($ => ({
+    left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
+    contents: [
+        new backIcon()
+    ]
+}));
+
+var backIcon = Picture.template($ => ({
+    left: 10, height: 20, url: "assets/backButton.png", active: true,
+    Behavior: class extends Behavior {
+        onTouchEnded(container) {
+            // MOVE TO PREVIOUS SCREEN HERE
             loadEric();
         }
+    }
+}));
 
-    }) 
+var spacer = Container.template($ => ({
+    name: "spacer", bottom: 0, left: 0, right: 0, skin: whiteSkin,
+    contents: [
+        new Column({
+            name: "dash", top: 0, bottom: 0, left: 0, right: 0,
+            contents: [
+                new Line({
+                    name: "views", left: 0, right: 0, skin: yellowSkin,
+                    contents: [
+                        new Container({
+                            name: "left", active: true, left: 0, right: 0,top: 0, bottom: 0,
+                            contents: [],
+                            Behavior: class extends Behavior {
+                                onTouchEnded(container, data){
+                                    loadActMonitor();
+                                }
+                            }
+                        }),
+                        new Container({
+                            name: "right", left: 0, right: 0, top: 0, bottom: 0,
+                            contents: []
+                        })
+                    ]
+                }),
+                // new Line({
+                //     name: "livefeed", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
+                //     contents: []
+                // })
+            ]
+        })
+    ]
 }));
 
 export var dashboardScreen = Container.template($ => ({
-    name: "dashboard",
-    top: 0, bottom: 0, left: 0, right: 0,
-    active: true, skin: orangeSkin,
+    name: "dashboard", top: 0, bottom: 0, left: 0, right: 0, active: true, skin: yellowSkin,
     contents: [
-    	new Column({
-    		name: 'main', top: 0, bottom: 0, right: 0, left: 0,
-    		contents: [
-    			new Column({
-    				name: 'navBar',
-    				skin: orangeSkin, height: 25, right: 0, left: 0, top: 5,
-    				contents:[
-                        new navBarButton({skin: yellowSkin})
-    				]
-    			}),
-    			new Column({
-    				name: 'dash', skin: yellowSkin,
-    				top: 0, bottom: 5, left: 0, right: 0,
-    				contents:[
-                        new Label({top: 5, height: 20, style: headlineStyle, string: "Dashboard"}),
-                        new Label({height: 20, style: smallHeadlineStyle, string: "Home - South Park"}),
-                        new Line({
-                            name: 'views', skin: yellowSkin,
-                            top: 0, left: 0, right: 0, height: 120,
-                            contents:[
-                                new Container({
-                                    name: 'left', left: 27, right: 5,
-                                    contents:[]
-                                }),
-                                new Container({
-                                    name: 'right', left: 5, right: 27,
-                                    contents:[]
-                                })
-                            ]
-                        }),
-                        new Container({
-                            name: 'livefeed', top: 5, bottom: 0, left: 0, right: 0, width: 320, height: 160,
-                            skin: yellowSkin, 
-                            contents:[]
-                        }),
-                        new Container({})
-    				]
-    			}),
-                new Column({
-                    name: 'bottomNav',
-                    skin: orangeSkin, height: 25,
-                    contents:[
-                        new navBarButton({skin: yellowSkin})
-                    ]
-                })
-
-    		]
-    	})
+        new NavTop({string: "Dashboard"}),
+        new spacer(),
+        new NavBot({txt: "Next"})
     ]
 }));
