@@ -13,7 +13,7 @@ import {
     BottomScrollerShadow
 } from 'scroller';
 
-let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray' fill: "white"});
+let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray', fill: "white"});
 let fieldStyle = new Style({ color: 'black', font: 'bold 14px', horizontal: 'left',
     vertical: 'middle', left: 5, right: 5, top: 5, bottom: 5 });
 let fieldHintStyle = new Style({ color: '#aaa', font: '14px', horizontal: 'left',
