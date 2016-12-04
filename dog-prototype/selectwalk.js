@@ -1,6 +1,22 @@
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
 
+import {
+    FieldScrollerBehavior,
+    FieldLabelBehavior
+} from 'field';
+import {
+    SystemKeyboard
+} from 'keyboard';
+
+let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray' });
+let fieldStyle = new Style({ color: 'black', font: 'bold 24px', horizontal: 'left',
+    vertical: 'middle', left: 5, right: 5, top: 5, bottom: 5 });
+let fieldHintStyle = new Style({ color: '#aaa', font: '24px', horizontal: 'left',
+    vertical: 'middle', left: 5, right: 5, top: 5, bottom: 5 });
+// let whiteSkin = new Skin({ fill: "white" });
+let fieldLabelSkin = new Skin({ fill: ['transparent', 'transparent', '#C0C0C0', '#acd473'] });
+
 var blackBorder = new Skin({fill: "white", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
 
 var titleScreenStyle = new Style({font: 'bold 60px', color: 'blue'});
@@ -133,13 +149,60 @@ var RouteLabels = Line.template($ => ({
     ]
 }));
 
-var NewRouteBox = Container.template($ => ({
-    left: 50, top: 10, right: 0, height: 30, skin: blackBorder,
+var startDest = "Home";
+var endDest = "";
+
+var MyField = Container.template($ => ({ 
+    height: 36, left: 0, top: 0, right: 0, skin: nameInputSkin, active: true,
     contents: [
-        new Text({
-            left: 5, top: 5, right: 5, bottom: 0, style: labelStyle, string: $.txt
+        Scroller($, { 
+            left: 4, right: 4, top: 4, bottom: 0, active: true, 
+            Behavior: FieldScrollerBehavior, clip: true, 
+            contents: [
+                Label($, { 
+                    left: 0, top: 0, bottom: 0, skin: fieldLabelSkin, 
+                    style: fieldStyle, anchor: 'NAME',
+                    editable: true, string: $.name,
+                    Behavior: class extends FieldLabelBehavior {
+                        onEdited(label) {
+                            let data = this.data;
+                            data.name = label.string;
+                            label.container.hint.visible = (data.name.length == 0);
+                            trace(data.name+"\n");
+                            application.distribute($.targetDest, label.string);
+                        }
+                    },
+                }),
+                Label($, {
+                    left: 0, right: 0, top: 0, bottom: 0, style: fieldHintStyle,
+                    string: "Tap to add text...", name: "hint"
+                }),
+            ]
         })
     ]
+}));
+
+var NewRouteBox = Container.template($ => ({
+    left: 50, top: 10, right: 0, height: 36, skin: blackBorder, active: true,
+    contents: [
+        new MyField({name: $.txt, targetDest: $.targetDest})
+    ],
+    Behavior: class extends Behavior {
+        onTouchEnded(content) {
+            SystemKeyboard.hide();
+            content.focus();
+        }
+        onUpdateStart(content, dest) {
+            trace(dest + "\n");
+            startDest = dest;
+            trace("Start: " + startDest + "\n");
+        }
+        onUpdateEnd(content, dest) {
+            trace(dest + "\n");
+            endDest = dest;  
+            trace("End: " + endDest + "\n");
+        }
+    }
 }));
 
 var NewRouteMap = Container.template($ => ({
@@ -150,12 +213,18 @@ var NewRouteMap = Container.template($ => ({
 }));
 
 export var NewRouteContainer = Column.template($ => ({
-    top: 0, left: 10, right: 10, bottom: 5,
+    top: 0, left: 10, right: 10, bottom: 5, active: true,
     contents: [
-        new NewRouteBox({txt: "Home"}),
-        new NewRouteBox({txt: "South Park"}),
+        new NewRouteBox({txt: startDest, targetDest: 'onUpdateStart'}),
+        new NewRouteBox({txt: endDest, targetDest: 'onUpdateEnd'}),
         new NewRouteMap({map: new map1()}),
-    ]
+    ],
+    Behavior: class extends Behavior {
+        onTouchEnded(content) {
+            SystemKeyboard.hide();
+            content.focus();
+        }
+    }
 }));
 
 var FrequentMaps = Container.template($ => ({
