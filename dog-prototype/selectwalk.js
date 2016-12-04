@@ -1,6 +1,6 @@
 import { SettingsOverlay } from "settingsoverlay"; 
 
-import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen, titleFont} from "main";
+import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
 import { SystemKeyboard } from 'keyboard';
 import KEYBOARD from './keyboard';
@@ -17,6 +17,8 @@ var blackBorder = new Skin({fill: "white", borders: {left:1, right:1, top:1, bot
 var titleScreenStyle = new Style({font: 'bold 60px', color: 'blue'});
 var titleStyle = new Style({font: '26px', color: 'black'});
 var labelStyle = new Style({font: '20px', fill: "black", horizontal: "left"});
+
+var titleFont = new Style({font: "30px ABeeZee", color: 'white'})
 
 /* Pictures */
 var routeLogo = Picture.template($ => ({
@@ -271,7 +273,13 @@ export var NewRouteContainer = Column.template($ => ({
                 new MyField({name: "CA", targetID: "state"})
             ]
         })
-    ]
+    ],
+    Behavior: class extends Behavior {
+        onTouchEnded(content) {
+            KEYBOARD.hide();
+            content.focus();
+        }
+    }
 }));
 
 /* Frequent Route */

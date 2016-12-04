@@ -1,6 +1,7 @@
 import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, 
-    whiteSkin, titleFont, loadGabe } from "main";
+    whiteSkin, loadGabe } from "main";
 var titleStyle = new Style({font: '26px', color: 'black'});
+var titleFont = new Style({font: "30px ABeeZee", color: 'white'})
 
 import { Button, ButtonBehavior } from 'buttons';
 
