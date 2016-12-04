@@ -3,6 +3,7 @@ import { SettingsOverlay } from "settingsoverlay";
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen, titleFont} from "main";
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
 import { SystemKeyboard } from 'keyboard';
+import KEYBOARD from './keyboard';
 
 /* Fonts and Skins */
 let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray', fill: "white" });
@@ -298,11 +299,5 @@ export var RouteScreen = Column.template($ => ({
         new RouteLabels(),
         $.routeSelect,
         new NavBot({txt: "Next"}),
-    ],
-    Behavior: class extends Behavior{
-        onTouchEnded(content){
-            KEYBOARD.hide();
-            content.focus();
-        }
-    }
+    ]
 }));
