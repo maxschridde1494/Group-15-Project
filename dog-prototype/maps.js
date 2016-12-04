@@ -40,7 +40,8 @@ export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
     //Generate MAPS URL from list of intersection lat lng coordinates
     /*input: 
         - latlonarr: array of [lat,lon] arrays for each marker
-        - centerlat, centerlng -> center point for static map
+        - bool: true if want marker on map
+        - markerarr -> lat lon for marker point
     */
     var requestURL = MAPSURLSTART + "&size=400x400";
     if (bool){
@@ -211,6 +212,35 @@ export function getMapsImg(url, uiCallback){
           trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
         }
     });
+}
+
+export function saveRoute(dict){
+    //input is dictionary with 1) name and 2) Google Maps url 
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    Files.ensureDirectory(uri)
+    var routeJson = {
+        name: dict.name,
+        url: dict.url
+    };
+    var routeFileName = routeJson.name + ".json";
+    var uriRoute = mergeURI(Files.preferencesDirectory, application.di + ".routes/" + routeFileName);
+    Files.writeJSON(uriRoute, routeJson);
+}
+export function deleteRoute(routeName){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    var route = uri + routeName + ".json";
+    Files.deleteFile(route);
+}
+export function readSavedRoutes(){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    var mapObjects = [];
+    var info, iterator = new Files.Iterator(uri);
+    while (info = iterator.getNext()){
+        var currPath = uri + info.path;
+        var route = Files.readJSON(currPath);
+        mapObjects.push(route);
+    }
+    return mapObjects;
 }
 
 // export function getMarkerMaps(urls, uiCallback){

@@ -34,7 +34,7 @@ import { RobotScreen } from "robot";
 import { AccountScreen } from "account";
 import { WebcamScreen } from "webcam";   
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
-    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner } from "maps";
+    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
 import { 
     Button,
     ButtonBehavior  
@@ -83,7 +83,8 @@ export function loadAbi(){
     application.add(currentScreen);
 }
 
-export function loadActMonitor(){
+export function loadActMonitor(corners){
+    //corners - array of 4 corner strings
     application.remove(currentScreen);
     currentScreen = new ActMonitorScreen();
     application.add(currentScreen);
@@ -92,17 +93,27 @@ export function loadActMonitor(){
     application.main.spacer.col.line1.completed.innercol.line.label2.string = "%";
     application.main.spacer.col.line1.distance.innercol.line.label2.string = "miles";
     application.main.spacer.col.line2.heartrate.innercol.line.label2.string = "bpm";
+    //KEEP THIS - REPLACE THE CORNERURLS BELOW
+    // var cornerURLs = [];
+    // for (var i=0; i<corners.length; i++){
+    //     var url = createLatLongURLfromCorner(corners[i], "|");
+    //     cornerURLs.push(url);
+    // }
     var cornerURL1 = createLatLongURLfromCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
     var cornerURL2 = createLatLongURLfromCorner("W Clark Ave|Evergreen Street,Burbank,CA", "|");
     var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
     var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
     var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
-    getMap(cornerURLs, false, "");
+    getMapNoMarkers(cornerURLs);
+    var moved = false;
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
             var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
                     application.main.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100));
-                    if (imageCount > 0){
+                    if (Math.round(result*100) != 50){
+                        moved = true;
+                    }
+                    if (imageCount > 3 && moved == true){
                         updateCurrLocation(result);
                     }
                 });
@@ -115,20 +126,25 @@ export function loadActMonitor(){
         }
     }
 }
-export var markersURLArray = [];
-export var markersImageArray = [];
-function getMap(cornersArr, bool, latlonarr){
+export var markersURLArray = []; //array of urls for 4 intersection marker maps
+export var markersImageArray = []; //array of images for 4 intersection marker maps
+function getMapNoMarkers(cornersArr){
+    // cornersArr - array of intersection strings for geocode api to get lats / lons
     getLatLonFourCorners(cornersArr, function(array){
-        var mapurl = createMapsURLfromLatLon2(array, bool, latlonarr);
+        var mapurl = createMapsURLfromLatLon2(array, false, "");
+        saveRoute({name: "test1", url: mapurl});
         getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
             application.main.spacer.col.map.add(mapIm);
         });
         markersURLArray = getMapswithMarkersURLs(array);
+        trace("markersURLArray: " + markersURLArray + "\n");
         generateMarkerImages(markersURLArray);
+        trace("should have generated marker images\n");
     });
 }
 function getMapswithMarkersURLs(latlonarr){
+    //latlonarr - array of intersection lat lon pairs (not urls)
     var imageArr = [];
     var urlsArr = [];
     for (var i=0; i < latlonarr.length; i++){
@@ -144,52 +160,45 @@ var im4;
 var imageCount = 0;
 
 function generateMarkerImages(urlArr){
+    //urlArr - array of urls for Google Maps Static API
     getMapsImg(urlArr[0], function(image){
         im1 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
+        trace("image Counte: " + imageCount + "\n");
     });
     getMapsImg(urlArr[1], function(image){
         im2 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
+        trace("image Counte: " + imageCount + "\n");
     });
     getMapsImg(urlArr[2], function(image){
         im3 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
+        trace("image Counte: " + imageCount + "\n");
     });
     getMapsImg(urlArr[3], function(image){
         im4 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
+        trace("image Counte: " + imageCount + "\n");
     });
 }
 
 function updateCurrLocation(reading){
+    //simulate location service (update map with % distance walked)
     var val = Math.round(reading*100);
     trace("VALUE: " + val + "\n");
     if (val <= 25){
-        if (percentWalkComplete > 25){
-            percentWalkComplete = 0;
-            application.main.spacer.col.map.empty();
-            application.main.spacer.col.map.add(im1);
-        }
+        application.main.spacer.col.map.empty();
+        application.main.spacer.col.map.add(im1);
     }else if (val > 25 && val <= 50){
-        trace("In check 2a\n");
-        if (percentWalkComplete <= 25 || percentWalkComplete > 50){
-            percentWalkComplete = 25;
-            application.main.spacer.col.map.empty();
-            application.main.spacer.col.map.add(im2);
-        }
+        application.main.spacer.col.map.empty();
+        application.main.spacer.col.map.add(im2);
     }else if (val > 50 && val <= 75){
-        if (percentWalkComplete <= 50 || percentWalkComplete > 75){
-            percentWalkComplete = 50;
-            application.main.spacer.col.map.empty();
-            application.main.spacer.col.map.add(im3);
-        }
+        application.main.spacer.col.map.empty();
+        application.main.spacer.col.map.add(im3);
     }else if (val > 75){
-        if (percentWalkComplete <= 75){
-            percentWalkComplete = 75;
-            application.main.spacer.col.map.empty();
-            application.main.spacer.col.map.add(im4);
-        }
+        application.main.spacer.col.map.empty();
+        application.main.spacer.col.map.add(im4);
     }
 }
 
@@ -211,12 +220,8 @@ export function loadMax(){
     var dash = new dashboardScreen();
     currentScreen = dash;
     application.add(currentScreen);
-    // let dashImage = new Picture({left: 0, right: 0, url: "assets/livefeed.png"});
-    // application.dashboard.spacer.dash.livefeed.add(dashImage);
-    let activitiesImage = new Picture({url: "assets/activitiesmonitor.png"});
-    application.dashboard.spacer.dash.views.left.add(activitiesImage);
-    let estimatesImage = new Picture({url: "assets/estimates.png"});
-    application.dashboard.spacer.dash.views.right.add(estimatesImage);
+    let dashImage = new Picture({left: 0, right: 0, aspect: "fit", url: "assets/livefeed.png"});
+    application.dashboard.col.livefeed.add(dashImage);
 }
 
 export function loadSettings(){
