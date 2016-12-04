@@ -99,11 +99,15 @@ export function loadActMonitor(corners){
     var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
     var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
     getMapNoMarkers(cornerURLs);
+    var moved = false;
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
             var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
                     application.main.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100));
-                    if (imageCount > 3){
+                    if (Math.round(result*100) != 50){
+                        moved = true;
+                    }
+                    if (imageCount > 3 && moved == true){
                         updateCurrLocation(result);
                     }
                 });
@@ -174,6 +178,7 @@ function generateMarkerImages(urlArr){
 }
 
 function updateCurrLocation(reading){
+    //simulate location service (update map with % distance walked)
     var val = Math.round(reading*100);
     trace("VALUE: " + val + "\n");
     if (val <= 25){
@@ -209,12 +214,8 @@ export function loadMax(){
     var dash = new dashboardScreen();
     currentScreen = dash;
     application.add(currentScreen);
-    // let dashImage = new Picture({left: 0, right: 0, url: "assets/livefeed.png"});
-    // application.dashboard.spacer.dash.livefeed.add(dashImage);
-    let activitiesImage = new Picture({url: "assets/activitiesmonitor.png"});
-    application.dashboard.spacer.dash.views.left.add(activitiesImage);
-    let estimatesImage = new Picture({url: "assets/estimates.png"});
-    application.dashboard.spacer.dash.views.right.add(estimatesImage);
+    let dashImage = new Picture({left: 0, right: 0, aspect: "fit", url: "assets/livefeed.png"});
+    application.dashboard.col.livefeed.add(dashImage);
 }
 
 export function loadSettings(){
