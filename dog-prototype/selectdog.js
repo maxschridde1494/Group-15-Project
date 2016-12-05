@@ -7,10 +7,55 @@ import { Button, ButtonBehavior } from 'buttons';
 
 var dogLabelStyle = new Style({font: "bold 15px ABeeZee", color: "black" });
 
+var dog1url = ""
+var dog2url = ""
+var dog3url = ""
+
+var dog1name = ""
+var dog2name = ""
+var dog3name = ""
+
+function readSavedRoutes(){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
+    var info, iterator = new Files.Iterator(uri);
+    while (info = iterator.getNext()){
+        trace(info.path + "\n");
+        var currPath = uri + info.path;
+        var route = Files.readJSON(currPath);
+        trace(route.name + "\n");
+        //do something with route
+    }
+    return ;
+}
+
+var dogs = readSavedRoutes();
+var numberofdogs = dogs.length;
+
+if (numberofdogs = 1) {
+    dog1name = dogs[1].name;
+    dog1url = dogs[1].image;
+}
+
+if (numberofdogs = 2) {
+    dog1name = dogs[1].name;
+    dog1url = dogs[1].image;
+    dog2name = dogs[2].name;
+    dog2url = dogs[2].image;
+}
+
+if (numberofdogs >= 3) {
+    dog1name = dogs[1].name;
+    dog1url = dogs[1].image;
+    dog2name = dogs[2].name;
+    dog2url = dogs[2].image;
+    dog3name = dogs[3].name;
+    dog3url = dogs[3].image;
+}
+
 var dogs = {
-    "Pepper": "assets/dog1.png",
-    "Snowball": "assets/dog2.png",
-    "Big Head": "assets/dog3.png"
+    dog1name: dog1url,
+    dog2name: dog2url,
+    dog3name: dog3url
 };
 
 function generateDogs() {
