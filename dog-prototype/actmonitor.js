@@ -1,6 +1,5 @@
 import { currentScreen, remotePins, closeAnalogs, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
 import { navBarSize, settingsIcon, stopsExport } from "selectwalk";
-import { markersURLArray } from "main";
 import { getMapsImg, saveRoute, deleteRoute } from "maps";
 
 let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
@@ -86,11 +85,11 @@ var spacer = Container.template($ => ({
           					new monitorBox({name: "heartrate", string: "Heart Rate:"})
           				]
           			}),
-                      new Container({
-                          name: "map", height: 250, left: 0, right: 0,
-                          contents: [
-                          ]
-                      })
+                new Container({
+                    name: "map", height: 250, left: 0, right: 0,
+                    contents: [
+                    ]
+                })
           		]
           	})
     ]

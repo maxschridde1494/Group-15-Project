@@ -1,5 +1,6 @@
 import { SettingsOverlay } from "settingsoverlay"; 
-import { saveRoute, deleteRoute, readSavedRoutes, getMapsImg } from "maps";
+import { getLatLonFourCorners, createLatLongURLfromCorner, createMapsURLfromLatLon2, getMapswithMarkersURLs,
+             saveRoute, deleteRoute, readSavedRoutes, getMapsImg } from "maps";
 
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
@@ -26,6 +27,8 @@ var titleStyle = new Style({font: '26px', color: 'black'});
 var labelStyle = new Style({font: '20px', fill: "black", horizontal: "left"});
 
 var titleFont = new Style({font: "30px ABeeZee", color: 'white'})
+export var newRouteMapUrl;
+export var markersURLArray;
 
 /* Pictures */
 var routeLogo = Picture.template($ => ({
@@ -38,10 +41,13 @@ var newRouteLabel = Picture.template($ => ({
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("New Route\n");
+            newRouteMapUrl = "";
+            markersURLArray = [];
             if (labelStatus != "New Route") {
                 labelStatus = "New Route";
                 application.remove(currentScreen);
-                currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
+                currentScreen = new RouteScreen({name: "newRoute", routeSelect: new NewRouteContainer()});
+                selectWalkScreen = "newRoute";
                 application.add(currentScreen);
                 application.distribute("updateRouteSelect", 0);
             }
@@ -64,7 +70,8 @@ var freqRouteLabel = Picture.template($ => ({
             if (labelStatus != "Frequent Route") {
                 labelStatus = "Frequent Route";
                 application.remove(currentScreen);
-                currentScreen = new RouteScreenFrequent({routeSelect: new FrequentContainer()});
+                currentScreen = new RouteScreenFrequent({name: "freqRoute", routeSelect: new FrequentContainer()});
+                selectWalkScreen = "freqRoute";
                 application.add(currentScreen);
                 application.distribute("updateRouteSelect", 1);
             }
@@ -78,8 +85,18 @@ var freqRouteLabel = Picture.template($ => ({
                     trace("saved map url: " + maps[i].url + "\n");
                     getMapsImg(maps[i].url, function(image){
                         let mapIm = new freq1({url: image});
-                        application.routeScreen.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
+                        application.freqRoute.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
                     });
+                    if (maps[i].markerURLs){
+                        trace("inside. array length: " + maps[i].markerURLs.length + "\n");
+                        for (var j=0; j<maps[i].markerURLs.length; j++){
+                            getMapsImg(maps[i].markerURLs[j], function(image){
+                                let mapIm = new freq1({url: image});
+                                application.freqRoute.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
+                            });
+                        }
+                    }
+                    trace("outside\n");
                 }
             } else {
                 container.url = "assets/freq-route.png";
@@ -119,36 +136,48 @@ export var city = "Burbank";
 export var state = "CA";
 var stops = [["", ""], ["", ""], ["", ""], ["", ""]];
 // export var stopsExport = [];
+export var selectWalkScreen = "";
 export var stopsExport = ["w clark ave|evergreen street","w magnolia blvd|evergreen street","n pass ave|w magnolia blvd","w clark ave|n pass ave"];
 var nextIcon = Picture.template($ => ({
     left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("Next Screen\n");
+            trace("screen: " + selectWalkScreen + "\n");
             // MOVE TO NEXT SCREEN HERE
-            var stop1 = stops[0][0] + "|" + stops[0][1];
-            var stop2 = stops[1][0] + "|" + stops[1][1];
-            var stop3 = stops[2][0] + "|" + stops[2][1];
-            var stop4 = stops[3][0] + "|" + stops[3][1];
-            // stopsExport = [stop1, stop2, stop3, stop4];
-            //generate GoogleMaps Image and lat lng and save to state
-            var cornerURLs=[];
-            for (var j=0; j<4; j++){
-                var string = stopsExport[j] + "," + city + "," + state;
-                cornerURLs.push(createLatLongURLfromCorner(string, "|"));
-            }
+            if (selectWalkScreen == "newRoute"){
+                var stop1 = stops[0][0] + "|" + stops[0][1];
+                var stop2 = stops[1][0] + "|" + stops[1][1];
+                var stop3 = stops[2][0] + "|" + stops[2][1];
+                var stop4 = stops[3][0] + "|" + stops[3][1];
+                // stopsExport = [stop1, stop2, stop3, stop4];
+                //generate GoogleMaps Image and lat lng and save to state
+                var cornerStrings=[];
+                for (var j=0; j<4; j++){
+                    var string = stopsExport[j] + "," + city + "," + state;
+                    cornerStrings.push(createLatLongURLfromCorner(string, "|"));
+                }
+                getLatLonFourCorners(cornerStrings, function(array){
+                    newRouteMapUrl = createMapsURLfromLatLon2(array, false, "");
+                    trace("map url: " + newRouteMapUrl + "\n");
+                    markersURLArray = getMapswithMarkersURLs(array)
+                    trace("markers urls: " + markersURLArray + "\n");
+                })
 
-            trace("\nSTOPS\n");
-            trace("Home: " + home + "\n");
-            trace("Stop1: " + stop1 + "\n");
-            trace("Stop2: " + stop2 + "\n");
-            trace("Stop3: " + stop3 + "\n");
-            trace("Stop4: " + stop4 + "\n");
-            trace("City: " + city + "\n");
-            trace("State: " + state + "\n");
-            trace("Stops Export: " + stopsExport + "\n");
-            trace("END STOPS\n");
-            loadAbi();
+                trace("\nSTOPS\n");
+                trace("Home: " + home + "\n");
+                trace("Stop1: " + stop1 + "\n");
+                trace("Stop2: " + stop2 + "\n");
+                trace("Stop3: " + stop3 + "\n");
+                trace("Stop4: " + stop4 + "\n");
+                trace("City: " + city + "\n");
+                trace("State: " + state + "\n");
+                trace("Stops Export: " + stopsExport + "\n");
+                trace("END STOPS\n");
+                loadAbi();
+            }else{
+                loadAbi();
+            }
         }
     }
 }));
@@ -263,7 +292,7 @@ var NewRouteBox = Line.template($ => ({
 }));
 
 export var NewRouteContainer = Column.template($ => ({
-    top: 10, left: 0, right: 0, bottom: 0, active: true,
+    name: "newRoute", top: 10, left: 0, right: 0, bottom: 0, active: true,
     contents: [
         new Line({
             top: 0, left: 0, right: 0, bottom: 0,
@@ -327,7 +356,7 @@ var FrequentContainer = Column.template($ => ({
 
 /* Select Route Screen */
 export var RouteScreen = Column.template($ => ({
-    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+    name: $.name, left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
         new NavTop({txt: "Select Route"}),
         new routeLogo({top: 10}),
@@ -337,7 +366,7 @@ export var RouteScreen = Column.template($ => ({
     ]
 }));
 var RouteScreenFrequent = Container.template($ => ({
-    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 
+    name: $.name, left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 
     contents: [
         new Container({
             name: "col", top: 150, bottom: 0, left: 0, right: 0, active: true,

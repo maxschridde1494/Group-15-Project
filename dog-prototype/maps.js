@@ -11,7 +11,8 @@ var testAddress2 = "Bob's Big Boy,Burbank,CA";
 var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 var testAddress4 = "CORNER%20W+Clark+Ave+%20AND%20N+Pass+Ave,Burbank,CA";
 
-import { markersImageArray } from "main";
+// import { markersImageArray } from "main";
+import { newRouteMapUrl, markersURLArray } from "selectwalk";
 
 export function createLatLongURLfromAddress(address){
     //Generate GEOCODE URL from Address
@@ -214,13 +215,75 @@ export function getMapsImg(url, uiCallback){
     });
 }
 
+export function getMapNoMarkers(cornersArr){
+    // cornersArr - array of intersection strings for geocode api to get lats / lons
+    getLatLonFourCorners(cornersArr, function(array){
+        var mapurl = createMapsURLfromLatLon2(array, false, ""); //url for map with path
+        getMapsImg(mapurl, function(image){
+            let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+            application.main.spacer.col.map.add(mapIm);
+        });
+        var markersURLArray = getMapswithMarkersURLs(array);
+        saveRoute({name: "test1", url: mapurl, array: markersURLArray});
+        trace("markersURLArray: " + markersURLArray + "\n");
+        generateMarkerImages(markersURLArray);
+        trace("should have generated marker images\n");
+    });
+}
+export function getMapswithMarkersURLs(latlonarr){
+    //latlonarr - array of intersection lat lon pairs (not urls)
+    var imageArr = [];
+    var urlsArr = [];
+    for (var i=0; i < latlonarr.length; i++){
+        var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]]);
+        urlsArr.push(url);
+    }
+    return urlsArr;
+}
+
+export var im1;
+export var im2; 
+export var im3;
+export var im4;
+export var imageCount = 0;
+
+function generateMarkerImages(urlArr){
+    //urlArr - array of urls for Google Maps Static API
+    imageCount = 0;
+    getMapsImg(urlArr[0], function(image){
+        im1 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+        imageCount++;
+        trace("image Counte: " + imageCount + "\n");
+    });
+    getMapsImg(urlArr[1], function(image){
+        im2 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+        imageCount++;
+        trace("image Counte: " + imageCount + "\n");
+    });
+    getMapsImg(urlArr[2], function(image){
+        im3 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+        imageCount++;
+        trace("image Counte: " + imageCount + "\n");
+    });
+    getMapsImg(urlArr[3], function(image){
+        im4 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+        imageCount++;
+        trace("image Counte: " + imageCount + "\n");
+    });
+}
+
+
+
+/*JSON Functions*/
+
 export function saveRoute(dict){
     //input is dictionary with 1) name and 2) Google Maps url 
     var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
     Files.ensureDirectory(uri)
     var routeJson = {
         name: dict.name,
-        url: dict.url
+        url: dict.url,
+        markerURLs: dict.array
     };
     var routeFileName = routeJson.name + ".json";
     var uriRoute = mergeURI(Files.preferencesDirectory, application.di + ".routes/" + routeFileName);
@@ -233,6 +296,7 @@ export function deleteRoute(routeName){
 }
 export function readSavedRoutes(){
     var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    Files.ensureDirectory(uri);
     var mapObjects = [];
     var info, iterator = new Files.Iterator(uri);
     while (info = iterator.getNext()){

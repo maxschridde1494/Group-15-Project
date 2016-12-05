@@ -25,7 +25,7 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreen, stopsExport, city, state } from "selectwalk";
+import { NewRouteContainer, RouteScreen, stopsExport, city, state, selectWalkScreen } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
 import { SettingsOverlay } from "settingsoverlay"; 
@@ -34,7 +34,8 @@ import { RobotScreen } from "robot";
 import { AccountScreen } from "account";
 import { WebcamScreen } from "webcam";   
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
-    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
+    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, getMapNoMarkers, getMapswithMarkersURLs, 
+    im1, im2, im3, im4, imageCount, saveRoute, deleteRoute, readSavedRoutes } from "maps";
 import { 
     Button,
     ButtonBehavior  
@@ -60,20 +61,24 @@ Handler.bind("/respond", Behavior({
 export function loadEric(){
     if (currentScreen != null){
         application.remove(currentScreen);
+        closeAnalogs();
     }
     currentScreen = new MainContainerTemplate();
     application.add(currentScreen);
 }
 
 export function loadErikConfirmationPage() {
+    closeAnalogs();
     application.remove(currentScreen);
     currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
 
 export function loadGabe(){
+    closeAnalogs();
     application.remove(currentScreen);
-    currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
+    currentScreen = new RouteScreen({name: "newRoute", routeSelect: new NewRouteContainer()});
+    selectWalkScreen = "newRoute";
     application.add(currentScreen);
 }
 
@@ -127,62 +132,61 @@ export function loadActMonitor(corners){
         }
     }
 }
-export var markersURLArray = []; //array of urls for 4 intersection marker maps
-export var markersImageArray = []; //array of images for 4 intersection marker maps
-function getMapNoMarkers(cornersArr){
-    // cornersArr - array of intersection strings for geocode api to get lats / lons
-    getLatLonFourCorners(cornersArr, function(array){
-        var mapurl = createMapsURLfromLatLon2(array, false, "");
-        saveRoute({name: "test1", url: mapurl});
-        getMapsImg(mapurl, function(image){
-            let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-            application.main.spacer.col.map.add(mapIm);
-        });
-        markersURLArray = getMapswithMarkersURLs(array);
-        trace("markersURLArray: " + markersURLArray + "\n");
-        generateMarkerImages(markersURLArray);
-        trace("should have generated marker images\n");
-    });
-}
-function getMapswithMarkersURLs(latlonarr){
-    //latlonarr - array of intersection lat lon pairs (not urls)
-    var imageArr = [];
-    var urlsArr = [];
-    for (var i=0; i < latlonarr.length; i++){
-        var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]]);
-        urlsArr.push(url);
-    }
-    return urlsArr;
-}
-var im1;
-var im2; 
-var im3;
-var im4;
-var imageCount = 0;
+// export var markersURLArray = []; //array of urls for 4 intersection marker maps
+// function getMapNoMarkers(cornersArr){
+//     // cornersArr - array of intersection strings for geocode api to get lats / lons
+//     getLatLonFourCorners(cornersArr, function(array){
+//         var mapurl = createMapsURLfromLatLon2(array, false, "");
+//         saveRoute({name: "test1", url: mapurl});
+//         getMapsImg(mapurl, function(image){
+//             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+//             application.main.spacer.col.map.add(mapIm);
+//         });
+//         markersURLArray = getMapswithMarkersURLs(array);
+//         trace("markersURLArray: " + markersURLArray + "\n");
+//         generateMarkerImages(markersURLArray);
+//         trace("should have generated marker images\n");
+//     });
+// }
+// function getMapswithMarkersURLs(latlonarr){
+//     //latlonarr - array of intersection lat lon pairs (not urls)
+//     var imageArr = [];
+//     var urlsArr = [];
+//     for (var i=0; i < latlonarr.length; i++){
+//         var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]]);
+//         urlsArr.push(url);
+//     }
+//     return urlsArr;
+// }
+// var im1;
+// var im2; 
+// var im3;
+// var im4;
+// var imageCount = 0;
 
-function generateMarkerImages(urlArr){
-    //urlArr - array of urls for Google Maps Static API
-    getMapsImg(urlArr[0], function(image){
-        im1 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-        imageCount++;
-        trace("image Counte: " + imageCount + "\n");
-    });
-    getMapsImg(urlArr[1], function(image){
-        im2 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-        imageCount++;
-        trace("image Counte: " + imageCount + "\n");
-    });
-    getMapsImg(urlArr[2], function(image){
-        im3 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-        imageCount++;
-        trace("image Counte: " + imageCount + "\n");
-    });
-    getMapsImg(urlArr[3], function(image){
-        im4 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-        imageCount++;
-        trace("image Counte: " + imageCount + "\n");
-    });
-}
+// function generateMarkerImages(urlArr){
+//     //urlArr - array of urls for Google Maps Static API
+//     getMapsImg(urlArr[0], function(image){
+//         im1 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+//         imageCount++;
+//         trace("image Counte: " + imageCount + "\n");
+//     });
+//     getMapsImg(urlArr[1], function(image){
+//         im2 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+//         imageCount++;
+//         trace("image Counte: " + imageCount + "\n");
+//     });
+//     getMapsImg(urlArr[2], function(image){
+//         im3 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+//         imageCount++;
+//         trace("image Counte: " + imageCount + "\n");
+//     });
+//     getMapsImg(urlArr[3], function(image){
+//         im4 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+//         imageCount++;
+//         trace("image Counte: " + imageCount + "\n");
+//     });
+// }
 
 function updateCurrLocation(reading){
     //simulate location service (update map with % distance walked)
