@@ -1,7 +1,8 @@
+import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { readSavedRoutes, getMapsImg } from "maps";
 
-import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
+import { ScreenTemplate } from "screenTemplate"
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
 import { SystemKeyboard } from 'keyboard';
 import KEYBOARD from './keyboard';
@@ -12,6 +13,11 @@ import {
     TopScrollerShadow,
     BottomScrollerShadow
 } from 'scroller';
+
+// let orangeSkin = new Skin({fill: "#ff7e3e"});
+// let yellowSkin = new Skin({fill: "#ffd359"});
+// let whiteSkin = new Skin({fill: "white"});
+// let titleFont = new Style({ font: "30px ABeeZee", color: "white" });
 
 let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray', fill: "white"});
 let fieldStyle = new Style({ color: 'black', font: 'bold 14px', horizontal: 'left',
@@ -34,16 +40,17 @@ var routeLogo = Picture.template($ => ({
 
 var labelStatus = "New Route";
 var newRouteLabel = Picture.template($ => ({
-    left: 10, right: 10, top: 5, bottom: 5, height: 10, url: "assets/new-route-selected.png", active: true,
+    left: 10, right: 10, top: 5, bottom: 5, height: 10, url: "assets/new-route-selected.png", active: false,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("New Route\n");
-            if (labelStatus != "New Route") {
+            if (container.active == true) {
                 labelStatus = "New Route";
                 application.remove(currentScreen);
-                currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
+                currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadErik", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
                 application.add(currentScreen);
                 application.distribute("updateRouteSelect", 0);
+                container.active = false;
             }
         }
         updateRouteSelect(container, value) {
@@ -51,6 +58,7 @@ var newRouteLabel = Picture.template($ => ({
                 container.url = "assets/new-route-selected.png";
             } else {
                 container.url = "assets/new-route.png";
+                container.active = true;
             }
         }
     }
@@ -61,12 +69,13 @@ var freqRouteLabel = Picture.template($ => ({
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("Frequent Route\n");
-            if (labelStatus != "Frequent Route") {
+            if (container.active == true) {
                 labelStatus = "Frequent Route";
                 application.remove(currentScreen);
                 currentScreen = new RouteScreenFrequent({routeSelect: new FrequentContainer()});
                 application.add(currentScreen);
                 application.distribute("updateRouteSelect", 1);
+                container.active = false;
             }
         }
         updateRouteSelect(container, value) {
@@ -86,6 +95,7 @@ var freqRouteLabel = Picture.template($ => ({
                 }
             } else {
                 container.url = "assets/freq-route.png";
+                container.active = true;
             }
         }
     }
@@ -174,7 +184,7 @@ var NavBot = Line.template($ => ({
 }));
 
 var RouteLabels = Line.template($ => ({
-    left: 0, top: 0, bottom: 0, right: 0, height: 20,
+    left: 0, top: 0, bottom: 0, right: 0,
     contents: [
         new newRouteLabel(),
         new freqRouteLabel(),
@@ -244,9 +254,11 @@ var MyField = Container.template($ => ({
     ]
 }));
 
-var textLabel = Label.template($ => ({
-    top: 0, bottom: 0, left: 0, right: 0, width: 10,
-    style: fieldStyle, string: $.txt
+var textLabel = Container.template($ => ({
+    top: 0, bottom: 0, left: 0, right: 0, skin: new Skin({fill: "#ff7e3e"}),
+    contents: [
+        new Label({top: 0, bottom: 0, left: 0, right: 0, style: fieldStyle, string: $.txt})
+    ]
 }));
 
 var NewRouteBox = Line.template($ => ({
@@ -262,10 +274,10 @@ export var NewRouteContainer = Column.template($ => ({
     top: 10, left: 0, right: 0, bottom: 0, active: true,
     contents: [
         new Line({
-            top: 0, left: 0, right: 0, bottom: 0,
+            left: 5, top: 0, right: 5, height: 26,
             contents: [
                 new textLabel({txt: "Home:"}),
-                new MyField({name: "Home", targetID: "home"})
+                new MyField({name: "Home", targetID: "home"}),
             ]
         }),
         new NewRouteBox({txt: 'stop1', targetID: 'stop1'}),
@@ -273,7 +285,7 @@ export var NewRouteContainer = Column.template($ => ({
         new NewRouteBox({txt: 'stop3', targetID: 'stop3'}),
         new NewRouteBox({txt: 'stop4', targetID: 'stop4'}),
         new Line({
-            top: 0, left: 0, right: 0, bottom: 0,
+            left: 5, top: 10, right: 5, height: 26,
             contents: [
                 new textLabel({txt: "City:"}),
                 new MyField({name: "Berkeley", targetID: "city"}),
@@ -321,17 +333,37 @@ var FrequentContainer = Column.template($ => ({
     ]
 }));
 
-/* Select Route Screen */
-export var RouteScreen = Column.template($ => ({
-    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+export var RouteScreenContent = Column.template($ => ({
+    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: new Skin({fill: "#ffd359"}),
     contents: [
-        new NavTop({txt: "Select Route"}),
         new routeLogo(),
         new RouteLabels(),
-        $.routeSelect,
-        new NavBot({txt: "Next"}),
+        new NewRouteContainer(),
     ]
 }));
+
+function test1(){
+    trace("Test1\n");
+};
+
+function test2(){
+    trace("Test2\n");
+}
+
+export var RouteScreen = new ScreenTemplate({titleTxt: "Select Route", nextScn: test1, prevScn: test2, screenContent: new RouteScreenContent()});
+
+/* Select Route Screen */
+// export var RouteScreen = Column.template($ => ({
+//     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+//     contents: [
+//         new NavTop({txt: "Select Route"}),
+//         new routeLogo(),
+//         new RouteLabels(),
+//         $.routeSelect,
+//         new NavBot({txt: "Next"}),
+//     ]
+// }));
+
 var RouteScreenFrequent = Column.template($ => ({
     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [

@@ -25,9 +25,9 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreen } from "selectwalk";
+import { NewRouteContainer, RouteScreen, RouteScreenContent } from "selectwalk";
 import { MainContainer } from "selectdog";
-import { ConfirmationContainer } from "confirmation";
+import { ConfirmationContainer, ConfirmationBox } from "confirmation";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { SettingsScreen} from "settings"; 
 import { RobotScreen } from "robot";  
@@ -39,6 +39,7 @@ import {
     Button,
     ButtonBehavior  
 } from 'buttons';
+import { ScreenTemplate } from "screenTemplate"
 
 Handler.bind("/discover", Behavior({
     onInvoke: function(handler, message){
@@ -67,19 +68,22 @@ export function loadEric(){
 
 export function loadErikConfirmationPage() {
     application.remove(currentScreen);
-    currentScreen = new ConfirmationContainer();
+    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadAbi", screenContent: new ConfirmationBox()});
+    // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
 
 export function loadGabe(){
     application.remove(currentScreen);
-    currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
+    currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadErik", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
+    // currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
     application.add(currentScreen);
 }
 
 export function loadAbi(){
     application.remove(currentScreen);
-    currentScreen = new MainContainer();
+    currentScreen = new ScreenTemplate({titleTxt: "Select Dog", prevScn: "loadGabe", nextScn: "loadConfirm", screenContent: new MainContainer()});
+    // currentScreen = new MainContainer();
     application.add(currentScreen);
 }
 

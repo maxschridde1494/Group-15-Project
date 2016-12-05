@@ -1,60 +1,37 @@
 import Pins from "pins";
 import { currentScreen, orangeSkin, yellowSkin, 
-    whiteSkin, loadAbi, loadActMonitor } from "main";
+    whiteSkin, loadAbi, loadMax } from "main";
 import { Button, ButtonBehavior } from 'buttons';
-export let titleFont = new Style({ font: "30px ABeeZee", color: "white" }); 
+import { ScreenTemplate } from "screenTemplate"
+import { dogsChosen } from "selectDog"
 
-/* Navigation Bar */
-var settingsIcon = Picture.template($ => ({
-    left: 5, height: 20, url: "assets/settings.png"
+var dogs = {
+    "Pepper": "assets/dog1.png",
+    "Snowball": "assets/dog2.png",
+    "Big Head": "assets/dog3.png"
+};
+
+var dog1 = new Skin({
+      width: 135, height: 135, fill: "white", aspect: "fit",
+      texture: new Texture(dogs["Pepper"])
+});
+
+var dog2 = new Skin({
+      width: 135, height: 135, fill: "white", aspect: "fit",
+      texture: new Texture(dogs["Snowball"])
+});
+
+var dog3 = new Skin({
+      width: 135, height: 135, fill: "white", aspect: "fit",
+      texture: new Texture(dogs["Big Head"])
+});
+
+var dogButton = Content.template($ => ({ 
+    top: 5, left: 0, right: 0, height: 40, width: 40, skin: $.dogSkin
 }));
 
-var backIcon = Picture.template($ => ({
-    left: 10, height: 20, url: "assets/backButton.png", active: true,
-    Behavior: class extends Behavior {
-        onTouchEnded(container) {
-            trace("Back Screen\n");
-            // MOVE TO PREVIOUS SCREEN HERE
-            loadAbi();
-        }
-    }
-}));
-
-var navBarSize = 40;
-var TitleTemplate = Label.template($ => ({
-    left: 0, right: 25, top: 0, bottom: 0,
-    style: titleFont,
-    string: $.string
-}));
-
-var NavTop = Line.template($ => ({
-    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
-    contents: [
-        new settingsIcon(),
-        new TitleTemplate({string: $.txt})
-    ]
-}));
-
-var NavBot = Line.template($ => ({
-    left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
-    contents: [
-        new backIcon(),
-    ]
-}));
 
 /* Confirmation Box */
-var ConfirmationBox = Column.template($ => ({
-    left: 25, right: 25, top: 50, bottom: 20, height: 250, skin: orangeSkin,
-    contents: [
-        new Label({
-            left: 0, right: 0, top: 0, 
-            style: titleFont,
-            string: "Confirmation"
-        })
-        // INSERT CONTENTS HERE
-    ]
-}));
-
 var but = new Skin({
       width: 400, height: 400, fill: "white", aspect: "fit",
       texture: new Texture("assets/confirmButton.png")
@@ -65,13 +42,45 @@ var confirmButton = Content.template($ => ({
     skin: but,
     Behavior: class extends ButtonBehavior {
         onTap(button){
+            trace(dogsChosen + "\n");
             application.distribute("onToggleLight", 1);
-            loadActMonitor();
+            loadMax();
         }
     }
 }));
 
-export var ConfirmationContainer = Column.template($ => ({
+function dogPics() {
+    var dogsLine = new Line({left: 0, right: 0, top: 0, height: 50, skin: orangeSkin, contents: []});
+    dogsLine.contents.add((new dogButton({dogSkin: dog1})));
+    // dogsLine.contents.add(new dogButton({dogSkin: dog1}));
+    // dogsLine.contents.add(new dogButton({dogSkin: dog1}));
+    return dogsLine;
+}
+
+export var ConfirmationBox = Column.template($ => ({
+    left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+    contents: [
+        new Column({
+            left: 25, right: 25, top: 50, bottom: 20, height: 250, skin: whiteSkin,
+            contents: [
+                new Line({
+                    left: 0, right: 0, top: 0, height: 50, skin: orangeSkin,
+                    contents: [
+                        new dogButton({dogSkin: dog1}),
+                        new dogButton({dogSkin: dog2}),
+                        new dogButton({dogSkin: dog3})
+                    ]
+                }),
+                // INSERT CONTENTS HERE
+            ]
+        }),
+        new confirmButton()
+    ]
+}));
+
+// new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadAbi", screenContent: new ConfirmationBox()});
+
+export var ConfirmationContainer = ScreenTemplate($ => ({
     left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
         new NavTop({txt: "Confirmation"}),
