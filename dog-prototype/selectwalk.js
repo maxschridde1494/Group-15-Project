@@ -1,5 +1,5 @@
 import { SettingsOverlay } from "settingsoverlay"; 
-import { saveRoute, deleteRoute, readSavedRoutes, getMapsImg } from "maps";
+import { saveRoute, deleteRoute, readSavedRoutes, getMapsImg, createLatLongURLfromCorner } from "maps";
 
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';

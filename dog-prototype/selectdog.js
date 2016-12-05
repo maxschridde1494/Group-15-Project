@@ -15,69 +15,74 @@ var dog1name = ""
 var dog2name = ""
 var dog3name = ""
 
+var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
+Files.deleteDirectory(uri, true);
+
 function readSavedRoutes(){
     var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
+    var dogs = [];
     var info, iterator = new Files.Iterator(uri);
     while (info = iterator.getNext()){
-        trace(info.path + "\n");
         var currPath = uri + info.path;
-        var route = Files.readJSON(currPath);
-        trace(route.name + "\n");
+        var dog = Files.readJSON(currPath);
+        trace(dog.name + "\n");
+        trace(dog.image + "\n");
+        dogs.push(dog);
         //do something with route
     }
-    return ;
+    return dogs;
 }
 
 var dogs = readSavedRoutes();
 var numberofdogs = dogs.length;
 
-if (numberofdogs = 1) {
-    dog1name = dogs[1].name;
-    dog1url = dogs[1].image;
+if (numberofdogs == 1) {
+    dog1name = dogs[0].name;
+    dog1url = dogs[0].image;
 }
 
-if (numberofdogs = 2) {
-    dog1name = dogs[1].name;
-    dog1url = dogs[1].image;
-    dog2name = dogs[2].name;
-    dog2url = dogs[2].image;
+if (numberofdogs == 2) {
+    dog1name = dogs[0].name;
+    dog1url = dogs[0].image;
+    dog2name = dogs[1].name;
+    dog2url = dogs[1].image;
 }
 
 if (numberofdogs >= 3) {
-    dog1name = dogs[1].name;
-    dog1url = dogs[1].image;
-    dog2name = dogs[2].name;
-    dog2url = dogs[2].image;
-    dog3name = dogs[3].name;
-    dog3url = dogs[3].image;
+    dog1name = dogs[0].name;
+    dog1url = dogs[0].image;
+    dog2name = dogs[1].name;
+    dog2url = dogs[1].image;
+    dog3name = dogs[2].name;
+    dog3url = dogs[2].image;
 }
 
-var dogs = {
+var dogDic = {
     dog1name: dog1url,
     dog2name: dog2url,
     dog3name: dog3url
 };
 
 function generateDogs() {
-    for (var d in dogs) {
-        trace(d + "\n")
+    for (var d in dogDic) {
+        trace("image url: " + dogDic[d] + "\n")
     }   
 }
 
-var dog1 = new Skin({
-      width: 135, height: 135, fill: "white", aspect: "fit",
-      texture: new Texture(dogs["Pepper"])
-});
+// var dog1 = new Skin({
+//       width: 135, height: 135, fill: "white", aspect: "fit",
+//       texture: new Texture(dogDic["Pepper"])
+// });
 
-var dog2 = new Skin({
-      width: 135, height: 135, fill: "white", aspect: "fit",
-      texture: new Texture(dogs["Snowball"])
-});
+// var dog2 = new Skin({
+//       width: 135, height: 135, fill: "white", aspect: "fit",
+//       texture: new Texture(dogDic["Snowball"])
+// });
 
-var dog3 = new Skin({
-      width: 135, height: 135, fill: "white", aspect: "fit",
-      texture: new Texture(dogs["Big Head"])
-});
+// var dog3 = new Skin({
+//       width: 135, height: 135, fill: "white", aspect: "fit",
+//       texture: new Texture(dogDic["Big Head"])
+// });
 
 var dogButton = Content.template($ => ({ 
     top: 0, left: 0, right: 0, height: 80, width: 80, active: true,

@@ -1,3 +1,5 @@
+import { currentScreen, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric} from "main";
+import { SettingsOverlay } from "settingsoverlay";
 import { 
     Button,
     ButtonBehavior 
@@ -36,6 +38,8 @@ var backIcon = Picture.template($ => ({
         onTouchEnded(container) {
             trace("Back Screen\n");
             // MOVE TO PREVIOUS SCREEN HERE
+            settingsOverlayScreen = new SettingsOverlay(); 
+            application.add(settingsOverlayScreen);
         }
     }
 }));
@@ -48,6 +52,8 @@ var nextIcon = Picture.template($ => ({
             // MOVE TO NEXT SCREEN HERE
 			saveJson(); 
 			readSavedRoutes();
+            settingsOverlayScreen = new SettingsOverlay(); 
+            application.add(settingsOverlayScreen);
 			
         }
     }
@@ -233,9 +239,9 @@ function saveJson(){
      var account = { name: dogName, 
       	 image: dogImage, 
      	 walk: "",
-       };
-       trace("dog url: " + uriAccountFile + dogName + ".json" + "\n");
-       Files.writeJSON(uriAccountFile + dogName + ".json", account); 
+   };
+   trace("dog url: " + uriAccountFile + dogName + ".json" + "\n");
+   Files.writeJSON(uriAccountFile + dogName + ".json", account); 
 }
 
 function readSavedRoutes(){

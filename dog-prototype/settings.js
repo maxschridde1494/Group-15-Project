@@ -30,6 +30,7 @@ var AccountButtons = Line.template($ => ({
         }
     }
 }));
+import { MainContainer } from "adddog";
 
 var DogsButtons = Line.template($ => ({
     left: 0, top: 0, bottom: 0, right: 0, active: true, skin: darkPeachSkin, 
@@ -40,6 +41,9 @@ var DogsButtons = Line.template($ => ({
     Behavior: class extends ButtonBehavior {
         onTap(button){
         	//TODO: weave together with dog page
+            application.remove(currentScreen);
+            currentScreen = new MainContainer();
+            application.add(currentScreen);
         }
     }
 }));
@@ -95,7 +99,15 @@ var settingsText = Picture.template($ => ({
     left: 80, height: 35, url: "assets/settingsText.png"
 }));
 
-var backIcon = Picture.template($ => ({    left: 10, height: 20, url: "assets/backButton.png", active: true,    Behavior: class extends Behavior {        onTouchEnded(container) {            // MOVE TO PREVIOUS SCREEN HERE            loadEric();        }    }}));
+var backIcon = Picture.template($ => ({
+    left: 10, height: 20, url: "assets/backButton.png", active: true,
+    Behavior: class extends Behavior {
+        onTouchEnded(container) {
+            // MOVE TO PREVIOUS SCREEN HERE
+            loadEric();
+        }
+    }
+}));
 
 
 
