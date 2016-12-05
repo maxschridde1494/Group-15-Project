@@ -25,7 +25,7 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreen } from "selectwalk";
+import { NewRouteContainer, RouteScreen, stopsExport, city, state } from "selectwalk";
 import { MainContainer } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
 import { SettingsOverlay } from "settingsoverlay"; 
@@ -99,11 +99,12 @@ export function loadActMonitor(corners){
     //     var url = createLatLongURLfromCorner(corners[i], "|");
     //     cornerURLs.push(url);
     // }
-    var cornerURL1 = createLatLongURLfromCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
-    var cornerURL2 = createLatLongURLfromCorner("W Clark Ave|Evergreen Street,Burbank,CA", "|");
-    var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
-    var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
-    var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
+    var cornerURLs=[];
+    for (var j=0; j<4; j++){
+        var string = stopsExport[j] + "," + city + "," + state;
+        cornerURLs.push(createLatLongURLfromCorner(string, "|"));
+    }
+    trace("corner urls: " + cornerURLs + "\n");
     getMapNoMarkers(cornerURLs);
     var moved = false;
     if (remotePins){
