@@ -134,97 +134,134 @@ let background2Skin = new Skin({
 
 let backgroundSkin = new Skin({fill: "#ffd359"});
 
-let dog1Photo = new Texture("assets/dog1.png");
+let dog1PhotoYellow = new Texture("assets/dog1Yellow.png");
+let dog1PhotoOrange = new Texture("assets/dog1Orange.png"); 
+let dog2PhotoYellow = new Texture("assets/dog2Yellow.png");
+let dog2PhotoOrange = new Texture("assets/dog2Orange.png"); 
+let dog3PhotoYellow = new Texture("assets/dog3Yellow.png");
+let dog3PhotoOrange = new Texture("assets/dog3Orange.png"); 
 
-let dog1Skin = new Skin({
+let dogSkin1Yellow = new Skin({
       width: 150, height: 150,
-      texture: dog1Photo,
+      texture: dog1PhotoYellow,
+      fill: "white",
+      aspect: "fit"
+});
+let dogSkin1Orange = new Skin({
+      width: 150, height: 150,
+      texture: dog1PhotoOrange,
+      fill: "white",
+      aspect: "fit"
+});
+let dogSkin2Yellow = new Skin({
+      width: 150, height: 150,
+      texture: dog2PhotoYellow,
+      fill: "white",
+      aspect: "fit"
+});
+let dogSkin2Orange = new Skin({
+      width: 150, height: 150,
+      texture: dog2PhotoOrange,
+      fill: "white",
+      aspect: "fit"
+});
+let dogSkin3Yellow = new Skin({
+      width: 150, height: 150,
+      texture: dog3PhotoYellow,
+      fill: "white",
+      aspect: "fit"
+});
+let dogSkin3Orange = new Skin({
+      width: 150, height: 150,
+      texture: dog3PhotoOrange,
       fill: "white",
       aspect: "fit"
 });
 
-let dog2Photo = new Texture("assets/dog2.png");
-
-let dog2Skin = new Skin({
-      width: 150, height: 150,
-      texture: dog2Photo,
-      fill: "white",
-      aspect: "fit"
-});
-
-let dog3Photo = new Texture("assets/dog3.png");
-
-let dog3Skin = new Skin({
-      width: 150, height: 150,
-      texture: dog3Photo,
-      fill: "white",
-      aspect: "fit"
-});
-
-var text1label = new Label({left:0, right:0, height:40, string:"Select An Avatar", style: new Style({ font: "bold 25px", color: "#000000" })});
+var text1label = Label.template($=> ({left:0, right:0, height:40, string:"Select An Avatar", style: new Style({ font: "bold 25px", color: "#000000" })}));
 
 
 export var text1Template = Column.template($ => ({
     left: 0, right: 0, top: 150,
     contents: [
-        text1label,
+        new text1label(),
     ]
 }));
 
-let mainButton1 = new Content({ 
+let mainButton1 = Content.template($=> ({ 
     top: 200, left: 115, height: 100, width: 100, active: true,
-    skin: dog1Skin, 
+    skin: dogSkin1Yellow, 
     Behavior: class extends ButtonBehavior {
         onTap(button){
-        	dogImage = "assets/dog1.png"
+        	if (dogImage == "") {
+        		} else if (dogImage == "assets/dog1Yellow.png"){
+        		button.skin = dogSkin1Orange;
+        	} else {
+        		dogImage = "";
+        		button.skin = dogSkin1Yellow;
+        	}
         }
     }
-});
+}));
 
-var text2label = new Label({left:0, right:0, height:40, string:"Snowball", style: new Style({ font: "bold 15px", color: "#000000" })});
+var text2label = Label.template($=> ({left:0, right:0, height:40, string:"Snowball", style: new Style({ font: "bold 15px", color: "#000000" })}));
 
 
 export var text2Template = Column.template($ => ({
     left: 0, right: 0, top: 350,
     contents: [
-        text2label,
+        new text2label(),
     ]
 }));
 
-var text3label = new Label({left:0, right:0, height:40, string:"Big Head", style: new Style({ font: "bold 15px", color: "#000000" })});
+var text3label = Label.template($=> ({left:0, right:0, height:40, string:"Big Head", style: new Style({ font: "bold 15px", color: "#000000" })}));
 
 
 export var text3Template = Column.template($ => ({
     left: 0, right: 0, top: 470,
     contents: [
-        text3label,
+        new text3label(),
     ]
 }));
 
-let mainButton2 = new Content({ 
+let mainButton2 = Content.template($=> ({ 
     top: 300, left: 115, height: 100, width: 100, active: true,
-    skin: dog2Skin, 
+    skin: dogSkin2Yellow,
     Behavior: class extends ButtonBehavior {
         onTap(button){
-        	dogImage = "assets/dog2.png"
+        	if (dogImage == "") {
+        		dogImage = "assets/dog2Yellow.png"; 
+        		button.skin = dogSkin2Orange;
+        	} else if (dogImage == "assets/dog2Yellow.png"){
+        		dogImage = ""; 
+        		button.skin = dogSkin2Yellow;
+        	}
         }
     }
-});
+}));
 
-let mainButton3 = new Content({ 
+let mainButton3 = Content.template($=> ({ 
     top: 400, left: 115, height: 100, width: 100, active: true,
-    skin: dog3Skin, 
+    skin: dogSkin3Yellow,  
     Behavior: class extends ButtonBehavior {
         onTap(button){
-        	dogImage = "assets/dog3.png"
+        	if (dogImage == "") {
+        		dogImage = "assets/dog3Yellow.png"; 
+        		trace("1\n") ; 
+        		button.skin = dogSkin3Orange; 
+        	} else if (dogImage == "assets/dog3Yellow.png"){
+        		dogImage = ""; 
+        		trace("2\n"); 
+        		button.skin = dogSkin3Yellow; 
+        	}
         }
     }
-});
+}));
 
-let mainCon = new Content({ 
+let mainCon = Content.template($=> ({ 
     top: 0, left: 0, height: 880, width: 560, 
     skin: backgroundSkin, 
-});
+}));
 
 
 function saveJson(){
@@ -256,15 +293,15 @@ function readSavedRoutes(){
     }
 }
 
-export let MainContainer = Container.template($ => ({
+export var AddDogScreen = Container.template($ => ({
     top: 0, bottom: 0, left: 0, right: 0,
     active: true, state: 0,
     contents: [
-        mainCon,
-        text1Template(),
-        mainButton1,
-        mainButton2,
-        mainButton3,
+        new mainCon(),
+        new text1Template(),
+        new mainButton1(),
+        new mainButton2(),
+        new mainButton3(),
         new DogNameLine(),
         new NavTop({txt: "Add Dog"}),
         new NavBot(),
@@ -277,4 +314,3 @@ export let MainContainer = Container.template($ => ({
     }
 }));
 
-application.add(new MainContainer());

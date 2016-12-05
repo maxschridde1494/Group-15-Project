@@ -33,6 +33,7 @@ import { SettingsScreen} from "settings";
 import { RobotScreen } from "robot";  
 import { AccountScreen } from "account";
 import { WebcamScreen } from "webcam";   
+import { AddDogScreen } from "adddog"; 
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
     getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
 import { 
@@ -255,6 +256,12 @@ export function loadAccount(){
 export function loadWebcam(imageNumber){
     application.remove(currentScreen);
     currentScreen = new WebcamScreen({image: imageNumber});
+    application.add(currentScreen);
+}
+
+export function loadAddDog(){
+    application.remove(currentScreen);
+    currentScreen = new AddDogScreen();
     application.add(currentScreen);
 }
 
