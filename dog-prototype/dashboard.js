@@ -56,16 +56,16 @@ export var dashboardScreen = Container.template($ => ({
             name: "col", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
             contents:[
                 new NavTop({string: "Dashboard"}),
-                new Label({
-                    top: 60, left: 40, right: 40, height: 40, skin: orangeSkinBorder, active: true, string: "Activities Monitor", style: mediumTextStyle,
-                    Behavior: class extends Behavior{
-                        onTouchEnded(container, data){
-                            loadActMonitor([]); //here, add the corners of the current walk
-                        }
-                    }
-                }),
+                // new Label({
+                //     top: 60, left: 40, right: 40, height: 40, skin: orangeSkinBorder, active: true, string: "Activities Monitor", style: mediumTextStyle,
+                //     Behavior: class extends Behavior{
+                //         onTouchEnded(container, data){
+                //             loadActMonitor([]); //here, add the corners of the current walk
+                //         }
+                //     }
+                // }),
                 new Container({
-                    name: "livefeed", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin, active: true,
+                    name: "livefeed", top: 40, left: 0, right: 0, skin: yellowSkin, active: true,
                     contents:
                     [],
                     Behavior: class extends Behavior{
@@ -77,6 +77,19 @@ export var dashboardScreen = Container.template($ => ({
                             delayLoop(); 
                         }
                     }
+                }),
+                new Container({
+                    top: 0, bottom: 0, left: 0, right: 0,
+                    contents:[
+                        new Label({
+                            left: 40, right: 40, height: 40, skin: orangeSkinBorder, active: true, string: "Activities Monitor", style: mediumTextStyle,
+                            Behavior: class extends Behavior{
+                                onTouchEnded(container, data){
+                                    loadActMonitor([]); //here, add the corners of the current walk
+                                }
+                            }
+                        })
+                    ]
                 }),
                 new NavBot({txt: "Next"})
                     ]

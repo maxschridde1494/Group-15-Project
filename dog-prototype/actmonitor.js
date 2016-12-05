@@ -27,8 +27,7 @@ var NavTop = Line.template($ => ({
 var NavBot = Line.template($ => ({
     left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
-        new backIcon(),
-        new nextIcon()
+        new backIcon()
     ]
 }));
 
@@ -39,17 +38,6 @@ var backIcon = Picture.template($ => ({
             // MOVE TO PREVIOUS SCREEN HERE
             closeAnalogs();
             loadMax();
-        }
-    }
-}));
-
-var nextIcon = Picture.template($ => ({
-    left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
-    Behavior: class extends Behavior {
-        onTouchEnded(container) {
-            trace("Next Screen\n");
-            // MOVE TO NEXT SCREEN HERE
-            loadAbi();
         }
     }
 }));
