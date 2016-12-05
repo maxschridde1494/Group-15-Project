@@ -1,36 +1,3 @@
-/*
- *     Copyright (C) 2010-2016 Marvell International Ltd.
- *     Copyright (C) 2002-2010 Kinoma, Inc.
- *
- *     Licensed under the Apache License, Version 2.0 (the "License");
- *     you may not use this file except in compliance with the License.
- *     You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *     Unless required by applicable law or agreed to in writing, software
- *     distributed under the License is distributed on an "AS IS" BASIS,
- *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *     See the License for the specific language governing permissions and
- *     limitations under the License.
- */
-/*
- *     Copyright (C) 2010-2016 Marvell International Ltd.
- *     Copyright (C) 2002-2010 Kinoma, Inc.
- *
- *     Licensed under the Apache License, Version 2.0 (the "License");
- *     you may not use this file except in compliance with the License.
- *     You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *     Unless required by applicable law or agreed to in writing, software
- *     distributed under the License is distributed on an "AS IS" BASIS,
- *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *     See the License for the specific language governing permissions and
- *     limitations under the License.
- */
-
 let small = new Style({ font: "20px", color: "black" });
 
 let orangeSkin = new Skin({fill: "#ff7e3e"});
@@ -54,8 +21,8 @@ var nextIcon = Picture.template($ => ({
         onTouchEnded(container) {
             trace("Next Screen\n");
             // MOVE TO NEXT SCREEN HERE
-			saveJson(); 
-			
+            saveJson(); 
+            
         }
     }
 }));
@@ -98,10 +65,10 @@ export var monthNum = 0;
 export var dayNum = 0;
 export var timeNum = 0;
 export var durationNum = 0;
-var text1label = new Label({left:0, right:0, height:40, string:"Month", style: new Style({ font: "bold 15px", color: "#000000" })});
-var text2label = new Label({left:0, right:0, height:40, string:"Day", style: new Style({ font: "bold 15px", color: "#000000" })});
-var text3label = new Label({left:0, right:0, height:40, string:"Start Time", style: new Style({ font: "bold 15px", color: "#000000" })});
-var text4label = new Label({left:0, right:0, height:40, string:"Duration (in hours)", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text1label = new Label({left:0, right:0, height:40, string:"Month", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text2label = new Label({left:0, right:0, height:40, string:"Day", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text3label = new Label({left:0, right:0, height:40, string:"Start Time", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text4label = new Label({left:0, right:0, height:40, string:"Duration (in hours)", style: new Style({ font: "bold 15px", color: "#000000" })});
 import {
     HorizontalSlider, HorizontalSliderBehavior
 } from 'sliders';
@@ -114,42 +81,42 @@ let MyMonthSlider = HorizontalSlider.template($ => ({
             monthNum = parseInt(this.data.value)
             trace("Value: " + monthNum + "\n");
             switch (monthNum){
-            	case 1: 
-	            	text1label.string = "Month: January";
-	            	break;
-            	case 2: 
-            		text1label.string = "Month: February";
-            		break;
-            	case 3: 
-            		text1label.string = "Month: March";
-            		break;
-            	case 4: 
-            		text1label.string = "Month: April";
-            		break;
-            	case 5: 
-            		text1label.string = "Month: May";
-            		break;
-            	case 6: 
-            		text1label.string = "Month: June";
-            		break;
-            	case 7: 
-            		text1label.string = "Month: July";
-            		break;
-            	case 8: 
-            		text1label.string = "Month: August";
-            		break;
-            	case 9: 
-            		text1label.string = "Month: September";
-            		break;
-            	case 10: 
-            		text1label.string = "Month: October";
-            		break;
-            	case 11:
-            		text1label.string = "Month: November";
-            		break;
-            	case 12: 
-            		text1label.string = "Month: December";
-            		break;
+                case 1: 
+                    text1label.string = "Month: January";
+                    break;
+                case 2: 
+                    text1label.string = "Month: February";
+                    break;
+                case 3: 
+                    text1label.string = "Month: March";
+                    break;
+                case 4: 
+                    text1label.string = "Month: April";
+                    break;
+                case 5: 
+                    text1label.string = "Month: May";
+                    break;
+                case 6: 
+                    text1label.string = "Month: June";
+                    break;
+                case 7: 
+                    text1label.string = "Month: July";
+                    break;
+                case 8: 
+                    text1label.string = "Month: August";
+                    break;
+                case 9: 
+                    text1label.string = "Month: September";
+                    break;
+                case 10: 
+                    text1label.string = "Month: October";
+                    break;
+                case 11:
+                    text1label.string = "Month: November";
+                    break;
+                case 12: 
+                    text1label.string = "Month: December";
+                    break;
             }
             trace(text1label.string + "\n");
         }
@@ -174,153 +141,153 @@ let MyTimeSlider = HorizontalSlider.template($ => ({
             trace("Value is: " + this.data.value + "\n");
             timeNum = parseInt(this.data.value);
             switch (timeNum){
-            	case 1: 
-	            	text3label.string = "Start Time: 12:00 AM";
-	            	break;
-            	case 2: 
-            		text3label.string = "Start Time: 12:30 AM";
-            		break;
-            	case 3: 
-            		text3label.string = "Start Time: 1:00 AM";
-            		break;
-            	case 4: 
-            		text3label.string = "Start Time: 1:30 AM";
-            		break;
-            	case 5: 
-            		text3label.string = "Start Time: 2:00 AM";
-            		break;
-            	case 6: 
-            		text3label.string = "Start Time: 2:30 AM";
-            		break;
-            	case 7: 
-            		text3label.string = "Start Time: 3:00 AM";
-            		break;
-            	case 8: 
-            		text3label.string = "Start Time: 3:30 AM";
-            		break;
-            	case 9: 
-            		text3label.string = "Start Time: 4:00 AM";
-            		break;
-            	case 10: 
-            		text3label.string = "Start Time: 4:30 AM";
-            		break;
-            	case 11:
-            		text3label.string = "Start Time: 5:00 AM";
-            		break;
-            	case 12: 
-            		text3label.string = "Start Time: 5:30 AM";
-            		break;
-            	case 13: 
-            		text3label.string = "Start Time: 6:00 AM";
-            		break;
-            	case 14: 
-            		text3label.string = "Start Time: 6:30 AM";
-            		break;
-            	case 15: 
-            		text3label.string = "Start Time: 7:00 AM";
-            		break;
-            	case 16: 
-            		text3label.string = "Start Time: 7:30 AM";
-            		break;
-            	case 17: 
-            		text3label.string = "Start Time: 8:00 AM";
-            		break;
-            	case 18: 
-            		text3label.string = "Start Time: 8:30 AM";
-            		break;
-            	case 19: 
-            		text3label.string = "Start Time: 9:00 AM";
-            		break;
-            	case 20: 
-            		text3label.string = "Start Time: 9:30 AM";
-            		break;
-            	case 21: 
-            		text3label.string = "Start Time: 10:00 AM";
-            		break;
-            	case 22: 
-            		text3label.string = "Start Time: 10:30 AM";
-            		break;
-            	case 23: 
-            		text3label.string = "Start Time: 11:00 AM";
-            		break;
-            	case 24: 
-            		text3label.string = "Start Time: 11:30 AM";
-            		break;
-            	case 25: 
-            		text3label.string = "Start Time: 12:00 PM";
-            		break;
-            	case 26: 
-            		text3label.string = "Start Time: 12:30 PM";
-            		break;
-            	case 27: 
-            		text3label.string = "Start Time: 1:00 PM";
-            		break;
-            	case 28: 
-            		text3label.string = "Start Time: 1:30 PM";
-            		break;
-            	case 29: 
-            		text3label.string = "Start Time: 2:00 PM";
-            		break;
-            	case 30: 
-            		text3label.string = "Start Time: 2:30 PM";
-            		break;
-            	case 31: 
-            		text3label.string = "Start Time: 3:00 PM";
-            		break;
-            	case 32: 
-            		text3label.string = "Start Time: 3:30 PM";
-            		break;
-            	case 33: 
-            		text3label.string = "Start Time: 4:00 PM";
-            		break;
-            	case 34: 
-            		text3label.string = "Start Time: 4:30 PM";
-            		break;
-            	case 35: 
-            		text3label.string = "Start Time: 5:00 PM";
-            		break;
-            	case 36: 
-            		text3label.string = "Start Time: 5:30 PM";
-            		break;
-            	case 37: 
-            		text3label.string = "Start Time: 6:00 PM";
-            		break;
-            	case 38: 
-            		text3label.string = "Start Time: 6:30 PM";
-            		break;
-            	case 39: 
-            		text3label.string = "Start Time: 7:00 PM";
-            		break;
-            	case 40: 
-            		text3label.string = "Start Time: 7:30 PM";
-            		break;
-            	case 41: 
-            		text3label.string = "Start Time: 8:00 PM";
-            		break;
-            	case 42: 
-            		text3label.string = "Start Time: 8:30 PM";
-            		break;
-            	case 43: 
-            		text3label.string = "Start Time: 9:00 PM";
-            		break;
-            	case 44: 
-            		text3label.string = "Start Time: 9:30 PM";
-            		break;
-            	case 45: 
-            		text3label.string = "Start Time: 10:00 PM";
-            		break;
-            	case 46: 
-            		text3label.string = "Start Time: 10:30 PM";
-            		break;
-            	case 47: 
-            		text3label.string = "Start Time: 11:00 PM";
-            		break;
-            	case 48: 
-            		text3label.string = "Start Time: 11:30 PM";
-            		break;
-            	case 49: 
-            		text3label.string = "Start Time: 12:00 AM";
-            		break;
+                case 1: 
+                    text3label.string = "Start Time: 12:00 AM";
+                    break;
+                case 2: 
+                    text3label.string = "Start Time: 12:30 AM";
+                    break;
+                case 3: 
+                    text3label.string = "Start Time: 1:00 AM";
+                    break;
+                case 4: 
+                    text3label.string = "Start Time: 1:30 AM";
+                    break;
+                case 5: 
+                    text3label.string = "Start Time: 2:00 AM";
+                    break;
+                case 6: 
+                    text3label.string = "Start Time: 2:30 AM";
+                    break;
+                case 7: 
+                    text3label.string = "Start Time: 3:00 AM";
+                    break;
+                case 8: 
+                    text3label.string = "Start Time: 3:30 AM";
+                    break;
+                case 9: 
+                    text3label.string = "Start Time: 4:00 AM";
+                    break;
+                case 10: 
+                    text3label.string = "Start Time: 4:30 AM";
+                    break;
+                case 11:
+                    text3label.string = "Start Time: 5:00 AM";
+                    break;
+                case 12: 
+                    text3label.string = "Start Time: 5:30 AM";
+                    break;
+                case 13: 
+                    text3label.string = "Start Time: 6:00 AM";
+                    break;
+                case 14: 
+                    text3label.string = "Start Time: 6:30 AM";
+                    break;
+                case 15: 
+                    text3label.string = "Start Time: 7:00 AM";
+                    break;
+                case 16: 
+                    text3label.string = "Start Time: 7:30 AM";
+                    break;
+                case 17: 
+                    text3label.string = "Start Time: 8:00 AM";
+                    break;
+                case 18: 
+                    text3label.string = "Start Time: 8:30 AM";
+                    break;
+                case 19: 
+                    text3label.string = "Start Time: 9:00 AM";
+                    break;
+                case 20: 
+                    text3label.string = "Start Time: 9:30 AM";
+                    break;
+                case 21: 
+                    text3label.string = "Start Time: 10:00 AM";
+                    break;
+                case 22: 
+                    text3label.string = "Start Time: 10:30 AM";
+                    break;
+                case 23: 
+                    text3label.string = "Start Time: 11:00 AM";
+                    break;
+                case 24: 
+                    text3label.string = "Start Time: 11:30 AM";
+                    break;
+                case 25: 
+                    text3label.string = "Start Time: 12:00 PM";
+                    break;
+                case 26: 
+                    text3label.string = "Start Time: 12:30 PM";
+                    break;
+                case 27: 
+                    text3label.string = "Start Time: 1:00 PM";
+                    break;
+                case 28: 
+                    text3label.string = "Start Time: 1:30 PM";
+                    break;
+                case 29: 
+                    text3label.string = "Start Time: 2:00 PM";
+                    break;
+                case 30: 
+                    text3label.string = "Start Time: 2:30 PM";
+                    break;
+                case 31: 
+                    text3label.string = "Start Time: 3:00 PM";
+                    break;
+                case 32: 
+                    text3label.string = "Start Time: 3:30 PM";
+                    break;
+                case 33: 
+                    text3label.string = "Start Time: 4:00 PM";
+                    break;
+                case 34: 
+                    text3label.string = "Start Time: 4:30 PM";
+                    break;
+                case 35: 
+                    text3label.string = "Start Time: 5:00 PM";
+                    break;
+                case 36: 
+                    text3label.string = "Start Time: 5:30 PM";
+                    break;
+                case 37: 
+                    text3label.string = "Start Time: 6:00 PM";
+                    break;
+                case 38: 
+                    text3label.string = "Start Time: 6:30 PM";
+                    break;
+                case 39: 
+                    text3label.string = "Start Time: 7:00 PM";
+                    break;
+                case 40: 
+                    text3label.string = "Start Time: 7:30 PM";
+                    break;
+                case 41: 
+                    text3label.string = "Start Time: 8:00 PM";
+                    break;
+                case 42: 
+                    text3label.string = "Start Time: 8:30 PM";
+                    break;
+                case 43: 
+                    text3label.string = "Start Time: 9:00 PM";
+                    break;
+                case 44: 
+                    text3label.string = "Start Time: 9:30 PM";
+                    break;
+                case 45: 
+                    text3label.string = "Start Time: 10:00 PM";
+                    break;
+                case 46: 
+                    text3label.string = "Start Time: 10:30 PM";
+                    break;
+                case 47: 
+                    text3label.string = "Start Time: 11:00 PM";
+                    break;
+                case 48: 
+                    text3label.string = "Start Time: 11:30 PM";
+                    break;
+                case 49: 
+                    text3label.string = "Start Time: 12:00 AM";
+                    break;
             }
         }
     }
@@ -333,30 +300,30 @@ let MyDurationSlider = HorizontalSlider.template($ => ({
             trace("Value is: " + this.data.value + "\n");
             durationNum = parseInt(this.data.value);
             switch (durationNum){
-            	case 1:
-            		text4label.string ="Duration: 30 Mins";
-            		break;
-            	case 2:
-            		text4label.string ="Duration: 1 Hour";
-            		break;
-            	case 3:
-            		text4label.string ="Duration: 1 Hours 30 Mins";
-            		break;
-            	case 4:
-            		text4label.string ="Duration: 2 Hours";
-            		break;
-            	case 5:
-            		text4label.string ="Duration: 2 Hours 30 Mins";
-            		break;
-            	case 6:
-            		text4label.string ="Duration: 3 Hours";
-            		break;
-            	case 7:
-            		text4label.string ="Duration: 3 Hours 30 Mins";
-            		break;
-            	case 8:
-            		text4label.string ="Duration: 4 Hours";
-            		break;
+                case 1:
+                    text4label.string ="Duration: 30 Mins";
+                    break;
+                case 2:
+                    text4label.string ="Duration: 1 Hour";
+                    break;
+                case 3:
+                    text4label.string ="Duration: 1 Hours 30 Mins";
+                    break;
+                case 4:
+                    text4label.string ="Duration: 2 Hours";
+                    break;
+                case 5:
+                    text4label.string ="Duration: 2 Hours 30 Mins";
+                    break;
+                case 6:
+                    text4label.string ="Duration: 3 Hours";
+                    break;
+                case 7:
+                    text4label.string ="Duration: 3 Hours 30 Mins";
+                    break;
+                case 8:
+                    text4label.string ="Duration: 4 Hours";
+                    break;
             }
             //if (durationNum > 0) {text4label.string ="Duration: " + parseInt(this.data.value) + " Hours";}
         }
@@ -378,7 +345,7 @@ var text0Template = Column.template($ => ({
     left: 0, right: 0, top: 10,
     contents: [
         Label($, {  
-            left: 0, right: 0, top: 80, height: 35, 
+            left: 0, right: 0, top: 10, height: 35, 
             style: new Style({ font: "bold 35px", color: "#000000" }), 
             string: "Schedule Walk" 
         }),
@@ -387,43 +354,38 @@ var text0Template = Column.template($ => ({
 
 
 var text1Template = Column.template($ => ({
-    left: 0, right: 0, top: 60,
+    left: 0, right: 0, top: 5,
     contents: [
-		text1label,
+        text1label,
     ]
 }));
 
 var text2Template = Column.template($ => ({
-    left: 0, right: 0, top: 170,
+    left: 0, right: 0, top: 5,
     contents: [
-		text2label,
+        text2label,
     ]
 }));
 
 
 var text3Template = Column.template($ => ({
-    left: 0, right: 0, top: 280,
+    left: 0, right: 0, top: 5,
     contents: [
-		text3label,
+        text3label,
     ]
 }));
 
 var text4Template = Column.template($ => ({
-    left: 0, right: 0, top: 390,
+    left: 0, right: 0, top: 5,
     contents: [
-		text4label,
+        text4label,
     ]
 }));
-
-let mainCon = new Content({ 
-    top: 0, left: 0, height: 880, width: 560, 
-    skin: backgroundSkin, 
-});
 
 let graySkin = new Skin({ fill: "gray" });
 
 var Screen3Template = Column.template($ => ({
-    left: 0, right: 0, top: 90, bottom: 400,
+    left: 0, right: 0, top: 0, bottom: 0,
     skin: new Skin({fill: "#ffd359"}),
     contents: [
         new MyMonthSlider({ min: 1, max: 12 }),
@@ -436,7 +398,7 @@ var Screen3Template = Column.template($ => ({
 }));
 
 var Screen4Template = Column.template($ => ({
-    left: 0, right: 0, top: 200, bottom: 320,
+    left: 0, right: 0, top: 0, bottom: 0,
     skin: new Skin({fill: "#ffd359"}),
     contents: [
         new MyDaySlider({ min: 1, max: 31 }),
@@ -449,7 +411,7 @@ var Screen4Template = Column.template($ => ({
 }));
 
 var Screen5Template = Column.template($ => ({
-    left: 0, right: 0, top: 310, bottom: 240,
+    left: 0, right: 0, top: 0, bottom: 0,
     skin: new Skin({fill: "#ffd359"}),
     contents: [
         new MyTimeSlider({ min: 1, max: 49 }),
@@ -462,7 +424,7 @@ var Screen5Template = Column.template($ => ({
 }));
 
 var Screen6Template = Column.template($ => ({
-    left: 0, right: 0, top: 420, bottom: 160,
+    left: 0, right: 0, top: 0, bottom: 0,
     skin: new Skin({fill: "#ffd359"}),
     contents: [
         new MyDurationSlider({ min: 1, max: 8 }),
@@ -474,22 +436,19 @@ var Screen6Template = Column.template($ => ({
     ]
 }));
 
-let MainContainer = Container.template($ => ({
-    top: 0, bottom: 0, left: 0, right: 0,
+export var ScheduleWalkContainer = Column.template($ => ({
+    top: 0, bottom: 0, left: 0, right: 0, skin: backgroundSkin,
     active: true, state: 0,
     contents: [
-    	mainCon,
         text1Template(),
-        text2Template(),
-        text3Template(),
-        text4Template(),
         Screen3Template(),
+        text2Template(),
         Screen4Template(),
+        text3Template(),
         Screen5Template(),
+        text4Template(),
         Screen6Template(),
-        new NavTop({txt: "Schedule a Walk"}),
-        new NavBot(),
+        // new NavTop({txt: "Schedule a Walk"}),
+        // new NavBot(),
     ],
 }));
-
-application.add(new MainContainer());

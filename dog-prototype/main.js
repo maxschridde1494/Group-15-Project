@@ -25,13 +25,15 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreen, stopsExport, city, state } from "selectwalk";
+import { NewRouteContainer, RouteScreen, RouteScreenContent, stopsExport, city, state } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
-import { ConfirmationContainer } from "confirmation";
+import { ConfirmationContainer, ConfirmationBox } from "confirmation";
+
 import { SettingsOverlay } from "settingsoverlay"; 
 import { SettingsScreen} from "settings"; 
 import { RobotScreen } from "robot";  
 import { AccountScreen } from "account";
+import { ScheduleWalkContainer, text1label, text2label, text3label, text4label } from "schedulewalk";
 import { WebcamScreen } from "webcam";   
 import { AddDogScreen } from "adddog"; 
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
@@ -40,6 +42,7 @@ import {
     Button,
     ButtonBehavior  
 } from 'buttons';
+import { ScreenTemplate } from "screenTemplate"
 
 Handler.bind("/discover", Behavior({
     onInvoke: function(handler, message){
@@ -58,6 +61,10 @@ Handler.bind("/respond", Behavior({
     }
 }));
 
+export function loadScreen(title, next, prev, content, nextTxt){
+
+}
+
 export function loadEric(){
     if (currentScreen != null){
         application.remove(currentScreen);
@@ -68,21 +75,33 @@ export function loadEric(){
 
 export function loadErikConfirmationPage() {
     application.remove(currentScreen);
-    currentScreen = new ConfirmationContainer();
+    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", screenContent: new ConfirmationBox()});
+    // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
 
 export function loadGabe(){
     application.remove(currentScreen);
-    currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
+    currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
+    // currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
     application.add(currentScreen);
 }
 
 export function loadAbi(){
     application.remove(currentScreen);
-    currentScreen = new SelectDogContainer();
+    currentScreen = new ScreenTemplate({titleTxt: "Select Dog", prevScn: "loadGabe", nextScn: "loadScheduleWalk", screenContent: new SelectDogContainer()});
     application.add(currentScreen);
     loadDogs();
+}
+
+export function loadScheduleWalk(){
+    text1label = new Label({left:0, right:0, height:40, string:"Month", style: new Style({ font: "bold 15px", color: "#000000" })});
+    text2label = new Label({left:0, right:0, height:40, string:"Day", style: new Style({ font: "bold 15px", color: "#000000" })});
+    text3label = new Label({left:0, right:0, height:40, string:"Start Time", style: new Style({ font: "bold 15px", color: "#000000" })});
+    text4label = new Label({left:0, right:0, height:40, string:"Duration (in hours)", style: new Style({ font: "bold 15px", color: "#000000" })});
+    application.remove(currentScreen);
+    currentScreen = new ScreenTemplate({titleTxt: "Select Time", prevScn: "loadAbi", nextScn: "loadConfirm", screenContent: new ScheduleWalkContainer()});
+    application.add(currentScreen);
 }
 
 export function loadActMonitor(corners){
@@ -101,12 +120,11 @@ export function loadActMonitor(corners){
     //     var url = createLatLongURLfromCorner(corners[i], "|");
     //     cornerURLs.push(url);
     // }
-    var cornerURLs=[];
-    for (var j=0; j<4; j++){
-        var string = stopsExport[j] + "," + city + "," + state;
-        cornerURLs.push(createLatLongURLfromCorner(string, "|"));
-    }
-    trace("corner urls: " + cornerURLs + "\n");
+    var cornerURL1 = createLatLongURLfromCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
+    var cornerURL2 = createLatLongURLfromCorner("W Clark Ave|Evergreen Street,Burbank,CA", "|");
+    var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
+    var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
+    var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
     getMapNoMarkers(cornerURLs);
     var moved = false;
     if (remotePins){
