@@ -1,10 +1,10 @@
 import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, 
     whiteSkin, loadGabe } from "main";
-var titleStyle = new Style({font: '26px', color: 'black'});
-var titleFont = new Style({font: "30px ABeeZee", color: 'white'})
 
 import { Button, ButtonBehavior } from 'buttons';
 
+var titleStyle = new Style({font: '26px', color: 'black'});
+var titleFont = new Style({font: "30px ABeeZee", color: 'white'})
 var dogLabelStyle = new Style({font: "bold 15px ABeeZee", color: "black" });
 
 var dog1url = ""
@@ -14,60 +14,90 @@ var dog3url = ""
 var dog1name = ""
 var dog2name = ""
 var dog3name = ""
+export var dogObjectArray = [];
+export var numberofdogs = 0;
 
-var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
-Files.deleteDirectory(uri, true);
-
-function readSavedRoutes(){
+export function readSavedDogs(){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
+    Files.ensureDirectory(uri)
+    if (Files.exists(uri)){
+        Files.deleteDirectory(uri, true);
+        Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
+    }
+    // for (var i=0; i<3; i++){
+    //     var account = {
+    //         name: "testDog" + String(i + 1),
+    //         image: "assets/dog" + String(i + 1) + ".png"
+    //     };
+    //     trace("dog name: " + account.name + " dog image: " + account.image + "\n");
+    //     var dogFileName = account.name + ".json";
+    //     var uriDog = mergeURI(Files.preferencesDirectory, application.di + ".dogs/" + dogFileName);
+    //     trace("json uri: " + uriDog + "\n");
+    //     Files.writeJSON(uriDog, account);
+    // }
     var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
     var dogs = [];
     var info, iterator = new Files.Iterator(uri);
+    trace("in read routes method\n");
     while (info = iterator.getNext()){
+        trace("in loop\n");
         var currPath = uri + info.path;
         var dog = Files.readJSON(currPath);
         trace(dog.name + "\n");
         trace(dog.image + "\n");
         dogs.push(dog);
-        //do something with route
     }
     return dogs;
 }
 
-var dogs = readSavedRoutes();
-var numberofdogs = dogs.length;
-
-if (numberofdogs == 1) {
-    dog1name = dogs[0].name;
-    dog1url = dogs[0].image;
+export function loadDogs(){
+    dogObjectArray = readSavedDogs(".dogs/");
+    numberofdogs = dogObjectArray.length;
+    var dogDic;
+    if (numberofdogs == 1) {
+        dog1name = dogObjectArray[0].name;
+        dog1url = dogObjectArray[0].image;
+        dogDic = {
+            dog1name: dog1url
+        };
+    } else if (numberofdogs == 2) {
+        dog1name = dogObjectArray[0].name;
+        dog1url = dogObjectArray[0].image;
+        dog2name = dogObjectArray[1].name;
+        dog2url = dogObjectArray[1].image;
+        dogDic = {
+            dog1name: dog1url,
+            dog2name: dog2url
+        };
+    } else if (numberofdogs >= 3) {
+        dog1name = dogObjectArray[0].name;
+        dog1url = dogObjectArray[0].image;
+        dog2name = dogObjectArray[1].name;
+        dog2url = dogObjectArray[1].image;
+        dog3name = dogObjectArray[2].name;
+        dog3url = dogObjectArray[2].image;
+        dogDic = {
+            dog1name: dog1url,
+            dog2name: dog2url,
+            dog3name: dog3url
+        };
+    }
+    for (var d in dogDic){
+        trace("dog dic value (image url): " + dogDic[d] + "\n");
+        // var dogPic = new dogSkinTemplate({url: dic[d]});
+        var dogPic = new Skin({
+              width: 135, height: 135, fill: "white", aspect: "fit",
+              texture: new Texture(dogDic[d])
+        });
+        var dogCon = new dogContainer({dogSkin: dogPic, string: d});
+        application.selectDogContainer.dogContainer.add(dogCon);
+    }
 }
 
-if (numberofdogs == 2) {
-    dog1name = dogs[0].name;
-    dog1url = dogs[0].image;
-    dog2name = dogs[1].name;
-    dog2url = dogs[1].image;
-}
-
-if (numberofdogs >= 3) {
-    dog1name = dogs[0].name;
-    dog1url = dogs[0].image;
-    dog2name = dogs[1].name;
-    dog2url = dogs[1].image;
-    dog3name = dogs[2].name;
-    dog3url = dogs[2].image;
-}
-
-var dogDic = {
-    dog1name: dog1url,
-    dog2name: dog2url,
-    dog3name: dog3url
-};
-
-function generateDogs() {
-    for (var d in dogDic) {
-        trace("image url: " + dogDic[d] + "\n")
-    }   
-}
+// var dogSkinTemplate = Skin.template($ => ({
+//     width: 135, height: 135, fill: "white", aspect: "fit",
+//     texture: new Texture($.url)
+// }));
 
 // var dog1 = new Skin({
 //       width: 135, height: 135, fill: "white", aspect: "fit",
@@ -152,15 +182,19 @@ export var text0Template = Column.template($ => ({
     ]
 }));
 
-export var MainContainer = Column.template($ => ({
-    top: 0, bottom: 0, left: 0, right: 0, skin: new Skin({fill: "#ffd359"}),
+export var SelectDogContainer = Column.template($ => ({
+    name: "selectDogContainer", top: 0, bottom: 0, left: 0, right: 0, skin: new Skin({fill: "#ffd359"}),
     active: true, state: 0,
     contents: [
         new NavTop({txt: "Select Dog"}),
-        text0Template(),
-        new dogContainer({dogSkin: dog1, string: "Pepper"}),
-        new dogContainer({dogSkin: dog2, string: "Snowball"}),
-        new dogContainer({dogSkin: dog3, string: "Big Head"}),
+        new text0Template(),
+        new Column({
+            name: "dogContainer", top: 0, bottom: 0, left: 0, right: 0,
+            contents: []
+        }),
+        // new dogContainer({dogSkin: dog1, string: "Pepper"}),
+        // new dogContainer({dogSkin: dog2, string: "Snowball"}),
+        // new dogContainer({dogSkin: dog3, string: "Big Head"}),
         new NavBot({txt: "Next"}),
     ],
 }));

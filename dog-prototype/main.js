@@ -26,7 +26,7 @@ import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreen, stopsExport, city, state } from "selectwalk";
-// import { MainContainer } from "selectdog";
+import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
 import { ConfirmationContainer } from "confirmation";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { SettingsScreen} from "settings"; 
@@ -79,8 +79,9 @@ export function loadGabe(){
 
 export function loadAbi(){
     application.remove(currentScreen);
-    currentScreen = new MainContainer();
+    currentScreen = new SelectDogContainer();
     application.add(currentScreen);
+    loadDogs();
 }
 
 export function loadActMonitor(corners){

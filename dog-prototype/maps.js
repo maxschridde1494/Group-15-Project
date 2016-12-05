@@ -224,6 +224,7 @@ export function saveRoute(dict){
     };
     var routeFileName = routeJson.name + ".json";
     var uriRoute = mergeURI(Files.preferencesDirectory, application.di + ".routes/" + routeFileName);
+    trace(uriRoute + "\n");
     Files.writeJSON(uriRoute, routeJson);
 }
 export function deleteRoute(routeName){
