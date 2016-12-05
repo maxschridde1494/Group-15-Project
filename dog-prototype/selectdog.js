@@ -20,10 +20,10 @@ export var numberofdogs = 0;
 export function readSavedDogs(){
     var uri = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
     Files.ensureDirectory(uri)
-    if (Files.exists(uri)){
-        Files.deleteDirectory(uri, true);
-        Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
-    }
+    // if (Files.exists(uri)){
+    //     Files.deleteDirectory(uri, true);
+    //     Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
+    // }
     // for (var i=0; i<3; i++){
     //     var account = {
     //         name: "testDog" + String(i + 1),
@@ -86,33 +86,13 @@ export function loadDogs(){
         trace("dog dic value (image url): " + dogDic[d] + "\n");
         // var dogPic = new dogSkinTemplate({url: dic[d]});
         var dogPic = new Skin({
-              width: 135, height: 135, fill: "white", aspect: "fit",
+              top: 10, width: 135, height: 135, fill: "white", aspect: "fit",
               texture: new Texture(dogDic[d])
         });
         var dogCon = new dogContainer({dogSkin: dogPic, string: d});
         application.selectDogContainer.dogContainer.add(dogCon);
     }
 }
-
-// var dogSkinTemplate = Skin.template($ => ({
-//     width: 135, height: 135, fill: "white", aspect: "fit",
-//     texture: new Texture($.url)
-// }));
-
-// var dog1 = new Skin({
-//       width: 135, height: 135, fill: "white", aspect: "fit",
-//       texture: new Texture(dogDic["Pepper"])
-// });
-
-// var dog2 = new Skin({
-//       width: 135, height: 135, fill: "white", aspect: "fit",
-//       texture: new Texture(dogDic["Snowball"])
-// });
-
-// var dog3 = new Skin({
-//       width: 135, height: 135, fill: "white", aspect: "fit",
-//       texture: new Texture(dogDic["Big Head"])
-// });
 
 var dogButton = Content.template($ => ({ 
     top: 0, left: 0, right: 0, height: 80, width: 80, active: true,
@@ -172,7 +152,7 @@ var NavBot = Line.template($ => ({
 }));
 
 export var text0Template = Column.template($ => ({
-    left: 0, right: 0, top: 10, bottom: 10,
+    left: 0, right: 0, top: 10, 
     contents: [
         Label($, {  
             left: 0, right: 0, top: 10,

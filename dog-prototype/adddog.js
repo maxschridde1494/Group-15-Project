@@ -267,9 +267,9 @@ let mainCon = Content.template($=> ({
 function saveJson(){
     var uriAccountDirectory = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
     // Clear out the "/account/" directory.
-    if (Files.exists(uriAccountDirectory)){
-         Files.deleteDirectory(uriAccountDirectory, true); 
-     }
+    // if (Files.exists(uriAccountDirectory)){
+    //      Files.deleteDirectory(uriAccountDirectory, true); 
+    //  }
      Files.ensureDirectory(uriAccountDirectory);
      var uriAccountFile = mergeURI(Files.preferencesDirectory, application.di + ".dogs/");
      trace("directory url: " + uriAccountFile + "\n"); 
