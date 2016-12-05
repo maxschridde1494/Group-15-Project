@@ -1,4 +1,4 @@
-import { currentScreen, orangeSkin, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric} from "main";
+import { currentScreen, orangeSkin, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric, loadAddDog} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { ButtonBehavior } from 'buttons';
 export var displayWebcam = false; 
@@ -30,7 +30,7 @@ var AccountButtons = Line.template($ => ({
         }
     }
 }));
-import { MainContainer } from "adddog";
+//import { MainContainer } from "adddog";
 
 var DogsButtons = Line.template($ => ({
     left: 0, top: 0, bottom: 0, right: 0, active: true, skin: darkPeachSkin, 
@@ -40,10 +40,7 @@ var DogsButtons = Line.template($ => ({
     ],
     Behavior: class extends ButtonBehavior {
         onTap(button){
-        	//TODO: weave together with dog page
-            application.remove(currentScreen);
-            currentScreen = new MainContainer();
-            application.add(currentScreen);
+        	loadAddDog(); 
         }
     }
 }));
