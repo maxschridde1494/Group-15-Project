@@ -1,5 +1,5 @@
 import { SettingsOverlay } from "settingsoverlay"; 
-import { readSavedRoutes, getMapsImg } from "maps";
+import { saveRoute, deleteRoute, readSavedRoutes, getMapsImg } from "maps";
 
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
@@ -77,11 +77,8 @@ var freqRouteLabel = Picture.template($ => ({
                     trace("saved map name: " + maps[i].name + "\n");
                     trace("saved map url: " + maps[i].url + "\n");
                     getMapsImg(maps[i].url, function(image){
-                        // let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
                         let mapIm = new freq1({url: image});
-                        application.routeScreen.col.scroller.frequentContainer.add(new FrequentMaps({name: "pic1", pic: mapIm}));
-                        // application.routeScreen.frequentContainer.pic1.empty();
-                        // application.routeScreen.frequentContainer.pic1.add(mapIm);
+                        application.routeScreen.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
                     });
                 }
             } else {
@@ -117,11 +114,12 @@ var selectRouteIcon = Picture.template($ => ({
     left: 50, height: 20, url: "assets/select-route.png"
 }));
 
-var home = "Home";
-var city = "Berkeley";
-var state = "CA";
+export var home = "Home";
+export var city = "Burbank";
+export var state = "CA";
 var stops = [["", ""], ["", ""], ["", ""], ["", ""]];
-export var stopsExport = [];
+// export var stopsExport = [];
+export var stopsExport = ["w clark ave|evergreen street","w magnolia blvd|evergreen street","n pass ave|w magnolia blvd","w clark ave|n pass ave"];
 var nextIcon = Picture.template($ => ({
     left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
     Behavior: class extends Behavior {
@@ -132,7 +130,13 @@ var nextIcon = Picture.template($ => ({
             var stop2 = stops[1][0] + "|" + stops[1][1];
             var stop3 = stops[2][0] + "|" + stops[2][1];
             var stop4 = stops[3][0] + "|" + stops[3][1];
-            stopsExport = [stop1, stop2, stop3, stop4];
+            // stopsExport = [stop1, stop2, stop3, stop4];
+            //generate GoogleMaps Image and lat lng and save to state
+            var cornerURLs=[];
+            for (var j=0; j<4; j++){
+                var string = stopsExport[j] + "," + city + "," + state;
+                cornerURLs.push(createLatLongURLfromCorner(string, "|"));
+            }
 
             trace("\nSTOPS\n");
             trace("Home: " + home + "\n");
