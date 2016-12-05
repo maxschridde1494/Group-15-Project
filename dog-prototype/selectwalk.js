@@ -29,12 +29,12 @@ var titleFont = new Style({font: "30px ABeeZee", color: 'white'})
 
 /* Pictures */
 var routeLogo = Picture.template($ => ({
-    top: 10, height: 30, url: "assets/routeIcon.png"
+    top: $.top, height: 30, url: "assets/routeIcon.png"
 }));
 
 var labelStatus = "New Route";
 var newRouteLabel = Picture.template($ => ({
-    left: 10, right: 10, top: 5, bottom: 5, height: 10, url: "assets/new-route-selected.png", active: true,
+    left: 10, right: 10, top: 0, bottom: 0, height: 15, url: "assets/new-route-selected.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("New Route\n");
@@ -57,7 +57,7 @@ var newRouteLabel = Picture.template($ => ({
 }));
 
 var freqRouteLabel = Picture.template($ => ({
-    left: 10, right: 10, top: 5, bottom: 5, height: 10, url: "assets/freq-route.png", active: true,
+    left: 10, right: 10, top: 0, bottom: 0, height: 15, url: "assets/freq-route.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("Frequent Route\n");
@@ -174,7 +174,7 @@ var NavBot = Line.template($ => ({
 }));
 
 var RouteLabels = Line.template($ => ({
-    left: 0, top: 0, bottom: 0, right: 0, height: 20,
+    left: 0, top: $.top, bottom: $.bottom, right: 0, height: 15,
     contents: [
         new newRouteLabel(),
         new freqRouteLabel(),
@@ -326,17 +326,17 @@ export var RouteScreen = Column.template($ => ({
     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
         new NavTop({txt: "Select Route"}),
-        new routeLogo(),
-        new RouteLabels(),
+        new routeLogo({top: 10}),
+        new RouteLabels({top: 0, bottom: 0}),
         $.routeSelect,
         new NavBot({txt: "Next"}),
     ]
 }));
-var RouteScreenFrequent = Column.template($ => ({
-    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+var RouteScreenFrequent = Container.template($ => ({
+    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 
     contents: [
-        new Column({
-            name: "col", top: 0, bottom: 0, left: 0, right: 0,
+        new Container({
+            name: "col", top: 150, bottom: 0, left: 0, right: 0, active: true,
             contents:[
                 // VerticalScroller($, {
                 //     name: "scroller", top: 0, bottom: 0, active: true,
@@ -345,34 +345,28 @@ var RouteScreenFrequent = Column.template($ => ({
                 //         VerticalScrollbar()
                 //     ]
                 // }),
-                new NavTop({txt: "Select Route"}),
-                new routeLogo(),
-                new RouteLabels(),
+
                 VerticalScroller($, {
                     name: "scroller", top: 0, bottom: 0, active: true,
                     contents: [
                         $.routeSelect,
-                        VerticalScrollbar()
+                        VerticalScrollbar(),
+                		//TopScrollerShadow(), 
+                		BottomScrollerShadow(),
                     ]
                 }),
-                new NavBot({txt: "Next"})
-            ]
-        })
+                
+            ]               
+        }),
+        new Container({
+            top: 0, height: 150, left: 0, right: 0, skin: yellowSkin, active: true,
+            contents:[
+                new NavTop({txt: "Select Route"}),
+        		new routeLogo({top: navBarSize + 10}),
+        		new RouteLabels({top: 110, bottom: 10}),  
+            ]               
+        }),
+        new NavBot({txt: "Next"}),
     ]
 }));
-// var RouteScreenFrequent = Column.template($ => ({
-//     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
-//     contents: [
-//         VerticalScroller($, {
-//             name: "scroller", top: 0, bottom: 0, active: true,
-//             contents: [
-//                 new NavTop({txt: "Select Route"}),
-//                 new routeLogo(),
-//                 new RouteLabels(),
-//                 $.routeSelect,
-//                 new NavBot({txt: "Next"}),
-//                 VerticalScrollbar()
-//             ]
-//         })
-//     ]
-// }));
+
