@@ -40,11 +40,7 @@ var routeLogo = Picture.template($ => ({
 
 var labelStatus = "New Route";
 var newRouteLabel = Picture.template($ => ({
-<<<<<<< HEAD
-    left: 10, right: 10, top: 5, bottom: 5, height: 10, url: "assets/new-route-selected.png", active: false,
-=======
     left: 10, right: 10, top: 0, bottom: 0, height: 15, url: "assets/new-route-selected.png", active: true,
->>>>>>> 70e31d02804722363da95d8df2ab71bea2758674
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("New Route\n");
@@ -192,11 +188,7 @@ var NavBot = Line.template($ => ({
 }));
 
 var RouteLabels = Line.template($ => ({
-<<<<<<< HEAD
-    left: 0, top: 0, bottom: 0, right: 0,
-=======
     left: 0, top: $.top, bottom: $.bottom, right: 0, height: 15,
->>>>>>> 70e31d02804722363da95d8df2ab71bea2758674
     contents: [
         new newRouteLabel(),
         new freqRouteLabel(),
@@ -267,9 +259,9 @@ var MyField = Container.template($ => ({
 }));
 
 var textLabel = Container.template($ => ({
-    top: 0, bottom: 0, left: 0, right: 0, skin: new Skin({fill: "#ff7e3e"}),
+    width: 50, left: 0, top: 0, bottom: 0,
     contents: [
-        new Label({top: 0, bottom: 0, left: 0, right: 0, style: fieldStyle, string: $.txt})
+        new Label({top: 0, bottom: 0, left: 0, width: 50, style: fieldStyle, string: $.txt})
     ]
 }));
 
@@ -286,16 +278,16 @@ export var NewRouteContainer = Column.template($ => ({
     top: 10, left: 0, right: 0, bottom: 0, active: true,
     contents: [
         new Line({
-            left: 5, top: 0, right: 5, height: 26,
+            left: 5, top: 0, right: 5, width: 50,
             contents: [
                 new textLabel({txt: "Home:"}),
                 new MyField({name: "Home", targetID: "home"}),
             ]
         }),
-        new NewRouteBox({txt: 'stop1', targetID: 'stop1'}),
-        new NewRouteBox({txt: 'stop2', targetID: 'stop2'}),
-        new NewRouteBox({txt: 'stop3', targetID: 'stop3'}),
-        new NewRouteBox({txt: 'stop4', targetID: 'stop4'}),
+        new NewRouteBox({txt: 'Stop 1', targetID: 'stop1'}),
+        new NewRouteBox({txt: 'Stop 2', targetID: 'stop2'}),
+        new NewRouteBox({txt: 'Stop 3', targetID: 'stop3'}),
+        new NewRouteBox({txt: 'Stop 4', targetID: 'stop4'}),
         new Line({
             left: 5, top: 10, right: 5, height: 26,
             contents: [
@@ -348,22 +340,13 @@ var FrequentContainer = Column.template($ => ({
 export var RouteScreenContent = Column.template($ => ({
     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: new Skin({fill: "#ffd359"}),
     contents: [
-<<<<<<< HEAD
-        new routeLogo(),
-        new RouteLabels(),
+        // new routeLogo(),
+        // new RouteLabels(),
+        new routeLogo({top: 10}),
+        new RouteLabels({top: 0, bottom: 0}),
         new NewRouteContainer(),
     ]
 }));
-
-function test1(){
-    trace("Test1\n");
-};
-
-function test2(){
-    trace("Test2\n");
-}
-
-export var RouteScreen = new ScreenTemplate({titleTxt: "Select Route", nextScn: test1, prevScn: test2, screenContent: new RouteScreenContent()});
 
 /* Select Route Screen */
 // export var RouteScreen = Column.template($ => ({
@@ -377,38 +360,18 @@ export var RouteScreen = new ScreenTemplate({titleTxt: "Select Route", nextScn: 
 //     ]
 // }));
 
-var RouteScreenFrequent = Column.template($ => ({
-    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
-=======
-        new NavTop({txt: "Select Route"}),
-        new routeLogo({top: 10}),
-        new RouteLabels({top: 0, bottom: 0}),
-        $.routeSelect,
-        new NavBot({txt: "Next"}),
-    ]
-}));
 var RouteScreenFrequent = Container.template($ => ({
     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 
->>>>>>> 70e31d02804722363da95d8df2ab71bea2758674
     contents: [
         new Container({
             name: "col", top: 150, bottom: 0, left: 0, right: 0, active: true,
             contents:[
-                // VerticalScroller($, {
-                //     name: "scroller", top: 0, bottom: 0, active: true,
-                //     contents: [
-                //         $.routeSelect,
-                //         VerticalScrollbar()
-                //     ]
-                // }),
-
                 VerticalScroller($, {
                     name: "scroller", top: 0, bottom: 0, active: true,
                     contents: [
                         $.routeSelect,
                         VerticalScrollbar(),
-                		//TopScrollerShadow(), 
-                		BottomScrollerShadow(),
+                        //TopScrollerShadow(), 
                     ]
                 }),
                 
@@ -418,11 +381,10 @@ var RouteScreenFrequent = Container.template($ => ({
             top: 0, height: 150, left: 0, right: 0, skin: yellowSkin, active: true,
             contents:[
                 new NavTop({txt: "Select Route"}),
-        		new routeLogo({top: navBarSize + 10}),
-        		new RouteLabels({top: 110, bottom: 10}),  
+                new routeLogo({top: navBarSize + 10}),
+                new RouteLabels({top: 110, bottom: 10}),  
             ]               
         }),
         new NavBot({txt: "Next"}),
     ]
 }));
-

@@ -9,7 +9,7 @@ Parameters:
 */
 
 import { SettingsOverlay } from "settingsoverlay";
-import { loadGabe loadAbi, loadEric, loadMax, loadErikConfirmationPage, settingsOverlayScreen} from "main";
+import { loadGabe, loadAbi, loadEric, loadMax, loadErikConfirmationPage, settingsOverlayScreen, loadScheduleWalk} from "main";
 
 function loadScreen(screen) {
     if (screen == "loadEric")
@@ -22,6 +22,9 @@ function loadScreen(screen) {
         loadErikConfirmationPage();
     else if (screen == "loadGabe")
         loadGabe();
+    else if (screen == "loadScheduleWalk"){
+        loadScheduleWalk();
+    }
 }
 
 var orangeSkin = new Skin({fill: "#ff7e3e"});

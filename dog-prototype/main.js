@@ -25,7 +25,7 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreen, RouteScreenContent, stopsExport, city, state } from "selectwalk";
+import { NewRouteContainer, RouteScreenContent, stopsExport, city, state } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
 import { ConfirmationContainer, ConfirmationBox } from "confirmation";
 
