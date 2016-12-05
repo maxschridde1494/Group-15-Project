@@ -32,6 +32,7 @@ import { SettingsOverlay } from "settingsoverlay";
 import { SettingsScreen} from "settings"; 
 import { RobotScreen } from "robot";  
 import { AccountScreen } from "account";
+import { ScheduleWalkContainer, text1label, text2label, text3label, text4label } from "schedulewalk";
 import { WebcamScreen } from "webcam";   
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
     getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
@@ -58,6 +59,10 @@ Handler.bind("/respond", Behavior({
     }
 }));
 
+export function loadScreen(title, next, prev, content, nextTxt){
+
+}
+
 export function loadEric(){
     if (currentScreen != null){
         application.remove(currentScreen);
@@ -68,21 +73,32 @@ export function loadEric(){
 
 export function loadErikConfirmationPage() {
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadAbi", screenContent: new ConfirmationBox()});
+    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", screenContent: new ConfirmationBox()});
     // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
 
 export function loadGabe(){
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadErik", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
+    currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
     // currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
     application.add(currentScreen);
 }
 
 export function loadAbi(){
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Select Dog", prevScn: "loadGabe", nextScn: "loadConfirm", screenContent: new MainContainer()});
+    currentScreen = new ScreenTemplate({titleTxt: "Select Dog", prevScn: "loadGabe", nextScn: "loadScheduleWalk", screenContent: new MainContainer()});
+    // currentScreen = new MainContainer();
+    application.add(currentScreen);
+}
+
+export function loadScheduleWalk(){
+    text1label = new Label({left:0, right:0, height:40, string:"Month", style: new Style({ font: "bold 15px", color: "#000000" })});
+    text2label = new Label({left:0, right:0, height:40, string:"Day", style: new Style({ font: "bold 15px", color: "#000000" })});
+    text3label = new Label({left:0, right:0, height:40, string:"Start Time", style: new Style({ font: "bold 15px", color: "#000000" })});
+    text4label = new Label({left:0, right:0, height:40, string:"Duration (in hours)", style: new Style({ font: "bold 15px", color: "#000000" })});
+    application.remove(currentScreen);
+    currentScreen = new ScreenTemplate({titleTxt: "Select Time", prevScn: "loadAbi", nextScn: "loadConfirm", screenContent: new ScheduleWalkContainer()});
     // currentScreen = new MainContainer();
     application.add(currentScreen);
 }

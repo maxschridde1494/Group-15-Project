@@ -1,5 +1,5 @@
 import { currentScreen, remotePins, closeAnalogs, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
-import { navBarSize, settingsIcon } from "selectwalk";
+import { navBarSize, settingsIcon, stopsExport } from "selectwalk";
 import { markersURLArray } from "main";
 import { getMapsImg, saveRoute, deleteRoute } from "maps";
 
@@ -73,26 +73,26 @@ var spacer = Container.template($ => ({
        //              }
        //          }),
                 new Line({
-    				name: "line1", top: 0, bottom: 0, left: 0, right: 0,
-    				contents: [
-    					new monitorBox({name: "completed", string: "Completed:"}),
-    					new monitorBox({name: "distance", string: "Distance Covered:"})
-    				]
-    			}),
-    			new Line({
-    				name: "line2", top: 0, bottom: 0, left: 0, right: 0,
-    				contents: [
-    					new monitorBox({name: "steps", string: "Steps:"}),
-    					new monitorBox({name: "heartrate", string: "Heart Rate:"})
-    				]
-    			}),
-                new Container({
-                    name: "map", height: 250, left: 0, right: 0,
-                    contents: [
-                    ]
-                })
-    		]
-    	})
+          				name: "line1", top: 0, bottom: 0, left: 0, right: 0,
+          				contents: [
+          					new monitorBox({name: "completed", string: "Completed:"}),
+          					new monitorBox({name: "distance", string: "Distance Covered:"})
+          				]
+          			}),
+          			new Line({
+          				name: "line2", top: 0, bottom: 0, left: 0, right: 0,
+          				contents: [
+          					new monitorBox({name: "steps", string: "Steps:"}),
+          					new monitorBox({name: "heartrate", string: "Heart Rate:"})
+          				]
+          			}),
+                      new Container({
+                          name: "map", height: 250, left: 0, right: 0,
+                          contents: [
+                          ]
+                      })
+          		]
+          	})
     ]
 }));
 
