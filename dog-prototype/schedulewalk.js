@@ -18,7 +18,7 @@ let MyWalkButtonTemplate = Button.template($ => ({
 			Month = "The walk starts now";
 			Day = "";
 			Time = "";
-			Duration = "30 Mins";
+			Duration = "";
 			iswalknow = 1;
 			loadErikConfirmationPage();
         }
@@ -80,10 +80,10 @@ import {
     ButtonBehavior 
 } from 'buttons';
 
-export var Month = "Month";
-export var Day = "Day";
-export var Time = "Start Time";
-export var Duration = "Duration";
+export var Month = "No Walk Scheduled";
+export var Day = "";
+export var Time = "";
+export var Duration = "";
 export var monthNum = 0;
 export var dayNum = 0;
 export var timeNum = 0;
@@ -164,8 +164,10 @@ let MyDaySlider = HorizontalSlider.template($ => ({
         onValueChanged(container) {
             trace("Value is: " + this.data.value + "\n");
             dayNum = parseInt(this.data.value);
-            if (dayNum > 0) {text2label.string ="Day: " + parseInt(this.data.value);}
-            Day = dayNum + " at ";
+            if (dayNum > 0) {
+            	text2label.string ="Day: " + parseInt(this.data.value);
+            	Day = dayNum + " at ";
+            } 
         }
     }
 }));
@@ -387,35 +389,35 @@ let MyDurationSlider = HorizontalSlider.template($ => ({
             switch (durationNum){
                 case 1:
                     text4label.string ="Duration: 30 Mins";
-                    Duration = "30 Mins";
+                    Duration = "Duration: 30 Mins";
                     break;
                 case 2:
                     text4label.string ="Duration: 1 Hour";
-                    Duration = "1 Hour";
+                    Duration = "Duration: 1 Hour";
                     break;
                 case 3:
                     text4label.string ="Duration: 1 Hours 30 Mins";
-                    Duration = "1 Hour 30 Mins";
+                    Duration = "Duration: 1 Hour 30 Mins";
                     break;
                 case 4:
                     text4label.string ="Duration: 2 Hours";
-                    Duration = "2 Hours";
+                    Duration = "Duration: 2 Hours";
                     break;
                 case 5:
                     text4label.string ="Duration: 2 Hours 30 Mins";
-                    Duration = "2 Hours 30 Mins";
+                    Duration = "Duration: 2 Hours 30 Mins";
                     break;
                 case 6:
                     text4label.string ="Duration: 3 Hours";
-                    Duration = "3 Hours";
+                    Duration = "Duration: 3 Hours";
                     break;
                 case 7:
                     text4label.string ="Duration: 3 Hours 30 Mins";
-                    Duration = "3 Hours 30 Mins";
+                    Duration = "Duration: 3 Hours 30 Mins";
                     break;
                 case 8:
                     text4label.string ="Duration: 4 Hours";
-                    Duration = "4 Hours";
+                    Duration = "Duration: 4 Hours";
                     break;
             }
             //if (durationNum > 0) {text4label.string ="Duration: " + parseInt(this.data.value) + " Hours";}
