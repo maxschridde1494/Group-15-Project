@@ -36,7 +36,7 @@ export function readSavedDogs(){
 export function loadDogs(){
     dogObjectArray = readSavedDogs(".dogs/");
     numberofdogs = dogObjectArray.length;
-    var dogDic;
+    var dogDic =[];
     if (numberofdogs == 1) {
         dog1name = dogObjectArray[0].name;
         trace("dogname: " + dog1name + "\n");
@@ -82,7 +82,6 @@ var dogButton = Content.template($ => ({
         }
     }
 }));
-
 var dogContainer = Column.template($  => ({
     left: 0, right: 0, top: 0, bottom: 0,
     contents: [

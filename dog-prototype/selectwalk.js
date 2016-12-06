@@ -1,6 +1,7 @@
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
-import { saveRoute, deleteRoute, readSavedRoutes, getMapsImg, createLatLongURLfromCorner } from "maps";
+import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
+    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
 
 import { ScreenTemplate } from "screenTemplate"
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
@@ -47,7 +48,7 @@ var newRouteLabel = Picture.template($ => ({
             if (container.active == true) {
                 labelStatus = "New Route";
                 application.remove(currentScreen);
-                currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadErik", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
+                currentScreen = new ScreenTemplate({name: "newRouteScreen", titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
                 application.add(currentScreen);
                 application.distribute("updateRouteSelect", 0);
                 container.active = false;
@@ -87,7 +88,7 @@ var freqRouteLabel = Picture.template($ => ({
                     trace("saved map url: " + maps[i].url + "\n");
                     getMapsImg(maps[i].url, function(image){
                         let mapIm = new freq1({url: image});
-                        application.routeScreen.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
+                        application.routeScreenFrequent.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
                     });
                 }
             } else {
@@ -124,12 +125,52 @@ var selectRouteIcon = Picture.template($ => ({
     left: 50, height: 20, url: "assets/select-route.png"
 }));
 
+export var walkName = "";
 export var home = "Home";
 export var city = "Burbank";
 export var state = "CA";
 var stops = [["", ""], ["", ""], ["", ""], ["", ""]];
-// export var stopsExport = [];
-export var stopsExport = ["w clark ave|evergreen street","w magnolia blvd|evergreen street","n pass ave|w magnolia blvd","w clark ave|n pass ave"];
+export var stopsExport = [];
+export var newRouteURLObject = [];
+// export var newRouteURLObject = {"name": "", "mainMapURL": "", "markerMapsURLArray": []};
+// export var stopsExport = ["w clark ave|evergreen street","w magnolia blvd|evergreen street","n pass ave|w magnolia blvd","w clark ave|n pass ave"];
+export function grabNewRouteURLs(returnArr){
+    var stop1 = stops[0][0] + "|" + stops[0][1];
+    var stop2 = stops[1][0] + "|" + stops[1][1];
+    var stop3 = stops[2][0] + "|" + stops[2][1];
+    var stop4 = stops[3][0] + "|" + stops[3][1];
+    stopsExport = [stop1, stop2, stop3, stop4];
+    trace("check: " + stopsExport + "\n");
+    var cornerURLs=[];
+    trace("stopsExport: " + stopsExport + "\n");
+    for (var j=0; j<stopsExport.length; j++){
+        var string = stopsExport[j] + "," + city + "," + state;
+        cornerURLs.push(createLatLongURLfromCorner(string, "|"));
+    }
+    trace("about to make lat lng api calls\n");
+    getLatLonFourCorners(cornerURLs, function(array){
+        var mapurl = createMapsURLfromLatLon2(array, false, ""); // get map URL
+        trace("route url: " + mapurl + "\n");
+        var urlsArr = []; //maps with markers urls
+        for (var i=0; i < array.length; i++){
+            var url = createMapsURLfromLatLon2(array, true,[array[i][0], array[i][1]]);
+            trace("marker map " + String(i) + " url: " + url + "\n");
+            urlsArr.push(url);
+        }
+        // returnDic["name"] = walkName;
+        // returnDic["mainMapURL"] = mapurl;
+        // returnDic["markerMapsURLArray"] = urlsArr;
+        returnArr.push(["name", walkName]);
+        returnArr.push(["map", mapurl]);
+        returnArr.push(["markers", urlsArr]);
+        // newRouteURLObject = {
+        //     name: walkName,
+        //     mainMapURL: mapurl,
+        //     markerMapsURLArray: urlsArr
+        // };
+        // trace("map version: " + newRouteURLObject[0] + "\n");
+    });
+}
 var nextIcon = Picture.template($ => ({
     left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
     Behavior: class extends Behavior {
@@ -140,14 +181,7 @@ var nextIcon = Picture.template($ => ({
             var stop2 = stops[1][0] + "|" + stops[1][1];
             var stop3 = stops[2][0] + "|" + stops[2][1];
             var stop4 = stops[3][0] + "|" + stops[3][1];
-            // stopsExport = [stop1, stop2, stop3, stop4];
-            //generate GoogleMaps Image and lat lng and save to state
-            var cornerURLs=[];
-            for (var j=0; j<4; j++){
-                var string = stopsExport[j] + "," + city + "," + state;
-                cornerURLs.push(createLatLongURLfromCorner(string, "|"));
-            }
-
+            stopsExport = [stop1, stop2, stop3, stop4];
             trace("\nSTOPS\n");
             trace("Home: " + home + "\n");
             trace("Stop1: " + stop1 + "\n");
@@ -157,7 +191,7 @@ var nextIcon = Picture.template($ => ({
             trace("City: " + city + "\n");
             trace("State: " + state + "\n");
             trace("Stops Export: " + stopsExport + "\n");
-            trace("END STOPS\n");
+            trace("YUPPPPPPPPP\n");
             loadAbi();
         }
     }
@@ -216,6 +250,9 @@ var MyField = Container.template($ => ({
                             trace(data.name+"\n");
 
                             if ($.targetID == 'home') home == data.name;
+                            else if ($.targetID == 'walkName'){
+                                walkName = data.name;
+                            }
                             else if ($.targetID == 'stop1') {
                                 if ($.stop == 0) 
                                     stops[0] = [data.name, stops[0][1]];
@@ -269,8 +306,8 @@ var NewRouteBox = Line.template($ => ({
     left: 5, top: 10, right: 5, height: 26, active: true,
     contents: [
         new textLabel({txt: $.txt}),
-        new MyField({name: $.txt, targetID: $.targetID, stop: 0}),
-        new MyField({name: $.txt, targetID: $.targetID, stop: 1})
+        new MyField({name: $.txt1, targetID: $.targetID, stop: 0}),
+        new MyField({name: $.txt2, targetID: $.targetID, stop: 1})
     ]
 }));
 
@@ -280,19 +317,26 @@ export var NewRouteContainer = Column.template($ => ({
         new Line({
             left: 5, top: 0, right: 5, width: 50,
             contents: [
+                new textLabel({txt: "Name: "}),
+                new MyField({name: "Test", targetID: "walkName"})
+            ]
+        }),
+        new Line({
+            left: 5, top: 5, right: 5, width: 50,
+            contents: [
                 new textLabel({txt: "Home:"}),
                 new MyField({name: "Home", targetID: "home"}),
             ]
         }),
-        new NewRouteBox({txt: 'Stop 1', targetID: 'stop1'}),
-        new NewRouteBox({txt: 'Stop 2', targetID: 'stop2'}),
-        new NewRouteBox({txt: 'Stop 3', targetID: 'stop3'}),
-        new NewRouteBox({txt: 'Stop 4', targetID: 'stop4'}),
+        new NewRouteBox({txt: "Stop 1", txt1: 'w clark ave', txt2: 'evergreen street', targetID: 'stop1'}),
+        new NewRouteBox({txt: "Stop 2",txt1: 'w magnolia blvd', txt2: 'evergreen street', targetID: 'stop2'}),
+        new NewRouteBox({txt: "Stop 3",txt1: 'n pass ave', txt2: 'w magnolia blvd', targetID: 'stop3'}),
+        new NewRouteBox({txt: "Stop 4",txt1: 'w clark ave', txt2: 'n pass ave', targetID: 'stop4'}),
         new Line({
             left: 5, top: 10, right: 5, height: 26,
             contents: [
                 new textLabel({txt: "City:"}),
-                new MyField({name: "Berkeley", targetID: "city"}),
+                new MyField({name: "Burbank", targetID: "city"}),
                 new textLabel({txt: "State:"}),
                 new MyField({name: "CA", targetID: "state"})
             ]
@@ -361,7 +405,7 @@ export var RouteScreenContent = Column.template($ => ({
 // }));
 
 var RouteScreenFrequent = Container.template($ => ({
-    name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 
+    name: "routeScreenFrequent", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 
     contents: [
         new Container({
             name: "col", top: 150, bottom: 0, left: 0, right: 0, active: true,

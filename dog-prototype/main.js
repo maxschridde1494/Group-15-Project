@@ -25,7 +25,7 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreenContent, stopsExport, city, state } from "selectwalk";
+import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
 import { ConfirmationContainer, ConfirmationBox } from "confirmation";
 
@@ -71,6 +71,7 @@ export function loadEric(){
     }
     currentScreen = new MainContainerTemplate();
     application.add(currentScreen);
+    // deleteDirectory(".routes/");
 }
 
 export function loadErikConfirmationPage() {
@@ -82,7 +83,7 @@ export function loadErikConfirmationPage() {
 
 export function loadGabe(){
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
+    currentScreen = new ScreenTemplate({name: "newRouteScreen", titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
     // currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
     application.add(currentScreen);
 }
@@ -153,12 +154,12 @@ function getMapNoMarkers(cornersArr){
     // cornersArr - array of intersection strings for geocode api to get lats / lons
     getLatLonFourCorners(cornersArr, function(array){
         var mapurl = createMapsURLfromLatLon2(array, false, "");
-        saveRoute({name: "test1", url: mapurl});
         getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
             application.main.spacer.col.map.add(mapIm);
         });
         markersURLArray = getMapswithMarkersURLs(array);
+        saveRoute({name: "test1", url: mapurl, markersArray: markersURLArray});
         trace("markersURLArray: " + markersURLArray + "\n");
         generateMarkerImages(markersURLArray);
         trace("should have generated marker images\n");

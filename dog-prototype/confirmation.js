@@ -3,6 +3,8 @@ import { currentScreen, orangeSkin, yellowSkin,
     whiteSkin, loadAbi, loadMax } from "main";
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
+import {newRouteURLObject } from "selectwalk";
+import { saveRoute } from "maps";
 // import { dogsChosen } from "selectDog"
 
 var dogs = {
@@ -42,8 +44,27 @@ var confirmButton = Content.template($ => ({
     skin: but,
     Behavior: class extends ButtonBehavior {
         onTap(button){
-            trace(dogsChosen + "\n");
+            //trace(dogsChosen + "\n");
             application.distribute("onToggleLight", 1);
+            var name;
+            var map;
+            var markers;
+            for (var i=0; i<newRouteURLObject.length; i++){
+                if (newRouteURLObject[i][0] == "name"){
+                    name = newRouteURLObject[i][1];
+                }else if (newRouteURLObject[i][0] == "map"){
+                    map = newRouteURLObject[i][1];
+                }else if (newRouteURLObject[i][0] == "markers"){
+                    markers = newRouteURLObject[i][1];
+                }
+            }
+            var routeJSON = {
+                name: name,
+                url: map,
+                markersArray: markers
+            }
+            saveRoute(routeJSON);
+            newRouteURLObject = [];
             loadMax();
         }
     }
