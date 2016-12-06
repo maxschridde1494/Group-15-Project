@@ -176,7 +176,6 @@ var nextIcon = Picture.template($ => ({
     left: 200, right: 0, height: 15, url: "assets/next.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
-            trace("Next Screen\n");
             // MOVE TO NEXT SCREEN HERE
             var stop1 = stops[0][0] + "|" + stops[0][1];
             var stop2 = stops[1][0] + "|" + stops[1][1];
