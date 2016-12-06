@@ -36,7 +36,7 @@ export function readSavedDogs(){
 export function loadDogs(){
     dogObjectArray = readSavedDogs(".dogs/");
     numberofdogs = dogObjectArray.length;
-    var dogDic;
+    var dogDic =[];
     if (numberofdogs == 1) {
         dog1name = dogObjectArray[0].name;
         trace("dogname: " + dog1name + "\n");
@@ -83,25 +83,36 @@ var dogButton = Content.template($ => ({
     }
 }));
 
-var dogContainer = Column.template($  => ({
+var dogContainer = Container.template($  => ({
     left: 0, right: 0, top: 0, bottom: 0,
     contents: [
         new Container({
-            left: 100, right: 100, top: 0, bottom: 0, skin: statusSkin, active: true,
+            left: 100, right: 100, top: 0, height: 120, skin: statusSkin, active: true,
             contents: [
                 new dogIcon({dogPic: $.dogPic})
             ],
             Behavior: class extends Behavior {
                 onTouchEnded(container) {
-                    // dogsChosen[$.string] = !dogsChosen[$.string];
+                	//select cases
+                	let orangeReplace = container.first.url.replace("Yellow.png", "Orange.png"); 
+                	let yellowReplace = container.first.url.replace("Orange.png", "Yellow.png");
+                	if (orangeReplace != container.first.url) { //select case
+                		container.first.url = orangeReplace;  
+                	} else if (yellowReplace != container.first.url) { //deselect case
+                		container.first.url = yellowReplace; 
+                	}
+                	
 
+                	
+                    
+                    // dogsChosen[$.string] = !dogsChosen[$.string];
                     trace($.string + " Dog Touched\n");
                     // trace(dogsChosen[$.string] + "\n");
-                    container.state = !container.state;
+                    //container.state = !container.state;
                 }
             }
         }),
-        new Label({left: 0, right: 0, top: 5, bottom: 0, height: 15, 
+        new Label({left: 0, right: 0, top: 120, height: 15, 
             string: $.string, style: dogLabelStyle})
     ]
 }));

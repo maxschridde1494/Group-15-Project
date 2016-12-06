@@ -1,5 +1,5 @@
 import { currentScreen, remotePins, closeAnalogs, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
-import { navBarSize, settingsIcon, stopsExport } from "selectwalk";
+import { NavTop, navBarSize, settingsIcon, stopsExport } from "selectwalk";
 import { markersURLArray } from "main";
 import { getMapsImg, saveRoute, deleteRoute } from "maps";
 
@@ -10,17 +10,9 @@ let orangeSkinBorder = new Skin({fill: "#ff7e3e", borders: {left:1, right:1, top
 export var ActMonitorScreen = Column.template($ => ({
     name: "main", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
     contents: [
-        new NavTop({string: "Activities Monitor"}),
+        new NavTop({txt: "Activities Monitor"}),
         new spacer(),
         new NavBot({txt: "Next"})
-    ]
-}));
-
-var NavTop = Line.template($ => ({
-    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
-    contents: [
-        new settingsIcon(),
-        new Label({hidden: false, left: 0, right: 0, string: $.string, style: largeTextStyle})
     ]
 }));
 
@@ -49,29 +41,6 @@ var spacer = Container.template($ => ({
     	new Column({
     		name: "col", top: 0, bottom: 0, left: 0, right: 0,
     		contents: [
-    			// new Label({
-       //              left: 0, right: 0, height: 20, skin: yellowSkin, active: true, string: "next", style: smallTextStyle,
-       //              contents: [],
-       //              Behavior: class extends Behavior {
-       //                  onTouchBegan(container, data){
-       //                      application.main.spacer.col.map.empty();
-       //                      trace(markersURLArray + "\n");
-       //                  }
-       //                  onTouchEnded(container, data){
-       //                      trace("counter: " + counter + "\n");
-       //                      saveRoute({name: "test" + counter, url: markersURLArray[counter]});
-       //                      getMapsImg(markersURLArray[counter], function(image){
-       //                          let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-       //                          application.main.spacer.col.map.add(mapIm);
-       //                      });
-       //                      if (counter == 3){
-       //                          counter = 0;
-       //                      }else{
-       //                          counter++;
-       //                      }
-       //                  }
-       //              }
-       //          }),
                 new Line({
           				name: "line1", top: 0, bottom: 0, left: 0, right: 0,
           				contents: [

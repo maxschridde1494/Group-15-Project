@@ -44,7 +44,7 @@ var nextIcon = Picture.template($ => ({
     }
 }));
 
-export var navBarSize = 40;
+export var navBarSize = 50;
 var TitleTemplate = Label.template($ => ({
     left: 0, right: 0, top: 0, bottom: 0,
     style: titleFont,

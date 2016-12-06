@@ -12,6 +12,7 @@ var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 var testAddress4 = "CORNER%20W+Clark+Ave+%20AND%20N+Pass+Ave,Burbank,CA";
 
 import { markersImageArray } from "main";
+import { newRouteURLObject } from "selectwalk";
 
 export function createLatLongURLfromAddress(address){
     //Generate GEOCODE URL from Address
@@ -215,16 +216,17 @@ export function getMapsImg(url, uiCallback){
 }
 
 export function saveRoute(dict){
-    //input is dictionary with 1) name and 2) Google Maps url 
+    //input is dictionary with 1) name and 2) Google Maps Main url 3) array of Marker Maps URLs
     var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
     Files.ensureDirectory(uri)
     var routeJson = {
         name: dict.name,
-        url: dict.url
+        url: dict.url,
+        markers: dict.markersArray
     };
     var routeFileName = routeJson.name + ".json";
+    trace("route file name: " + routeFileName + "\n");
     var uriRoute = mergeURI(Files.preferencesDirectory, application.di + ".routes/" + routeFileName);
-    trace(uriRoute + "\n");
     Files.writeJSON(uriRoute, routeJson);
 }
 export function deleteRoute(routeName){
@@ -234,6 +236,7 @@ export function deleteRoute(routeName){
 }
 export function readSavedRoutes(){
     var uri = mergeURI(Files.preferencesDirectory, application.di + ".routes/");
+    Files.ensureDirectory(uri);
     var mapObjects = [];
     var info, iterator = new Files.Iterator(uri);
     while (info = iterator.getNext()){

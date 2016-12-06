@@ -9,6 +9,7 @@ Parameters:
 */
 
 import { SettingsOverlay } from "settingsoverlay";
+import { stopsExport, grabNewRouteURLs, newRouteURLObject } from "selectwalk";
 import { loadGabe, loadAbi, loadEric, loadMax, loadErikConfirmationPage, settingsOverlayScreen, loadScheduleWalk} from "main";
 
 function loadScreen(screen) {
@@ -62,6 +63,11 @@ var nextIcon = Label.template($ => ({
         onTouchEnded(container) {
             trace("Next Screen\n");
             // MOVE TO NEXT SCREEN HERE
+            trace(container.container.container.name + "\n");
+            if (container.container.container.name == "newRouteScreen"){
+                grabNewRouteURLs(newRouteURLObject);
+            }
+
             loadScreen($.nextScn);
         }
     }

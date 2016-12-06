@@ -1,4 +1,5 @@
 import { currentScreen, orangeSkin, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric, loadAddDog} from "main";
+import { NavTop} from "selectwalk"; 
 import { SettingsOverlay } from "settingsoverlay"; 
 import { ButtonBehavior } from 'buttons';
 export var displayWebcam = false; 
@@ -67,10 +68,7 @@ var AboutButtons = Line.template($ => ({
     ],
     Behavior: class extends ButtonBehavior {
         onTap(button){
-        	i = 0;
-        	displayWebcam = true; 
-        	loadWebcam(i.toString()); 
-        	delayLoop(); 
+        	//not implemented
         }
     }
 }));
@@ -110,13 +108,6 @@ var backIcon = Picture.template($ => ({
 
 // Templates
 var navBarSize = 40;
-var NavTop = Line.template($ => ({
-    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
-    contents: [
-        new settingsIcon(),
-        new settingsText()
-    ]
-}));
 
 var NavBot = Line.template($ => ({
     left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
@@ -129,7 +120,7 @@ var NavBot = Line.template($ => ({
 export var SettingsScreen = Column.template($ => ({
     left: 0, right: 0, top: 0, bottom: 0, skin: peachSkin,
     contents: [
-        new NavTop(),
+        new NavTop({txt: "Settings"}),
         new AccountButtons(),
         new DogsButtons(),
         new RobotButtons(),

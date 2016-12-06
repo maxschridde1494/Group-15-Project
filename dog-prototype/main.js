@@ -25,7 +25,7 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreenContent, stopsExport, city, state } from "selectwalk";
+import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
 import { ConfirmationContainer, ConfirmationBox } from "confirmation";
 
@@ -71,18 +71,20 @@ export function loadEric(){
     }
     currentScreen = new MainContainerTemplate();
     application.add(currentScreen);
+    // deleteDirectory(".routes/");
 }
 
 export function loadErikConfirmationPage() {
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", screenContent: new ConfirmationBox()});
+    currentScreen = new ScreenTemplate({name: "confirmationScreen", titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", 
+    	screenContent: new ConfirmationBox({walkName: "Duffy's walk", month: "January", date: "8", start: "11:00am", duration: "2 hours"})});
     // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
 
 export function loadGabe(){
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
+    currentScreen = new ScreenTemplate({name: "newRouteScreen", titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
     // currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
     application.add(currentScreen);
 }
@@ -153,12 +155,12 @@ function getMapNoMarkers(cornersArr){
     // cornersArr - array of intersection strings for geocode api to get lats / lons
     getLatLonFourCorners(cornersArr, function(array){
         var mapurl = createMapsURLfromLatLon2(array, false, "");
-        saveRoute({name: "test1", url: mapurl});
         getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
             application.main.spacer.col.map.add(mapIm);
         });
         markersURLArray = getMapswithMarkersURLs(array);
+        saveRoute({name: "test1", url: mapurl, markersArray: markersURLArray});
         trace("markersURLArray: " + markersURLArray + "\n");
         generateMarkerImages(markersURLArray);
         trace("should have generated marker images\n");
@@ -241,7 +243,7 @@ export function loadMax(){
     var dash = new dashboardScreen();
     currentScreen = dash;
     application.add(currentScreen);
-    let dashImage = new Picture({left: 0, right: 0, aspect: "fit", url: "assets/livefeed.png"});
+    let dashImage = new Picture({left: 0, right: 0, aspect: "fit", url: "assets/livefeed2.png"});
     application.dashboard.col.livefeed.add(dashImage);
 }
 
@@ -285,6 +287,7 @@ export function loadAddDog(){
 
 export function deleteDirectory(directory){
     var uri = mergeURI(Files.preferencesDirectory, application.di + directory);
+    trace(uri + "\n"); 
     if (Files.exists(uri)){
         Files.deleteDirectory(uri, true);
         Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
@@ -297,6 +300,7 @@ class AppBehavior extends Behavior{
         application.discover("dogwalker.device.app");
     }
     onLaunch(application){
+    	// deleteDirectory(".dogs/"); 
         loadEric();
         let discoveryInstance = Pins.discover(
            connectionDesc => {
