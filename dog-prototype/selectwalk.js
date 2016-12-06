@@ -27,6 +27,7 @@ let fieldLabelSkin = new Skin({ fill: ['transparent', 'transparent', '#C0C0C0', 
 var blackBorder = new Skin({fill: "white", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
 var titleScreenStyle = new Style({font: 'bold 60px', color: 'blue'});
 var titleStyle = new Style({font: '26px', color: 'black'});
+var smallStyle = new Style({font: '18px', color: 'black'});
 var labelStyle = new Style({font: '20px', fill: "black", horizontal: "left"});
 
 var titleFont = new Style({font: "30px ABeeZee", color: 'white'})
@@ -88,7 +89,7 @@ var freqRouteLabel = Picture.template($ => ({
                     var inputArr = [maps[i].url, maps[i].name]
                     getMapsImgFrequent(inputArr, function(image, name){
                         let mapIm = new freq1({url: image});
-                        var l = new Label({ name: 'label', width: 30, string: name, style: titleStyle});
+                        var l = new Label({ name: 'label', right: 60, string: name, style: smallStyle});
                         var mapContainer = new FrequentMaps({name: "map" + String(i), pic: mapIm, lab: l});
                         // var line = new Line({top: 0, bottom: 0, right: 0, left: 0,
                         //     contents:[
@@ -354,7 +355,7 @@ var map1 = Picture.template($ => ({
 }));
 
 var freq1 = Picture.template($ => ({
-    left: 0, right: 50, top: 1, bottom: 1, height: 200, aspect: 'fit', url: $.url
+    left: 0, right: 0, top: 1, bottom: 1, height: 200, aspect: 'fit', url: $.url
 }));
 
 // var freq1 = Picture.template($ => ({
@@ -421,7 +422,7 @@ var RouteScreenFrequent = Container.template($ => ({
     name: "routeScreenFrequent", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 
     contents: [
         new Container({
-            name: "col", top: 150, bottom: 0, left: 0, right: 0, active: true,
+            name: "col", top: 150, bottom: 55, left: 0, right: 0, active: true,
             contents:[
                 VerticalScroller($, {
                     name: "scroller", top: 0, bottom: 0, active: true,
