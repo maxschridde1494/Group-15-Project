@@ -6,6 +6,7 @@ import { ScreenTemplate } from "screenTemplate"
 import {newRouteURLObject, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
 import { getMapsImg, saveRoute, readSavedRoutes } from "maps";
 import { readSavedDogs } from "selectdog";
+import { iswalknow } from "schedulewalk";
 
 // import { dogsChosen } from "selectDog"
 
@@ -54,7 +55,9 @@ var confirmButton = Content.template($ => ({
     Behavior: class extends ButtonBehavior {
         onTap(button){
             //trace(dogsChosen + "\n");
-            application.distribute("onToggleLight", 1);
+            if (iswalknow == 1){   
+                application.distribute("onToggleLight", 1);
+            }
             var name;
             var map;
             var markers;
