@@ -1,7 +1,24 @@
+import { borderedSkin, loadErikConfirmationPage} from "main";
 let small = new Style({ font: "20px", color: "black" });
 
 let orangeSkin = new Skin({fill: "#ff7e3e"});
 let titleFont = new Style({ font: "30px ABeeZee", color: "white" });
+
+let MyWalkButtonTemplate = Button.template($ => ({
+    top: 15, bottom: 15, left: 10, right: 10,  skin: borderedSkin,
+    contents: [
+        new Label({left: 0, right: 0, string: "Start Walk Now", style: small})
+    ],
+    Behavior: class extends ButtonBehavior {
+        onTap(button){
+            monthNum = 0;
+			dayNum = 0;
+			timeNum = 0;
+			durationNum = 0;
+			loadErikConfirmationPage();
+        }
+    }
+}));
 
 
 /* Navigation Bar */
@@ -65,16 +82,16 @@ export var monthNum = 0;
 export var dayNum = 0;
 export var timeNum = 0;
 export var durationNum = 0;
-export var text1label = new Label({left:0, right:0, height:40, string:"Month", style: new Style({ font: "bold 15px", color: "#000000" })});
-export var text2label = new Label({left:0, right:0, height:40, string:"Day", style: new Style({ font: "bold 15px", color: "#000000" })});
-export var text3label = new Label({left:0, right:0, height:40, string:"Start Time", style: new Style({ font: "bold 15px", color: "#000000" })});
-export var text4label = new Label({left:0, right:0, height:40, string:"Duration (in hours)", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text1label = new Label({left:0, right:0, height:20, string:"Month", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text2label = new Label({left:0, right:0, height:20, string:"Day", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text3label = new Label({left:0, right:0, height:20, string:"Start Time", style: new Style({ font: "bold 15px", color: "#000000" })});
+export var text4label = new Label({left:0, right:0, height:20, string:"Duration (in hours)", style: new Style({ font: "bold 15px", color: "#000000" })});
 import {
     HorizontalSlider, HorizontalSliderBehavior
 } from 'sliders';
 
 let MyMonthSlider = HorizontalSlider.template($ => ({
-    height: 50, left: 0, right: 0,
+    height: 15, left: 0, right: 0,
     Behavior: class extends HorizontalSliderBehavior {
         onValueChanged(container) {
             trace("Value is: " + this.data.value + "\n");
@@ -124,7 +141,7 @@ let MyMonthSlider = HorizontalSlider.template($ => ({
 }));
 
 let MyDaySlider = HorizontalSlider.template($ => ({
-    height: 50, left: 0, right: 0,
+    height: 15, left: 0, right: 0,
     Behavior: class extends HorizontalSliderBehavior {
         onValueChanged(container) {
             trace("Value is: " + this.data.value + "\n");
@@ -135,7 +152,7 @@ let MyDaySlider = HorizontalSlider.template($ => ({
 }));
 
 let MyTimeSlider = HorizontalSlider.template($ => ({
-    height: 50, left: 0, right: 0,
+    height: 15, left: 0, right: 0,
     Behavior: class extends HorizontalSliderBehavior {
         onValueChanged(container) {
             trace("Value is: " + this.data.value + "\n");
@@ -294,7 +311,7 @@ let MyTimeSlider = HorizontalSlider.template($ => ({
 }));
 
 let MyDurationSlider = HorizontalSlider.template($ => ({
-    height: 50, left: 0, right: 0,
+    height: 15, left: 0, right: 0,
     Behavior: class extends HorizontalSliderBehavior {
         onValueChanged(container) {
             trace("Value is: " + this.data.value + "\n");
@@ -354,14 +371,14 @@ var text0Template = Column.template($ => ({
 
 
 var text1Template = Column.template($ => ({
-    left: 0, right: 0, top: 5,
+    left: 0, right: 0, top: 0,
     contents: [
         text1label,
     ]
 }));
 
 var text2Template = Column.template($ => ({
-    left: 0, right: 0, top: 5,
+    left: 0, right: 0, top: 0,
     contents: [
         text2label,
     ]
@@ -369,14 +386,14 @@ var text2Template = Column.template($ => ({
 
 
 var text3Template = Column.template($ => ({
-    left: 0, right: 0, top: 5,
+    left: 0, right: 0, top: 0,
     contents: [
         text3label,
     ]
 }));
 
 var text4Template = Column.template($ => ({
-    left: 0, right: 0, top: 5,
+    left: 0, right: 0, top: 0,
     contents: [
         text4label,
     ]
@@ -390,7 +407,7 @@ var Screen3Template = Column.template($ => ({
     contents: [
         new MyMonthSlider({ min: 1, max: 12 }),
         Label($, {  
-            left: 0, right: 0, top: 0, height: 20, 
+            left: 0, right: 0, top: 0, height: 10, 
             style: new Style({ font: "12px", color: "black" }), 
             string: "Jan   Feb   Mar   Apr   May   Jun   Jul   Aug   Sep   Oct   Nov   Dec" 
         }),
@@ -448,6 +465,7 @@ export var ScheduleWalkContainer = Column.template($ => ({
         Screen5Template(),
         text4Template(),
         Screen6Template(),
+        MyWalkButtonTemplate(),
         // new NavTop({txt: "Schedule a Walk"}),
         // new NavBot(),
     ],
