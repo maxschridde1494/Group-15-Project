@@ -25,6 +25,7 @@ let fieldHintStyle = new Style({ color: '#aaa', font: '14px', horizontal: 'left'
 let fieldLabelSkin = new Skin({ fill: ['transparent', 'transparent', '#C0C0C0', '#acd473'] });
 
 var blackBorder = new Skin({fill: "white", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
+var orangeBorder = new Skin({fill: "white", borders: {left:3, right:3, top:3, bottom:3}, stroke: "#ff7e3e"})
 var titleScreenStyle = new Style({font: 'bold 60px', color: 'blue'});
 var titleStyle = new Style({font: '26px', color: 'black'});
 var smallStyle = new Style({font: '18px', color: 'black'});
@@ -355,7 +356,7 @@ var map1 = Picture.template($ => ({
 }));
 
 var freq1 = Picture.template($ => ({
-    left: 0, right: 0, top: 1, bottom: 1, height: 200, aspect: 'fit', url: $.url
+    left: 5, right: 0, top: 5, bottom: 5, height: 200, aspect: 'fit', url: $.url
 }));
 
 // var freq1 = Picture.template($ => ({
@@ -374,7 +375,7 @@ var freq1 = Picture.template($ => ({
 //     ]
 // }));
 var FrequentMaps = Line.template($ => ({
-    name: $.name, left: 0, top: 10, right: 0, height:200, skin: blackBorder, active: true,
+    name: $.name, left: 0, top: 10, right: 0, height:210, skin: blackBorder, active: true,
     contents: [
         $.pic,
         $.lab
@@ -382,6 +383,7 @@ var FrequentMaps = Line.template($ => ({
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             frequentContainerSelectedRoute = container.label.string;
+            container.skin = orangeBorder;
             trace("\n"+frequentContainerSelectedRoute + "\n");
         }
     }
