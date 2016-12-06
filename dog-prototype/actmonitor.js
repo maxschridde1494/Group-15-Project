@@ -4,6 +4,7 @@ import { markersURLArray } from "main";
 import { getMapsImg, saveRoute, deleteRoute } from "maps";
 
 let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
+let smallTextStyleBlack = new Style({ font: "bold 15px", color: "black" });
 let largeTextStyle = new Style({ font: "bold 30px", color: "white"});
 let orangeSkinBorder = new Skin({fill: "#ff7e3e", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
 
@@ -36,11 +37,12 @@ var backIcon = Picture.template($ => ({
 
 var counter = 0;
 var spacer = Container.template($ => ({
-    name: "spacer", top: 10, bottom: 0, left: 0, right: 0, skin: whiteSkin,
+    name: "spacer", top: 10, bottom: 0, left: 0, right: 0, skin: yellowSkin,
     contents: [
     	new Column({
     		name: "col", top: 0, bottom: 0, left: 0, right: 0,
     		contents: [
+                new Label({name: "title", height: 30, left: 0, right: 0, string: "", style: largeTextStyle}),
                 new Line({
           				name: "line1", top: 0, bottom: 0, left: 0, right: 0,
           				contents: [

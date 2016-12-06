@@ -4,10 +4,12 @@ export let whiteSkin = new Skin({fill: "white"});
 export let titleFont = new Style({ font: "30px ABeeZee", color: "white" });
 
 let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
+let smallTextStyleBlack = new Style({ font: "bold 15px", color: "black" });
 
 export var currentScreen = null;
 export var settingsOverlayScreen = null; 
 export let deviceURL;
+export var currentWalk = "";
 
 export var accountName = ""; 
 export var accountEmail = ""; 
@@ -125,12 +127,29 @@ export function loadActMonitor(corners){
     //     var url = createLatLongURLfromCorner(corners[i], "|");
     //     cornerURLs.push(url);
     // }
-    var cornerURL1 = createLatLongURLfromCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
-    var cornerURL2 = createLatLongURLfromCorner("W Clark Ave|Evergreen Street,Burbank,CA", "|");
-    var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
-    var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
-    var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
-    getMapNoMarkers(cornerURLs);
+    if (currentWalk == ""){
+        trace("Inside empty currentWalk\n");
+        var maps = readSavedRoutes();
+        if (maps.length > 0){
+            var mapUrl = maps[0].url;
+            var markersURLArray = maps[0].markers;
+            trace("markers array: " + markersURLArray + "\n");
+            var mapName = maps[0].name;
+            application.main.spacer.col.title.string = mapName;
+            getMapsImg(mapUrl, function(image){
+                let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+                application.main.spacer.col.map.add(mapIm);
+            });
+            generateMarkerImages(markersURLArray);
+        }
+    }else{
+        var cornerURL1 = createLatLongURLfromCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
+        var cornerURL2 = createLatLongURLfromCorner("W Clark Ave|Evergreen Street,Burbank,CA", "|");
+        var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
+        var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
+        var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
+        getMapNoMarkers(cornerURLs);
+    }
     var moved = false;
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
@@ -164,9 +183,7 @@ function getMapNoMarkers(cornersArr){
         });
         markersURLArray = getMapswithMarkersURLs(array);
         saveRoute({name: "test1", url: mapurl, markersArray: markersURLArray});
-        trace("markersURLArray: " + markersURLArray + "\n");
         generateMarkerImages(markersURLArray);
-        trace("should have generated marker images\n");
     });
 }
 function getMapswithMarkersURLs(latlonarr){
