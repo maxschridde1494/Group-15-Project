@@ -76,7 +76,7 @@ export function loadEric(){
 
 export function loadErikConfirmationPage() {
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", 
+    currentScreen = new ScreenTemplate({name: "confirmationScreen", titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", 
     	screenContent: new ConfirmationBox({walkName: "Duffy's walk", month: "January", date: "8", start: "11:00am", duration: "2 hours"})});
     // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);

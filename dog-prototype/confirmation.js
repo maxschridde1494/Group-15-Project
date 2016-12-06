@@ -4,7 +4,7 @@ import { currentScreen, orangeSkin, yellowSkin,
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
 import {newRouteURLObject } from "selectwalk";
-import { saveRoute } from "maps";
+import { getMapsImg, saveRoute } from "maps";
 
 // import { dogsChosen } from "selectDog"
 
@@ -67,9 +67,13 @@ var confirmButton = Content.template($ => ({
                 url: map,
                 markersArray: markers
             }
+            getMapsImg(map, function(image){
+                let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
+                application.confirmationScreen.confirmationBox.col.add(mapIm);
+            });
             saveRoute(routeJSON);
             newRouteURLObject = [];
-            loadMax();
+            // loadMax();
         }
     }
 }));
@@ -86,10 +90,10 @@ var labelTemplate = Label.template($=>({ top: $.top, string: $.txt,
     		style: $.style })); 
 
 export var ConfirmationBox = Column.template($ => ({
-    left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
+    name: "confirmationBox", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
         new Column({
-            left: 20, right: 20, top: 40, bottom: 20, height: 300, skin: whiteSkin,
+            name: "col", left: 20, right: 20, top: 40, bottom: 20, height: 300, skin: whiteSkin,
             contents: [
                 new Line({
                     left: 0, right: 0, top: 0, height: 50, skin: orangeSkin,
