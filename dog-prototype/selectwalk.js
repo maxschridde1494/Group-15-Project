@@ -1,7 +1,7 @@
 import { currentScreen, loadAbi, loadEric, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
-    getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
+    getMapsImgFrequent, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
 
 import { ScreenTemplate } from "screenTemplate"
 import { FieldScrollerBehavior, FieldLabelBehavior } from 'field';
@@ -86,9 +86,19 @@ var freqRouteLabel = Picture.template($ => ({
                 for (var i=0; i<maps.length; i++){
                     trace("saved map name: " + maps[i].name + "\n");
                     trace("saved map url: " + maps[i].url + "\n");
-                    getMapsImg(maps[i].url, function(image){
+                    var inputArr = [maps[i].url, maps[i].name]
+                    getMapsImgFrequent(inputArr, function(image, name){
                         let mapIm = new freq1({url: image});
-                        application.routeScreenFrequent.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
+                        var l = new Label({ width: 30, string: name, style: titleStyle});
+                        var mapContainer = new FrequentMaps({name: "map" + String(i), pic: mapIm, lab: l});
+                        // var line = new Line({top: 0, bottom: 0, right: 0, left: 0,
+                        //     contents:[
+                        //         mapContainer,
+                        //         new Label({ width: 50, top: 0, bottom: 0, string: name, style: titleStyle})
+                        //     ]
+                        // });
+                        application.routeScreenFrequent.col.scroller.frequentContainer.add(mapContainer);
+                        // application.routeScreenFrequent.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
                     });
                 }
             } else {
@@ -157,18 +167,9 @@ export function grabNewRouteURLs(returnArr){
             trace("marker map " + String(i) + " url: " + url + "\n");
             urlsArr.push(url);
         }
-        // returnDic["name"] = walkName;
-        // returnDic["mainMapURL"] = mapurl;
-        // returnDic["markerMapsURLArray"] = urlsArr;
         returnArr.push(["name", walkName]);
         returnArr.push(["map", mapurl]);
         returnArr.push(["markers", urlsArr]);
-        // newRouteURLObject = {
-        //     name: walkName,
-        //     mainMapURL: mapurl,
-        //     markerMapsURLArray: urlsArr
-        // };
-        // trace("map version: " + newRouteURLObject[0] + "\n");
     });
 }
 var nextIcon = Picture.template($ => ({
@@ -355,7 +356,7 @@ var map1 = Picture.template($ => ({
 }));
 
 var freq1 = Picture.template($ => ({
-    left: 0, right: 125, top: 1, bottom: 1, height: 150, aspect: 'fit', url: $.url
+    left: 0, right: 50, top: 1, bottom: 1, height: 200, aspect: 'fit', url: $.url
 }));
 
 // var freq1 = Picture.template($ => ({
@@ -366,10 +367,18 @@ var freq1 = Picture.template($ => ({
 //     left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/freq2.jpg"
 // }));
 
-var FrequentMaps = Container.template($ => ({
-    name: $.name, left: 0, top: 10, right: 0, height:175, skin: blackBorder,
+// var FrequentMaps = Container.template($ => ({
+//     name: $.name, left: 0, top: 10, right: 0, height:175, skin: blackBorder,
+//     contents: [
+//         $.pic,
+//         $.lab
+//     ]
+// }));
+var FrequentMaps = Line.template($ => ({
+    name: $.name, left: 0, top: 10, right: 0, height:200, skin: blackBorder,
     contents: [
-        $.pic
+        $.pic,
+        $.lab
     ]
 }));
 

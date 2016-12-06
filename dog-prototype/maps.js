@@ -214,6 +214,24 @@ export function getMapsImg(url, uiCallback){
         }
     });
 }
+export function getMapsImgFrequent(input, uiCallback){
+    //Generate GOOGLE STATIC MAPS image
+    var message = new Message(input[0]);
+    var promise = message.invoke(Message.JSON);
+    promise.then(json => {
+        if (0 == message.error && 200 == message.status){
+            try{
+                uiCallback(json, input[1]);
+            }
+            catch (e) {
+                throw('Web service responded with invalid JSON!\n');
+              }
+        }
+        else {
+          trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+        }
+    });
+}
 
 export function saveRoute(dict){
     //input is dictionary with 1) name and 2) Google Maps Main url 3) array of Marker Maps URLs
