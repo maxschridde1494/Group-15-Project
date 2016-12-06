@@ -2,6 +2,7 @@ import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin,
     whiteSkin, loadGabe, selectedDogs } from "main";
 
 import { Button, ButtonBehavior } from 'buttons';
+import { frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
 
 var titleStyle = new Style({font: '26px ABeeZee', color: 'white'});
 var titleFont = new Style({font: "30px ABeeZee", color: 'white'})

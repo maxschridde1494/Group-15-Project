@@ -12,7 +12,7 @@ var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 var testAddress4 = "CORNER%20W+Clark+Ave+%20AND%20N+Pass+Ave,Burbank,CA";
 
 import { markersImageArray } from "main";
-import { newRouteURLObject } from "selectwalk";
+import { newRouteURLObject, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
 
 export function createLatLongURLfromAddress(address){
     //Generate GEOCODE URL from Address

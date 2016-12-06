@@ -3,7 +3,7 @@ import { currentScreen, orangeSkin, yellowSkin,
     whiteSkin, loadAbi, loadMax, selectedDogs } from "main";
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
-import {newRouteURLObject } from "selectwalk";
+import {newRouteURLObject, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
 import { getMapsImg, saveRoute } from "maps";
 import { readSavedDogs } from "selectdog";
 

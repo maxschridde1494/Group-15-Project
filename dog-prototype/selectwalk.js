@@ -14,11 +14,8 @@ import {
     TopScrollerShadow,
     BottomScrollerShadow
 } from 'scroller';
-
-// let orangeSkin = new Skin({fill: "#ff7e3e"});
-// let yellowSkin = new Skin({fill: "#ffd359"});
-// let whiteSkin = new Skin({fill: "white"});
-// let titleFont = new Style({ font: "30px ABeeZee", color: "white" });
+export var frequentContainerSelected = false;
+export var frequentContainerSelectedRoute = "";
 
 let nameInputSkin = new Skin({ borders: { left: 2, right: 2, top: 2, bottom: 2 }, stroke: 'gray', fill: "white"});
 let fieldStyle = new Style({ color: 'black', font: 'bold 14px', horizontal: 'left',
@@ -45,6 +42,7 @@ var newRouteLabel = Picture.template($ => ({
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("New Route\n");
+            frequentContainerSelected = false;
             if (container.active == true) {
                 labelStatus = "New Route";
                 application.remove(currentScreen);
@@ -70,6 +68,7 @@ var freqRouteLabel = Picture.template($ => ({
     Behavior: class extends Behavior {
         onTouchEnded(container) {
             trace("Frequent Route\n");
+            frequentContainerSelected = true;
             if (container.active == true) {
                 labelStatus = "Frequent Route";
                 application.remove(currentScreen);
@@ -89,7 +88,7 @@ var freqRouteLabel = Picture.template($ => ({
                     var inputArr = [maps[i].url, maps[i].name]
                     getMapsImgFrequent(inputArr, function(image, name){
                         let mapIm = new freq1({url: image});
-                        var l = new Label({ width: 30, string: name, style: titleStyle});
+                        var l = new Label({ name: 'label', width: 30, string: name, style: titleStyle});
                         var mapContainer = new FrequentMaps({name: "map" + String(i), pic: mapIm, lab: l});
                         // var line = new Line({top: 0, bottom: 0, right: 0, left: 0,
                         //     contents:[
@@ -374,11 +373,17 @@ var freq1 = Picture.template($ => ({
 //     ]
 // }));
 var FrequentMaps = Line.template($ => ({
-    name: $.name, left: 0, top: 10, right: 0, height:200, skin: blackBorder,
+    name: $.name, left: 0, top: 10, right: 0, height:200, skin: blackBorder, active: true,
     contents: [
         $.pic,
         $.lab
-    ]
+    ], 
+    Behavior: class extends Behavior {
+        onTouchEnded(container) {
+            frequentContainerSelectedRoute = container.label.string;
+            trace("\n"+frequentContainerSelectedRoute + "\n");
+        }
+    }
 }));
 
 var FrequentContainer = Column.template($ => ({

@@ -29,7 +29,7 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject, walkName } from "selectwalk";
+import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject, walkName, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
 import { ConfirmationContainer, ConfirmationBox, dogPics } from "confirmation";
 
@@ -101,6 +101,8 @@ export function loadErikConfirmationPage() {
 
 export function loadGabe(){
     application.remove(currentScreen);
+    frequentContainerSelected = false;
+    frequentContainerSelectedRoute = "";
     currentScreen = new ScreenTemplate({name: "newRouteScreen", titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
     // currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
     application.add(currentScreen);
