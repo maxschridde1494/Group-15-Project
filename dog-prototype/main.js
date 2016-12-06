@@ -303,7 +303,7 @@ class AppBehavior extends Behavior{
         application.discover("dogwalker.device.app");
     }
     onLaunch(application){
-    	// deleteDirectory(".dogs/"); 
+    	//deleteDirectory(".dogs/"); 
         loadEric();
         let discoveryInstance = Pins.discover(
            connectionDesc => {
@@ -363,13 +363,12 @@ export let MyButtonTemplate = Button.template($ => ({
 }));
 
 export var ButtonColumnTemplate = Column.template($ => ({
-    left: 20, right: 20, top: 100, bottom: 180,
+    left: 20, right: 20, top: 120, bottom: 180,
     contents: [
         new Picture({height: 55, url: "assets/logo.png", bottom: 25}),
+        new MyButtonTemplate({string: "New Walk"}),
         new MyButtonTemplate({string: "Current Walk"}),
-        new MyButtonTemplate({string:"New Walk"}),
-        new MyButtonTemplate({string:"Schedule Walk"}),
-        new MyButtonTemplate({string:"Settings"})
+        new MyButtonTemplate({string: "Settings"})
     ]
 }));
 
