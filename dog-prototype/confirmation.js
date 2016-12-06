@@ -54,11 +54,11 @@ var confirmButton = Content.template($ => ({
             var map;
             var markers;
             for (var i=0; i<newRouteURLObject.length; i++){
-                if (newRouteURLObject[i][0] == "name"){
+                if (newRouteURLObject[i][0] == "name") {
                     name = newRouteURLObject[i][1];
-                }else if (newRouteURLObject[i][0] == "map"){
+                } else if (newRouteURLObject[i][0] == "map") {
                     map = newRouteURLObject[i][1];
-                }else if (newRouteURLObject[i][0] == "markers"){
+                } else if (newRouteURLObject[i][0] == "markers") {
                     markers = newRouteURLObject[i][1];
                 }
             }
