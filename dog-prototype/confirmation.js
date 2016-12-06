@@ -104,7 +104,7 @@ export var ConfirmationBox = Column.template($ => ({
                     ]
                 }),
                 new labelTemplate({txt: $.walkName, style: boldText, top: 10}), 
-                new labelTemplate({txt: $.month + " " + $.date + ", " + $.start, style: normalText, top: 20}), 
+                new labelTemplate({txt: $.month + " " + $.date + $.start, style: normalText, top: 20}), 
                 new labelTemplate({txt: "Duration: " + $.duration, style: normalText, top: 10}), 
             ]
         }),
