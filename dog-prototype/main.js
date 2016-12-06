@@ -89,7 +89,7 @@ export function loadGabe(){
 
 export function loadAbi(){
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Select Dog", prevScn: "loadGabe", nextScn: "loadScheduleWalk", screenContent: new SelectDogContainer()});
+    currentScreen = new ScreenTemplate({name: "selectDog", titleTxt: "Select Dog", prevScn: "loadGabe", nextScn: "loadScheduleWalk", screenContent: new SelectDogContainer()});
     application.add(currentScreen);
     loadDogs();
 }
@@ -281,6 +281,14 @@ export function loadAddDog(){
     application.remove(currentScreen);
     currentScreen = new AddDogScreen();
     application.add(currentScreen);
+}
+
+export function deleteDirectory(directory){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + directory);
+    if (Files.exists(uri)){
+        Files.deleteDirectory(uri, true);
+        Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
+    }
 }
 
 class AppBehavior extends Behavior{

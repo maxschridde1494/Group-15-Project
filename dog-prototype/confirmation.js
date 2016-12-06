@@ -3,7 +3,7 @@ import { currentScreen, orangeSkin, yellowSkin,
     whiteSkin, loadAbi, loadMax } from "main";
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
-import { dogsChosen } from "selectDog"
+// import { dogsChosen } from "selectDog"
 
 var dogs = {
     "Pepper": "assets/dog1.png",
