@@ -1,5 +1,5 @@
 import { currentScreen, loadErikConfirmationPage, orangeSkin, yellowSkin, 
-    whiteSkin, loadGabe } from "main";
+    whiteSkin, loadGabe, selectedDogs } from "main";
 
 import { Button, ButtonBehavior } from 'buttons';
 
@@ -70,24 +70,15 @@ export var dogsChosen = {
 };
 
 var dogIcon = Picture.template($ => ({
-    top: 0, left: 0, right: 0, bottom: 0, height: 75, width: 75,
+    top: 0, left: 0, right: 0, bottom: 0, height: 50, width: 50,
     url: $.dogPic
-}));
-var dogButton = Content.template($ => ({ 
-    top: 0, left: 0, right: 0, height: 80, width: 80, active: true,
-    skin: $.dogSkin,
-    Behavior: class extends ButtonBehavior {
-        onTap(button){
-            loadErikConfirmationPage(); 
-        }
-    }
 }));
 
 var dogContainer = Container.template($  => ({
     left: 0, right: 0, top: 0, bottom: 0,
     contents: [
         new Container({
-            left: 100, right: 100, top: 0, height: 120, skin: statusSkin, active: true,
+            left: 100, right: 100, top: 10, height: 90, skin: statusSkin, active: true,
             contents: [
                 new dogIcon({dogPic: $.dogPic})
             ],
@@ -101,18 +92,27 @@ var dogContainer = Container.template($  => ({
                 	} else if (yellowReplace != container.first.url) { //deselect case
                 		container.first.url = yellowReplace; 
                 	}
+                	if (selectedDogs.includes($.string)) {
+                		var index = selectedDogs.indexOf($.string); 
+                		if (index > -1) {
+                			selectedDogs.splice(index, 1); 
+                		}
+                	} else {
+                		selectedDogs.push($.string); 
+                	}
+                	trace(selectedDogs + "\n"); 
                 	
 
                 	
                     
                     // dogsChosen[$.string] = !dogsChosen[$.string];
-                    trace($.string + " Dog Touched\n");
+                    //trace($.string + " Dog Touched\n");
                     // trace(dogsChosen[$.string] + "\n");
                     //container.state = !container.state;
                 }
             }
         }),
-        new Label({left: 0, right: 0, top: 120, height: 15, 
+        new Label({left: 0, right: 0, top: 110, height: 15, 
             string: $.string, style: dogLabelStyle})
     ]
 }));

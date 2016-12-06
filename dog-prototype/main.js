@@ -14,6 +14,8 @@ export var accountEmail = "";
 export var accountPhone = ""; 
 export var accountAddress = ""; 
 
+export var selectedDogs = []; 
+
 var analogReader1 = undefined;
 var analogReader2 = undefined;
 var analogReader3 = undefined;
@@ -75,6 +77,7 @@ export function loadEric(){
 }
 
 export function loadErikConfirmationPage() {
+	trace(selectedDogs + "\n"); 
     application.remove(currentScreen);
     currentScreen = new ScreenTemplate({name: "confirmationScreen", titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", 
     	screenContent: new ConfirmationBox({walkName: "Duffy's walk", month: "January", date: "8", start: "11:00am", duration: "2 hours"})});
@@ -300,7 +303,7 @@ class AppBehavior extends Behavior{
         application.discover("dogwalker.device.app");
     }
     onLaunch(application){
-    	// deleteDirectory(".dogs/"); 
+    	//deleteDirectory(".dogs/"); 
         loadEric();
         let discoveryInstance = Pins.discover(
            connectionDesc => {
@@ -360,13 +363,12 @@ export let MyButtonTemplate = Button.template($ => ({
 }));
 
 export var ButtonColumnTemplate = Column.template($ => ({
-    left: 20, right: 20, top: 100, bottom: 180,
+    left: 20, right: 20, top: 120, bottom: 180,
     contents: [
         new Picture({height: 55, url: "assets/logo.png", bottom: 25}),
+        new MyButtonTemplate({string: "New Walk"}),
         new MyButtonTemplate({string: "Current Walk"}),
-        new MyButtonTemplate({string:"New Walk"}),
-        new MyButtonTemplate({string:"Schedule Walk"}),
-        new MyButtonTemplate({string:"Settings"})
+        new MyButtonTemplate({string: "Settings"})
     ]
 }));
 
