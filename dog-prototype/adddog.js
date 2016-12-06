@@ -1,5 +1,6 @@
-import { currentScreen, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric} from "main";
+import { currentScreen, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric, loadSettings} from "main";
 import { SettingsOverlay } from "settingsoverlay";
+import { NavTop} from "selectwalk";
 import { 
     Button,
     ButtonBehavior 
@@ -36,10 +37,7 @@ var backIcon = Picture.template($ => ({
     left: 10, height: 20, url: "assets/backButton.png", active: true,
     Behavior: class extends Behavior {
         onTouchEnded(container) {
-            trace("Back Screen\n");
-            // MOVE TO PREVIOUS SCREEN HERE
-            settingsOverlayScreen = new SettingsOverlay(); 
-            application.add(settingsOverlayScreen);
+            loadSettings(); 
         }
     }
 }));
@@ -66,15 +64,6 @@ var TitleTemplate = Label.template($ => ({
     string: $.string
 }));
 
-
-
-var NavTop = Line.template($ => ({
-    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
-    contents: [
-        //new settingsIcon(),
-        new TitleTemplate({string: $.txt})
-    ]
-}));
 
 var NavBot = Line.template($ => ({
     left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
@@ -188,21 +177,7 @@ export var text1Template = Column.template($ => ({
     ]
 }));
 
-let mainButton1 = Content.template($=> ({ 
-    top: 200, left: 115, height: 100, width: 100, active: true,
-    skin: dogSkin1Yellow, 
-    Behavior: class extends ButtonBehavior {
-        onTap(button){
-        	if (dogImage == "") {
-        		} else if (dogImage == "assets/dog1Yellow.png"){
-        		button.skin = dogSkin1Orange;
-        	} else {
-        		dogImage = "";
-        		button.skin = dogSkin1Yellow;
-        	}
-        }
-    }
-}));
+
 
 var text2label = Label.template($=> ({left:0, right:0, height:40, string:"Snowball", style: new Style({ font: "bold 15px", color: "#000000" })}));
 
@@ -222,6 +197,22 @@ export var text3Template = Column.template($ => ({
     contents: [
         new text3label(),
     ]
+}));
+
+let mainButton1 = Content.template($=> ({ 
+    top: 200, left: 115, height: 100, width: 100, active: true,
+    skin: dogSkin1Yellow, 
+    Behavior: class extends ButtonBehavior {
+        onTap(button){
+        	if (dogImage == "") {
+        		dogImage = "assets/dog1Yellow.png"; 
+        		button.skin = dogSkin1Orange;
+        	} else if (dogImage == "assets/dog1Yellow.png"){
+        		dogImage = ""; 
+        		button.skin = dogSkin1Yellow;
+        	} 
+        }
+    }
 }));
 
 let mainButton2 = Content.template($=> ({ 
@@ -247,11 +238,9 @@ let mainButton3 = Content.template($=> ({
         onTap(button){
         	if (dogImage == "") {
         		dogImage = "assets/dog3Yellow.png"; 
-        		trace("1\n") ; 
         		button.skin = dogSkin3Orange; 
         	} else if (dogImage == "assets/dog3Yellow.png"){
         		dogImage = ""; 
-        		trace("2\n"); 
         		button.skin = dogSkin3Yellow; 
         	}
         }

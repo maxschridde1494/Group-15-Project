@@ -3,12 +3,16 @@ import { currentScreen, orangeSkin, yellowSkin,
     whiteSkin, loadAbi, loadMax } from "main";
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
+// import {newRouteURLObject } from "selectwalk";
 // import { dogsChosen } from "selectDog"
 
+
+var boldText = new Style( { font: "bold 26px", color: "black" });
+var normalText = new Style( { font: "24px", color: "black" });
 var dogs = {
-    "Pepper": "assets/dog1.png",
-    "Snowball": "assets/dog2.png",
-    "Big Head": "assets/dog3.png"
+    "Pepper": "assets/dog1Yellow.png",
+    "Snowball": "assets/dog2Yellow.png",
+    "Big Head": "assets/dog3Yellow.png"
 };
 
 var dog1 = new Skin({
@@ -38,7 +42,7 @@ var but = new Skin({
 });
 
 var confirmButton = Content.template($ => ({ 
-    top: 0, left: 25, right: 0, bottom: 50, height: 30, width: 30, active: true,
+    top: 0, left: 25, right: 0, bottom: 10, height: 30, width: 30, active: true,
     skin: but,
     Behavior: class extends ButtonBehavior {
         onTap(button){
@@ -57,11 +61,14 @@ function dogPics() {
     return dogsLine;
 }
 
+var labelTemplate = Label.template($=>({ top: $.top, string: $.txt, 
+    		style: $.style })); 
+
 export var ConfirmationBox = Column.template($ => ({
     left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
         new Column({
-            left: 25, right: 25, top: 50, bottom: 20, height: 250, skin: whiteSkin,
+            left: 20, right: 20, top: 40, bottom: 20, height: 300, skin: whiteSkin,
             contents: [
                 new Line({
                     left: 0, right: 0, top: 0, height: 50, skin: orangeSkin,
@@ -71,21 +78,20 @@ export var ConfirmationBox = Column.template($ => ({
                         new dogButton({dogSkin: dog3})
                     ]
                 }),
-                // INSERT CONTENTS HERE
+                new labelTemplate({txt: $.walkName, style: boldText, top: 10}), 
+                new labelTemplate({txt: $.month + " " + $.date + ", " + $.start, style: normalText, top: 20}), 
+                new labelTemplate({txt: "Duration: " + $.duration, style: normalText, top: 10}), 
             ]
         }),
         new confirmButton()
     ]
 }));
 
-// new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadAbi", screenContent: new ConfirmationBox()});
-
 export var ConfirmationContainer = ScreenTemplate($ => ({
     left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
         new NavTop({txt: "Confirmation"}),
         new ConfirmationBox(),
-        new confirmButton(),
         new NavBot({txt: "Next"}),
     ]
 }));

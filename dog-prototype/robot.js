@@ -1,4 +1,5 @@
 import { currentScreen, borderedSkin, loadSettings, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
+import { NavTop} from "selectwalk"; 
 import { SettingsOverlay } from "settingsoverlay"; 
 import {    SwitchButton,    SwitchButtonBehavior} from 'switch';
 
@@ -84,13 +85,6 @@ var robotText = Picture.template($ => ({
 
 // Templates
 var navBarSize = 40;
-var NavTop = Line.template($ => ({
-    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
-    contents: [
-        new settingsIcon(),
-        new robotText()
-    ]
-}));
 
 var NavBot = Line.template($ => ({
     left: 0, bottom: 0, right: 0, height: navBarSize, skin: orangeSkin,
@@ -104,7 +98,7 @@ var NavBot = Line.template($ => ({
 export var RobotScreen = Column.template($ => ({
     left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
     contents: [
-        new NavTop(),
+        new NavTop({txt: "My Robot"}),
         new robotContainer(),
         new poopOptions(),
         new poopFullness(),   

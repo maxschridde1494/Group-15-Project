@@ -75,7 +75,8 @@ export function loadEric(){
 
 export function loadErikConfirmationPage() {
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", screenContent: new ConfirmationBox()});
+    currentScreen = new ScreenTemplate({titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", 
+    	screenContent: new ConfirmationBox({walkName: "Duffy's walk", month: "January", date: "8", start: "11:00am", duration: "2 hours"})});
     // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
@@ -241,7 +242,7 @@ export function loadMax(){
     var dash = new dashboardScreen();
     currentScreen = dash;
     application.add(currentScreen);
-    let dashImage = new Picture({left: 0, right: 0, aspect: "fit", url: "assets/livefeed.png"});
+    let dashImage = new Picture({left: 0, right: 0, aspect: "fit", url: "assets/livefeed2.png"});
     application.dashboard.col.livefeed.add(dashImage);
 }
 
@@ -285,6 +286,7 @@ export function loadAddDog(){
 
 export function deleteDirectory(directory){
     var uri = mergeURI(Files.preferencesDirectory, application.di + directory);
+    trace(uri + "\n"); 
     if (Files.exists(uri)){
         Files.deleteDirectory(uri, true);
         Files.ensureDirectory(uri); //creates the new directory with path: file:///Users/nimda/Library/Preferences//fsk/1/app.companion.dog-prototype.dogs/
@@ -297,6 +299,7 @@ class AppBehavior extends Behavior{
         application.discover("dogwalker.device.app");
     }
     onLaunch(application){
+    	// deleteDirectory(".dogs/"); 
         loadEric();
         let discoveryInstance = Pins.discover(
            connectionDesc => {
