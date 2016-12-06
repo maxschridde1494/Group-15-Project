@@ -14,6 +14,8 @@ export var accountEmail = "";
 export var accountPhone = ""; 
 export var accountAddress = ""; 
 
+export var selectedDogs = []; 
+
 var analogReader1 = undefined;
 var analogReader2 = undefined;
 var analogReader3 = undefined;
@@ -75,6 +77,7 @@ export function loadEric(){
 }
 
 export function loadErikConfirmationPage() {
+	trace(selectedDogs + "\n"); 
     application.remove(currentScreen);
     currentScreen = new ScreenTemplate({name: "confirmationScreen", titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", 
     	screenContent: new ConfirmationBox({walkName: "Duffy's walk", month: "January", date: "8", start: "11:00am", duration: "2 hours"})});
