@@ -25,7 +25,7 @@ export let remotePins;
 import Pins from "pins";
 import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
-import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject } from "selectwalk";
+import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject, walkName } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
 import { ConfirmationContainer, ConfirmationBox } from "confirmation";
 
@@ -33,7 +33,7 @@ import { SettingsOverlay } from "settingsoverlay";
 import { SettingsScreen} from "settings"; 
 import { RobotScreen } from "robot";  
 import { AccountScreen } from "account";
-import { ScheduleWalkContainer, text1label, text2label, text3label, text4label } from "schedulewalk";
+import { ScheduleWalkContainer, text1label, text2label, text3label, text4label, Month, Day, Time, Duration, iswalknow} from "schedulewalk";
 import { WebcamScreen } from "webcam";   
 import { AddDogScreen } from "adddog"; 
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
@@ -76,8 +76,19 @@ export function loadEric(){
 
 export function loadErikConfirmationPage() {
     application.remove(currentScreen);
-    currentScreen = new ScreenTemplate({name: "confirmationScreen", titleTxt: "Confirmation", nextScn: "loadMax", prevScn: "loadScheduleWalk", 
-    	screenContent: new ConfirmationBox({walkName: "Duffy's walk", month: "January", date: "8", start: "11:00am", duration: "2 hours"})});
+    let followingScreen = "";
+    trace(iswalknow + "\n");
+    switch (iswalknow){
+    	case 0: 
+    		followingScreen = "loadEric"
+    		break;
+    	case 1:
+    		followingScreen = "loadMax"
+    		break;
+    }
+    trace(followingScreen);
+    currentScreen = new ScreenTemplate({name: "confirmationScreen", titleTxt: "Confirmation", nextScn: followingScreen, prevScn: "loadScheduleWalk", 
+    	screenContent: new ConfirmationBox({walkName: walkName, month: Month, date: Day, start: Time, duration: Duration})});
     // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
 }
