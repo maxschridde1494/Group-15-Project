@@ -4,7 +4,7 @@ import { currentScreen, orangeSkin, yellowSkin,
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
 import {newRouteURLObject, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
-import { getMapsImg, saveRoute } from "maps";
+import { getMapsImg, saveRoute, readSavedRoutes } from "maps";
 import { readSavedDogs } from "selectdog";
 
 // import { dogsChosen } from "selectDog"
@@ -58,27 +58,62 @@ var confirmButton = Content.template($ => ({
             var name;
             var map;
             var markers;
-            for (var i=0; i<newRouteURLObject.length; i++){
-                if (newRouteURLObject[i][0] == "name") {
-                    name = newRouteURLObject[i][1];
-                } else if (newRouteURLObject[i][0] == "map") {
-                    map = newRouteURLObject[i][1];
-                } else if (newRouteURLObject[i][0] == "markers") {
-                    markers = newRouteURLObject[i][1];
+            if (frequentContainerSelected){
+                trace("FREQUENT CONTAINER SELECTED\n");
+                var maps = readSavedRoutes();
+                for (var z=0; z<maps.length; z++){
+                    if (maps[z].name == frequentContainerSelectedRoute){
+                        name = maps[z].name;
+                        map = maps[z].url;
+                        markers = maps[z].markers;
+                    }
+                }
+            }else{
+                for (var i=0; i<newRouteURLObject.length; i++){
+                    if (newRouteURLObject[i][0] == "name") {
+                        name = newRouteURLObject[i][1];
+                    } else if (newRouteURLObject[i][0] == "map") {
+                        map = newRouteURLObject[i][1];
+                    } else if (newRouteURLObject[i][0] == "markers") {
+                        markers = newRouteURLObject[i][1];
+                    }
                 }
             }
-            var routeJSON = {
-                name: name,
-                url: map,
-                markersArray: markers
-            }
+
+            // var name;
+            // var map;
+            // var markers;
+            // for (var i=0; i<newRouteURLObject.length; i++){
+            //     if (newRouteURLObject[i][0] == "name") {
+            //         name = newRouteURLObject[i][1];
+            //     } else if (newRouteURLObject[i][0] == "map") {
+            //         map = newRouteURLObject[i][1];
+            //     } else if (newRouteURLObject[i][0] == "markers") {
+            //         markers = newRouteURLObject[i][1];
+            //     }
+            // }
+            // var routeJSON = {
+            //     name: name,
+            //     url: map,
+            //     markersArray: markers
+            // }
             getMapsImg(map, function(image){
                 let mapIm = new Picture({height: 100, width: 100, right: 0, left: 0, bottom: 15, top:0, url: image});
                 application.confirmationScreen.confirmationBox.col.add(mapIm);
             });
-            saveRoute(routeJSON);
+            if (frequentContainerSelected == false){
+                trace("saving json\n");
+                var routeJSON = {
+                    name: name,
+                    url: map,
+                    markersArray: markers
+                }
+                saveRoute(routeJSON);
+            }
+            // saveRoute(routeJSON);
+            frequentContainerSelected = false;
+            frequentContainerSelectedRoute = "";
             newRouteURLObject = [];
-            // loadMax();
         }
     }
 }));
