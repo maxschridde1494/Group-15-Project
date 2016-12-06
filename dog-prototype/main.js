@@ -31,7 +31,7 @@ import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject, walkName } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
-import { ConfirmationContainer, ConfirmationBox } from "confirmation";
+import { ConfirmationContainer, ConfirmationBox, dogPics } from "confirmation";
 
 import { SettingsOverlay } from "settingsoverlay"; 
 import { SettingsScreen} from "settings"; 
@@ -96,6 +96,7 @@ export function loadErikConfirmationPage() {
     	screenContent: new ConfirmationBox({walkName: walkName, month: Month, date: Day, start: Time, duration: Duration})});
     // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
+    dogPics();
 }
 
 export function loadGabe(){
@@ -106,6 +107,7 @@ export function loadGabe(){
 }
 
 export function loadAbi(){
+    selectedDogs = [];
     application.remove(currentScreen);
     currentScreen = new ScreenTemplate({name: "selectDog", titleTxt: "Select Dog", prevScn: "loadGabe", nextScn: "loadScheduleWalk", screenContent: new SelectDogContainer()});
     application.add(currentScreen);

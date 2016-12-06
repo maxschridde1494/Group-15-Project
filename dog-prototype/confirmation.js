@@ -1,10 +1,11 @@
 import Pins from "pins";
 import { currentScreen, orangeSkin, yellowSkin, 
-    whiteSkin, loadAbi, loadMax } from "main";
+    whiteSkin, loadAbi, loadMax, selectedDogs } from "main";
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
 import {newRouteURLObject } from "selectwalk";
 import { getMapsImg, saveRoute } from "maps";
+import { readSavedDogs } from "selectdog";
 
 // import { dogsChosen } from "selectDog"
 
@@ -36,6 +37,10 @@ var dogButton = Content.template($ => ({
     top: 5, left: 0, right: 0, height: 40, width: 40, skin: $.dogSkin
 }));
 
+var dogIcon = Picture.template($ => ({
+    top: 0, left: 0, right: 0, bottom: 0, height: 75, width: 75,
+    url: $.dogPic
+}));
 
 /* Confirmation Box */
 var but = new Skin({
@@ -78,12 +83,39 @@ var confirmButton = Content.template($ => ({
     }
 }));
 
-function dogPics() {
-    var dogsLine = new Line({left: 0, right: 0, top: 0, height: 50, skin: orangeSkin, contents: []});
-    dogsLine.contents.add((new dogButton({dogSkin: dog1})));
-    // dogsLine.contents.add(new dogButton({dogSkin: dog1}));
-    // dogsLine.contents.add(new dogButton({dogSkin: dog1}));
-    return dogsLine;
+export function dogPics() {
+    var dogObjectArray = readSavedDogs(".dogs/");
+    trace(dogObjectArray.string + "\n");
+    var numberofdogs = dogObjectArray.length;
+    var dogDic =[];
+    if (numberofdogs  >= 1) {
+        var dog1name = dogObjectArray[0].name;
+        trace("dogname: " + dog1name + "\n");
+        var dog1url = dogObjectArray[0].image;
+        dogDic = [[dog1name, dog1url]];
+    }
+
+    if (numberofdogs >= 2) {
+        var dog2name = dogObjectArray[1].name;
+        var dog2url = dogObjectArray[1].image;
+        dogDic.push([dog2name, dog2url]);
+    }
+
+    if (numberofdogs >= 3) {
+        var dog3name = dogObjectArray[2].name;
+        var dog3url = dogObjectArray[2].image;
+        dogDic.push([dog3name, dog3url]);
+    }
+    
+    for (var k=0; k < dogDic.length; k++){
+        trace("CurDog: " + dogDic[k][0] + "\n");
+        trace("AllDogs: " + selectedDogs + "\n");
+
+        if (selectedDogs.indexOf(dogDic[k][0]) > -1) {
+            var dogCon = new dogIcon({dogPic: dogDic[k][1]});
+            application.confirmationScreen.confirmationBox.col.dogs.add(dogCon);
+        }
+    }
 }
 
 var labelTemplate = Label.template($=>({ top: $.top, string: $.txt, 
@@ -96,12 +128,8 @@ export var ConfirmationBox = Column.template($ => ({
             name: "col", left: 20, right: 20, top: 40, bottom: 20, height: 300, skin: whiteSkin,
             contents: [
                 new Line({
-                    left: 0, right: 0, top: 0, height: 50, skin: orangeSkin,
-                    contents: [
-                        new dogButton({dogSkin: dog1}),
-                        new dogButton({dogSkin: dog2}),
-                        new dogButton({dogSkin: dog3})
-                    ]
+                    name: "dogs", left: 0, right: 0, top: 0, height: 50, skin: orangeSkin,
+                    contents: []
                 }),
                 new labelTemplate({txt: $.walkName, style: boldText, top: 10}), 
                 new labelTemplate({txt: $.month + " " + $.date + $.start, style: normalText, top: 20}), 
