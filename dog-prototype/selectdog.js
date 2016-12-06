@@ -101,21 +101,22 @@ var dogContainer = Container.template($  => ({
                 	} else if (yellowReplace != container.first.url) { //deselect case
                 		container.first.url = yellowReplace; 
                 	}
-                	if (selectedDogs.includes($.string)) {
-                		var index = selectedDogs.indexOf($.string); 
-                		if (index > -1) {
-                			selectedDogs.splice(index, 1); 
-                		}
-                	} else {
-                		selectedDogs.push($.string); 
-                	}
-                	trace(selectedDogs + "\n"); 
+
+                    if (selectedDogs.includes($.string)) {
+                        var index = selectedDogs.indexOf($.string); 
+                        if (index > -1) {
+                            selectedDogs.splice(index, 1); 
+                        }
+                    } else {
+                        selectedDogs.push($.string); 
+                    }
+                    trace(selectedDogs + "\n"); 
                 	
 
                 	
                     
                     // dogsChosen[$.string] = !dogsChosen[$.string];
-                    //trace($.string + " Dog Touched\n");
+                    trace($.string + " Dog Touched\n");
                     // trace(dogsChosen[$.string] + "\n");
                     //container.state = !container.state;
                 }
