@@ -198,14 +198,14 @@ var nextIcon = Picture.template($ => ({
 }));
 
 /* Navigation Bar */
-export var navBarSize = 40;
+export var navBarSize = 50;
 var TitleTemplate = Label.template($ => ({
     left: 0, right: 25, top: 0, bottom: 0,
     style: titleFont,
     string: $.string
 }));
 
-var NavTop = Line.template($ => ({
+export var NavTop = Line.template($ => ({
     left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
     contents: [
         new settingsIcon(),
@@ -387,7 +387,7 @@ export var RouteScreenContent = Column.template($ => ({
         // new routeLogo(),
         // new RouteLabels(),
         new routeLogo({top: 10}),
-        new RouteLabels({top: 0, bottom: 0}),
+        new RouteLabels({top: -27, bottom: 20}),
         new NewRouteContainer(),
     ]
 }));

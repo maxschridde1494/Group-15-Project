@@ -1,5 +1,5 @@
 import { currentScreen, remotePins, closeAnalogs, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
-import { navBarSize, settingsIcon, stopsExport } from "selectwalk";
+import { NavTop, navBarSize, settingsIcon, stopsExport } from "selectwalk";
 import { markersURLArray } from "main";
 import { getMapsImg, saveRoute, deleteRoute } from "maps";
 
@@ -10,17 +10,9 @@ let orangeSkinBorder = new Skin({fill: "#ff7e3e", borders: {left:1, right:1, top
 export var ActMonitorScreen = Column.template($ => ({
     name: "main", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
     contents: [
-        new NavTop({string: "Activities Monitor"}),
+        new NavTop({txt: "Activities Monitor"}),
         new spacer(),
         new NavBot({txt: "Next"})
-    ]
-}));
-
-var NavTop = Line.template($ => ({
-    left: 0, top: 0, right: 0, height: navBarSize, skin: orangeSkin,
-    contents: [
-        new settingsIcon(),
-        new Label({hidden: false, left: 0, right: 0, string: $.string, style: largeTextStyle})
     ]
 }));
 
