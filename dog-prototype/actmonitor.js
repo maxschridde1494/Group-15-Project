@@ -1,4 +1,5 @@
-import { currentScreen, remotePins, closeAnalogs, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
+import { currentScreen, remotePins, analogReader1, analogReader2,
+          analogReader3, analogReader4, loadMax, yellowSkin, whiteSkin, orangeSkin } from "main";
 import { NavTop, navBarSize, settingsIcon, stopsExport } from "selectwalk";
 import { markersURLArray } from "main";
 import { getMapsImg, saveRoute, deleteRoute } from "maps";
@@ -23,6 +24,19 @@ var NavBot = Line.template($ => ({
         new backIcon()
     ]
 }));
+
+function closeAnalogs(){
+    if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
+        analogReader1.close();
+        analogReader1 = undefined;
+        analogReader2.close();
+        analogReader2 = undefined;
+        analogReader3.close();
+        analogReader3 = undefined;
+        analogReader4.close();
+        analogReader4 = undefined;
+    }
+}
 
 var backIcon = Picture.template($ => ({
     left: 10, height: 20, url: "assets/backButton.png", active: true,

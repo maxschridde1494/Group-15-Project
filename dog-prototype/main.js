@@ -167,7 +167,11 @@ export function loadActMonitor(corners){
     var moved = false;
     if (remotePins){
         if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
-            var analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
+            trace(application.main.spacer.col.line1.completed.innercol.line.label.string + "\n");
+            trace(application.main.spacer.col.line1.distance.innercol.line.label.string + "\n");
+            trace(application.main.spacer.col.line2.steps.innercol.line.label.string + "\n");
+            trace(application.main.spacer.col.line2.heartrate.innercol.line.label.string + "\n");
+            analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
                     application.main.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100));
                     if (Math.round(result*100) != 50){
                         moved = true;
@@ -176,15 +180,20 @@ export function loadActMonitor(corners){
                         updateCurrLocation(result);
                     }
                 });
-            var analogReader2 = remotePins.repeat("/analog2/read", 10, function(result){
+            analogReader2 = remotePins.repeat("/analog2/read", 10, function(result){
                     application.main.spacer.col.line1.distance.innercol.line.label.string = String((result*10).toFixed(1))});
-            var analogReader3 = remotePins.repeat("/analog3/read", 10, function(result){
+            analogReader3 = remotePins.repeat("/analog3/read", 10, function(result){
                     application.main.spacer.col.line2.steps.innercol.line.label.string = String(Math.round(result*1000))});
-            var analogReader4 = remotePins.repeat("/analog4/read", 10, function(result){
+            analogReader4 = remotePins.repeat("/analog4/read", 10, function(result){
                     application.main.spacer.col.line2.heartrate.innercol.line.label.string = String(Math.round(result*100))});
         }
     }
 }
+export var analogReader1;
+export var analogReader2;
+export var analogReader3;
+export var analogReader4;
+
 export var markersURLArray = []; //array of urls for 4 intersection marker maps
 export var markersImageArray = []; //array of images for 4 intersection marker maps
 function getMapNoMarkers(cornersArr){
@@ -263,18 +272,18 @@ function updateCurrLocation(reading){
     }
 }
 
-export function closeAnalogs(){
-    if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
-        analogReader1.close();
-        analogReader1 = undefined;
-        analogReader2.close();
-        analogReader2 = undefined;
-        analogReader3.close();
-        analogReader3 = undefined;
-        analogReader4.close();
-        analogReader4 = undefined;
-    }
-}
+// export function closeAnalogs(){
+//     if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
+//         analogReader1.close();
+//         analogReader1 = undefined;
+//         analogReader2.close();
+//         analogReader2 = undefined;
+//         analogReader3.close();
+//         analogReader3 = undefined;
+//         analogReader4.close();
+//         analogReader4 = undefined;
+//     }
+// }
 
 export function loadMax(){
     application.remove(currentScreen);
