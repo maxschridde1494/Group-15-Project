@@ -76,6 +76,7 @@ export function loadEric(){
     currentScreen = new MainContainerTemplate();
     application.add(currentScreen);
     // deleteDirectory(".routes/");
+    // deleteDirectory(".dogs/");
 }
 
 export function loadErikConfirmationPage() {
@@ -94,7 +95,6 @@ export function loadErikConfirmationPage() {
     trace(followingScreen);
     currentScreen = new ScreenTemplate({name: "confirmationScreen", titleTxt: "Confirmation", nextScn: followingScreen, prevScn: "loadScheduleWalk", 
     	screenContent: new ConfirmationBox({walkName: walkName, month: Month, date: Day, start: Time, duration: Duration})});
-    // currentScreen = new ConfirmationContainer();
     application.add(currentScreen);
     dogPics();
 }
@@ -104,7 +104,6 @@ export function loadGabe(){
     frequentContainerSelected = false;
     frequentContainerSelectedRoute = "";
     currentScreen = new ScreenTemplate({name: "newRouteScreen", titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
-    // currentScreen = new RouteScreen({routeSelect: new NewRouteContainer()});
     application.add(currentScreen);
 }
 
@@ -191,7 +190,7 @@ export var markersImageArray = []; //array of images for 4 intersection marker m
 function getMapNoMarkers(cornersArr){
     // cornersArr - array of intersection strings for geocode api to get lats / lons
     getLatLonFourCorners(cornersArr, function(array){
-        var mapurl = createMapsURLfromLatLon2(array, false, "");
+        var mapurl = createMapsURLfromLatLon2(array, false, "", "");
         getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
             application.main.spacer.col.map.add(mapIm);
@@ -206,7 +205,11 @@ function getMapswithMarkersURLs(latlonarr){
     var imageArr = [];
     var urlsArr = [];
     for (var i=0; i < latlonarr.length; i++){
-        var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]]);
+        if (i == latlonarr.length - 1){
+            var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]], "S");
+        }else{
+            var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]], "C");
+        }
         urlsArr.push(url);
     }
     return urlsArr;

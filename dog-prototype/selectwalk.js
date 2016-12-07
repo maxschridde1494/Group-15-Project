@@ -137,8 +137,8 @@ var selectRouteIcon = Picture.template($ => ({
 }));
 
 export var walkName = "";
-export var home = "Home";
-export var city = "Burbank";
+export var home = "2302 Piedmont Ave";
+export var city = "Berkeley";
 export var state = "CA";
 var stops = [["", ""], ["", ""], ["", ""], ["", ""]];
 export var stopsExport = [];
@@ -150,21 +150,31 @@ export function grabNewRouteURLs(returnArr){
     var stop2 = stops[1][0] + "|" + stops[1][1];
     var stop3 = stops[2][0] + "|" + stops[2][1];
     var stop4 = stops[3][0] + "|" + stops[3][1];
-    stopsExport = [stop1, stop2, stop3, stop4];
-    trace("check: " + stopsExport + "\n");
+    stopsExport = [stop1, stop2, stop3, stop4, home];
     var cornerURLs=[];
     trace("stopsExport: " + stopsExport + "\n");
     for (var j=0; j<stopsExport.length; j++){
-        var string = stopsExport[j] + "," + city + "," + state;
-        cornerURLs.push(createLatLongURLfromCorner(string, "|"));
+        if (j != stopsExport.length - 1){
+            var string = stopsExport[j] + "," + city + "," + state;
+            trace(string + "\n");
+            cornerURLs.push(createLatLongURLfromCorner(string, "|"));
+        }else{
+            var string = stopsExport[j] + "," + city + "," + state;
+            trace(string + "\n");
+            cornerURLs.push(createLatLongURLfromAddress(string));
+        }
     }
     trace("about to make lat lng api calls\n");
     getLatLonFourCorners(cornerURLs, function(array){
-        var mapurl = createMapsURLfromLatLon2(array, false, ""); // get map URL
+        var mapurl = createMapsURLfromLatLon2(array, false, "", ""); // get map URL
         trace("route url: " + mapurl + "\n");
         var urlsArr = []; //maps with markers urls
         for (var i=0; i < array.length; i++){
-            var url = createMapsURLfromLatLon2(array, true,[array[i][0], array[i][1]]);
+            if (i == array.length - 1){
+                var url = createMapsURLfromLatLon2(array, true,[array[i][0], array[i][1]], "S");
+            }else{
+                var url = createMapsURLfromLatLon2(array, true,[array[i][0], array[i][1]], "C");
+            }
             trace("marker map " + String(i) + " url: " + url + "\n");
             urlsArr.push(url);
         }
@@ -181,7 +191,7 @@ var nextIcon = Picture.template($ => ({
             var stop1 = stops[0][0] + "|" + stops[0][1];
             var stop2 = stops[1][0] + "|" + stops[1][1];
             var stop3 = stops[2][0] + "|" + stops[2][1];
-            var stop4 = stops[3][0] + "|" + stops[3][1];
+            var stop4 = stops[3][0] + "|" + stops[3][1]; 
             stopsExport = [stop1, stop2, stop3, stop4];
             trace("\nSTOPS\n");
             trace("Home: " + home + "\n");
@@ -326,18 +336,23 @@ export var NewRouteContainer = Column.template($ => ({
             left: 5, top: 5, right: 5, width: 50,
             contents: [
                 new textLabel({txt: "Home:"}),
-                new MyField({name: "Home", targetID: "home"}),
+                new MyField({name: "2302 Piedmont Ave", targetID: "home"}),
             ]
         }),
-        new NewRouteBox({txt: "Stop 1", txt1: 'w clark ave', txt2: 'evergreen street', targetID: 'stop1'}),
-        new NewRouteBox({txt: "Stop 2",txt1: 'w magnolia blvd', txt2: 'evergreen street', targetID: 'stop2'}),
-        new NewRouteBox({txt: "Stop 3",txt1: 'n pass ave', txt2: 'w magnolia blvd', targetID: 'stop3'}),
-        new NewRouteBox({txt: "Stop 4",txt1: 'w clark ave', txt2: 'n pass ave', targetID: 'stop4'}),
+        // new NewRouteBox({txt: "Stop 1", txt1: 'w clark ave', txt2: 'evergreen street', targetID: 'stop1'}),
+        // new NewRouteBox({txt: "Stop 2",txt1: 'w magnolia blvd', txt2: 'evergreen street', targetID: 'stop2'}),
+        // new NewRouteBox({txt: "Stop 3",txt1: 'n pass ave', txt2: 'w magnolia blvd', targetID: 'stop3'}),
+        // new NewRouteBox({txt: "Stop 4",txt1: 'w clark ave', txt2: 'n pass ave', targetID: 'stop4'}),
+        new NewRouteBox({txt: "Stop 1", txt1: 'Piedmont Ave', txt2: 'Bancroft Way', targetID: 'stop1'}),
+        new NewRouteBox({txt: "Stop 2",txt1: 'Bancroft Way', txt2: 'College Ave', targetID: 'stop2'}),
+        new NewRouteBox({txt: "Stop 3",txt1: 'College Ave', txt2: 'Durant Ave', targetID: 'stop3'}),
+        new NewRouteBox({txt: "Stop 4",txt1: 'Piedmont Ave', txt2: 'Durant Ave', targetID: 'stop4'}),
         new Line({
             left: 5, top: 10, right: 5, height: 26,
             contents: [
                 new textLabel({txt: "City:"}),
-                new MyField({name: "Burbank", targetID: "city"}),
+                // new MyField({name: "Burbank", targetID: "city"}),
+                new MyField({name: "Berkeley", targetID: "city"}),
                 new textLabel({txt: "State:"}),
                 new MyField({name: "CA", targetID: "state"})
             ]

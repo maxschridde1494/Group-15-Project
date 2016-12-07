@@ -37,7 +37,7 @@ export function createMapsURLfromLatLon(lat, lon){
                  + "&key=" + STATICMAPSAPIKEY;
     return requestURL
 }
-export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
+export function createMapsURLfromLatLon2(latlonarr, bool, markerarr, marker){
     //Generate MAPS URL from list of intersection lat lng coordinates
     /*input: 
         - latlonarr: array of [lat,lon] arrays for each marker
@@ -46,7 +46,7 @@ export function createMapsURLfromLatLon2(latlonarr, bool, markerarr){
     */
     var requestURL = MAPSURLSTART + "&size=400x400";
     if (bool){
-        requestURL += "&markers=color:blue|label:C|" + markerarr[0] + "," + markerarr[1];
+        requestURL += "&markers=color:blue|label:" + marker + "|" + markerarr[0] + "," + markerarr[1];
     }
     requestURL += "&path=color:0x0000ff80|weight:3|";
     for (var i = 0; i < latlonarr.length; i++){
@@ -171,6 +171,20 @@ export function getLatLonFourCorners(urls, uiCallback){
             try {
                 latlongHelper(json, arr);
                 message = new Message(urls[3]);
+                return message.invoke(Message.JSON);
+            }
+            catch (e) {
+                throw('Web service responded with invalid JSON!\n');
+            }
+        }
+        else{
+            trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
+        }
+    }).then(json => {
+        if (0 == message.error && 200 == message.status){
+            try {
+                latlongHelper(json, arr);
+                message = new Message(urls[4]);
                 return message.invoke(Message.JSON);
             }
             catch (e) {
