@@ -150,6 +150,7 @@ export function loadScheduleWalk(){
     text2label = new Label({left:0, right:0, height:40, string:"Day", style: new Style({ font: "bold 15px", color: "#000000" })});
     text3label = new Label({left:0, right:0, height:40, string:"Start Time", style: new Style({ font: "bold 15px", color: "#000000" })});
     text4label = new Label({left:0, right:0, height:40, string:"Duration (in hours)", style: new Style({ font: "bold 15px", color: "#000000" })});
+    iswalknow = 0;
     application.remove(currentScreen);
     currentScreen = new ScreenTemplate({titleTxt: "Select Time", prevScn: "loadAbi", nextScn: "loadConfirm", screenContent: new ScheduleWalkContainer()});
     application.add(currentScreen);

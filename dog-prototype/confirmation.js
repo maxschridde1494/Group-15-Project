@@ -71,7 +71,9 @@ var confirmButton = Content.template($ => ({
     Behavior: class extends ButtonBehavior {
         onTap(button){
             //trace(dogsChosen + "\n");
-            saveWalk({name: walkName, month: Month, day: Day, time: Time, duration: Duration});
+            if (iswalknow == 0){
+                saveWalk({name: walkName, month: Month, day: Day, time: Time, duration: Duration});
+            }
             var name;
             var map;
             var markers;
