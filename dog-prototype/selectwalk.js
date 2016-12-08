@@ -92,14 +92,7 @@ var freqRouteLabel = Picture.template($ => ({
                         let mapIm = new freq1({url: image});
                         var l = new Label({ name: 'label', right: 60, string: name, style: smallStyle});
                         var mapContainer = new FrequentMaps({name: "map" + String(i), pic: mapIm, lab: l});
-                        // var line = new Line({top: 0, bottom: 0, right: 0, left: 0,
-                        //     contents:[
-                        //         mapContainer,
-                        //         new Label({ width: 50, top: 0, bottom: 0, string: name, style: titleStyle})
-                        //     ]
-                        // });
                         application.routeScreenFrequent.col.scroller.frequentContainer.add(mapContainer);
-                        // application.routeScreenFrequent.col.scroller.frequentContainer.add(new FrequentMaps({name: "map" + String(i), pic: mapIm}));
                     });
                 }
             } else {

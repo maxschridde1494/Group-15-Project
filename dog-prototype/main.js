@@ -31,8 +31,7 @@ import { dashboardScreen } from "dashboard";
 import { ActMonitorScreen } from "actmonitor";
 import { NewRouteContainer, RouteScreenContent, stopsExport, city, state, newRouteURLObject, walkName, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
 import { SelectDogContainer, loadDogs, readSavedDogs } from "selectdog";
-import { ConfirmationContainer, ConfirmationBox, dogPics } from "confirmation";
-
+import { ConfirmationContainer, ConfirmationBox, dogPics, labelTemplate, boldText, normalText } from "confirmation";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { SettingsScreen} from "settings"; 
 import { RobotScreen } from "robot";  
@@ -42,6 +41,7 @@ import { WebcamScreen } from "webcam";
 import { AddDogScreen } from "adddog"; 
 import { createLatLongURLfromAddress, createLatLongURLfromCorner, createMapsURLfromLatLon2, createMapsURLfromLatLon, 
     getMapsImg, getLatLonFourCorners, parseAddress, parseCorner, saveRoute, deleteRoute, readSavedRoutes } from "maps";
+import { ScheduledWalksContainer } from "viewscheduled";
 import { 
     Button,
     ButtonBehavior  
@@ -64,10 +64,6 @@ Handler.bind("/respond", Behavior({
         message.status = 200;    
     }
 }));
-
-export function loadScreen(title, next, prev, content, nextTxt){
-
-}
 
 export function loadEric(){
     if (currentScreen != null){
@@ -106,6 +102,39 @@ export function loadGabe(){
     frequentContainerSelectedRoute = "";
     currentScreen = new ScreenTemplate({name: "newRouteScreen", titleTxt: "Select Route", prevScn: "loadEric", nextScn: "loadAbi", screenContent: new RouteScreenContent()});
     application.add(currentScreen);
+}
+
+export function readSavedWalks(){
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".scheduledwalks/");
+    Files.ensureDirectory(uri);
+    var walkObjects = [];
+    var info, iterator = new Files.Iterator(uri);
+    while (info = iterator.getNext()){
+        var currPath = uri + info.path;
+        var route = Files.readJSON(currPath);
+        walkObjects.push(route);
+    }
+    return walkObjects;
+}
+
+export function loadScheduled(){
+    application.remove(currentScreen);
+    frequentContainerSelected = false;
+    frequentContainerSelectedRoute = "";
+    currentScreen = new ScreenTemplate({name: "scheduledScreen", titleTxt: "Scheduled Walks", prevScn: "loadEric", nextScn: "loadEric", screenContent: new ScheduledWalksContainer()});
+    application.add(currentScreen);
+    var walks = readSavedWalks();
+    for (var i=0; i<walks.length; i++){
+        var walkcontainer = new Column({
+            top: 20, bottom: 0, left: 0, right: 0,
+            contents: [
+                new labelTemplate({txt: walks[i].name, style: boldText, top: 10}),
+                new labelTemplate({txt: walks[i].month + " " + walks[i].day + walks[i].time, style: normalText, top: 10}), 
+                new labelTemplate({txt: walks[i].duration, style: normalText, top: 10}),
+            ]
+        })
+        application.scheduledScreen.scheduledWalksContainer.col.add(walkcontainer);
+    }
 }
 
 export function loadAbi(){
@@ -270,9 +299,9 @@ function generateMarkerImages(urlArr){
 
 function updateCurrLocation(reading){
     //simulate location service (update map with % distance walked)
-    if (currMarkerIm){
-        application.actmonitor.spacer.col.map.remove(currMarkerIm);
-    }
+    // if (currMarkerIm){
+    //     application.actmonitor.spacer.col.map.remove(currMarkerIm);
+    // }
     if (reading == 0 || reading == 1){
         application.actmonitor.spacer.col.map.empty();
         application.actmonitor.spacer.col.map.add(homeimage);
@@ -417,6 +446,9 @@ export let MyButtonTemplate = Button.template($ => ({
             if ($.string == "Settings") {
                 loadSettings();
             }
+            if ($.string == "Scheduled Walks"){
+                loadScheduled();
+            }
         }
     }
 }));
@@ -427,6 +459,7 @@ export var ButtonColumnTemplate = Column.template($ => ({
         new Picture({height: 55, url: "assets/logo.png", bottom: 25}),
         new MyButtonTemplate({string: "New Walk"}),
         new MyButtonTemplate({string: "Current Walk"}),
+        new MyButtonTemplate({string: "Scheduled Walks"}),
         new MyButtonTemplate({string: "Settings"})
     ]
 }));

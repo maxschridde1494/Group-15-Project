@@ -3,16 +3,15 @@ import { currentScreen, currentWalk, orangeSkin, yellowSkin,
     whiteSkin, loadAbi, loadMax, selectedDogs } from "main";
 import { Button, ButtonBehavior } from 'buttons';
 import { ScreenTemplate } from "screenTemplate"
-import {newRouteURLObject, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
+import {newRouteURLObject, frequentContainerSelected, frequentContainerSelectedRoute, walkName } from "selectwalk";
 import { getMapsImg, saveRoute, readSavedRoutes } from "maps";
 import { readSavedDogs } from "selectdog";
-import { iswalknow } from "schedulewalk";
-
+import { iswalknow, Month, Day, Time, Duration } from "schedulewalk";
 // import { dogsChosen } from "selectDog"
 
 
-var boldText = new Style( { font: "bold 26px", color: "black" });
-var normalText = new Style( { font: "24px", color: "black" });
+export var boldText = new Style( { font: "bold 26px", color: "black" });
+export var normalText = new Style( { font: "24px", color: "black" });
 var dogs = {
     "Pepper": "assets/dog1Yellow.png",
     "Snowball": "assets/dog2Yellow.png",
@@ -49,12 +48,30 @@ var but = new Skin({
       texture: new Texture("assets/confirmButton.png")
 });
 
+export function saveWalk(dict){
+    //input is dictionary with 1) name and 2) Google Maps Main url 3) array of Marker Maps URLs
+    var uri = mergeURI(Files.preferencesDirectory, application.di + ".scheduledwalks/");
+    Files.ensureDirectory(uri)
+    var walkJson = {
+        name: dict.name,
+        month: dict.month,
+        day: dict.day,
+        time: dict.time,
+        duration: dict.duration
+    };
+    var walkFileName = walkJson.month + ".json";
+    trace("walk file name: " + walkFileName + "\n");
+    var uriWalk = mergeURI(Files.preferencesDirectory, application.di + ".scheduledwalks/" + walkFileName);
+    Files.writeJSON(uriWalk, walkJson);
+}
+
 var confirmButton = Content.template($ => ({ 
     top: 0, left: 25, right: 0, bottom: 10, height: 30, width: 30, active: true,
     skin: but,
     Behavior: class extends ButtonBehavior {
         onTap(button){
             //trace(dogsChosen + "\n");
+            saveWalk({name: walkName, month: Month, day: Day, time: Time, duration: Duration});
             var name;
             var map;
             var markers;
@@ -139,7 +156,7 @@ export function dogPics() {
     }
 }
 
-var labelTemplate = Label.template($=>({ top: $.top, string: $.txt, 
+export var labelTemplate = Label.template($=>({ top: $.top, string: $.txt, 
     		style: $.style })); 
 
 export var ConfirmationBox = Column.template($ => ({
