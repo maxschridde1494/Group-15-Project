@@ -1,7 +1,10 @@
 import { currentScreen, borderedSkin, loadSettings, orangeSkin, yellowSkin, whiteSkin, settingsOverlayScreen} from "main";
 import { NavTop} from "selectwalk"; 
 import { SettingsOverlay } from "settingsoverlay"; 
-import {    SwitchButton,    SwitchButtonBehavior} from 'switch';
+import {
+    SwitchButton,
+    SwitchButtonBehavior
+} from 'switch';
 
 import { 
     Button,
@@ -18,14 +21,32 @@ var robotImage = Picture.template($ => ({
     top: 20, height: 290, url: "assets/robot.png",
 }));
 
-var robotContainer = Container.template($=>({    skin: whiteSkin,
+var robotContainer = Container.template($=>({
+    skin: whiteSkin,
     contents: [
     	new robotImage()
-    ]}));
+    ]
+}));
 
-var switchTemplate = SwitchButton.template($ => ({    height: 50, width: 80, left: 20,     Behavior: class extends SwitchButtonBehavior {    }}));
+var switchTemplate = SwitchButton.template($ => ({
+    height: 50, width: 80, left: 20, 
+    Behavior: class extends SwitchButtonBehavior {
+    }
+}));
 
-var labelTemplate = Label.template($=>({ left: 10, string: $.txt,     		style: normalText }))
+var labelTemplate = Label.template($=>({ name: $.name, left: 10, string: $.txt, 
+    		style: normalText,
+
+            Behavior: class extends ButtonBehavior {
+                updateSpace(content, value){
+                    //TODO: Clear associated analog pin? 
+                    if ($.name == "space") {
+                        content.string = "0%";
+                    }
+                }
+            }
+
+}));
 
 var poopOptions = Line.template($ => ({
     bottom: 0, top: 10, right: 0, left: 10, 
@@ -41,7 +62,7 @@ var poopFullness = Line.template($ => ({
     contents: [
         new labelTemplate({txt: "Space Left:               "}),
         //TODO: this should be replaced with an analog pin read
-        new labelTemplate({txt: "37%"})
+        new labelTemplate({name: "space", txt: "37%"})
     ]
 }));
 
@@ -53,6 +74,7 @@ let buttonTemplate = Button.template($ => ({
     Behavior: class extends ButtonBehavior {
         onTap(button){
             //TODO: Clear associated analog pin? 
+            application.distribute("updateSpace", 0);
         }
     }
 }));

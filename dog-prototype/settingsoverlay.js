@@ -6,7 +6,7 @@ import { settingsOverlayScreen, loadEric, loadSettings} from "main";
 import { closeAnalogs } from "actmonitor";
 
 var blackSkin = new Skin({ fill:"#E6000000" });
-var normalText = new Style( { font: "40px", color: "#bababa" });
+var normalText = new Style( { font: "40px ABeeZee", color: "#bababa" });
 
 export var SettingsOverlay = Column.template($ => ({
     left: 0, right: 0, top: 0, bottom: 0, skin: blackSkin,
@@ -17,7 +17,7 @@ export var SettingsOverlay = Column.template($ => ({
     ]
 }));
 
-var homeLabel = Label.template($=>({ left: 10, top: 10,string: "Home", 
+var homeLabel = Label.template($=>({ left: 10, top: 10, string: "Home", 
     		style: normalText }))
 var settingsLabel = Label.template($=>({ left: 10, top: 10,string: "Settings", 
     		style: normalText }))		
@@ -39,7 +39,7 @@ var settingsIcon = Picture.template($ => ({
 }));
 
 var homeButtons = Line.template($ => ({
-    left: 3, top: 0, right: 0, active: true,
+    left: 3, top: 10, right: 0, active: true,
     contents: [
         new homeIcon(),
         new homeLabel(),

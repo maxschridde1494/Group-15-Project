@@ -316,7 +316,7 @@ var NewRouteBox = Line.template($ => ({
 }));
 
 export var NewRouteContainer = Column.template($ => ({
-    top: 10, left: 0, right: 0, bottom: 0, active: true,
+    top: 0, left: 0, right: 0, bottom: 100, active: true,
     contents: [
         new Line({
             left: 5, top: 0, right: 5, width: 50,
@@ -332,9 +332,9 @@ export var NewRouteContainer = Column.template($ => ({
                 new MyField({name: "911 North Evergreen Street", targetID: "home"}),
             ]
         }),
-        new NewRouteBox({txt: "Stop 1",txt1: 'w magnolia blvd', txt2: 'evergreen street', targetID: 'stop1'}),
-        new NewRouteBox({txt: "Stop 2",txt1: 'n pass ave', txt2: 'w magnolia blvd', targetID: 'stop2'}),
-        new NewRouteBox({txt: "Stop 3",txt1: 'w clark ave', txt2: 'n pass ave', targetID: 'stop3'}),
+        new NewRouteBox({txt: "Stop 1", txt1: 'w magnolia blvd', txt2: 'evergreen street', targetID: 'stop1'}),
+        new NewRouteBox({txt: "Stop 2", txt1: 'n pass ave', txt2: 'w magnolia blvd', targetID: 'stop2'}),
+        new NewRouteBox({txt: "Stop 3", txt1: 'w clark ave', txt2: 'n pass ave', targetID: 'stop3'}),
         new NewRouteBox({txt: "Stop 4", txt1: 'w clark ave', txt2: 'evergreen street', targetID: 'stop4'}),
         // new NewRouteBox({txt: "Stop 1", txt1: 'Piedmont Ave', txt2: 'Bancroft Way', targetID: 'stop1'}),
         // new NewRouteBox({txt: "Stop 2",txt1: 'Bancroft Way', txt2: 'College Ave', targetID: 'stop2'}),
@@ -394,7 +394,7 @@ export var RouteScreenContent = Column.template($ => ({
     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: new Skin({fill: "#ffd359"}),
     contents: [
         new routeLogo({top: 10}),
-        new RouteLabels({top: -27, bottom: 20}),
+        new RouteLabels({top: 0, bottom: 0}),
         new NewRouteContainer(),
     ]
 }));
@@ -421,7 +421,7 @@ var RouteScreenFrequent = Container.template($ => ({
             contents:[
                 new NavTop({txt: "Select Route"}),
                 new routeLogo({top: navBarSize + 10}),
-                new RouteLabels({top: 110, bottom: 10}),  
+                new RouteLabels({top: 100, bottom: 10}),  
             ]               
         }),
         new NavBot({txt: "Next"}),

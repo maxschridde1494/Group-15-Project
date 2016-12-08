@@ -75,7 +75,7 @@ var dogIcon = Picture.template($ => ({
     url: $.dogPic
 }));
 
-var dogContainer = Container.template($  => ({
+var dogContainer = Column.template($  => ({
     left: 0, right: 0, top: 0, bottom: 0,
     contents: [
         new Container({
@@ -114,7 +114,7 @@ var dogContainer = Container.template($  => ({
                 }
             }
         }),
-        new Label({left: 0, right: 0, top: 110, height: 15, 
+        new Label({left: 0, right: 0, top: 5, height: 15, 
             string: $.string, style: dogLabelStyle})
     ]
 }));
@@ -125,8 +125,8 @@ export var text0Template = Column.template($ => ({
     contents: [
         Label($, {  
             left: 0, right: 0, top: 10,
-            style: new Style({ font: "30px ABeeZee", color: 'white' }), 
-            string: "Who Is Joining?" 
+            style: new Style({ font: "30px ABeeZee", color: '#7F7F7F' }), 
+            string: "Who is joining?" 
         }),
     ]
 }));
