@@ -305,7 +305,7 @@ function updateCurrLocation(reading){
     // }
     if (reading == 0 || reading == 1){
         application.actmonitor.spacer.col.map.empty();
-        if (homeimage.container != undefined){
+        if (homeimage.container != undefined && homeimage.container != homeimage){
                 homeimage.container.remove(im3);
             }
         application.actmonitor.spacer.col.map.add(homeimage);
@@ -314,28 +314,28 @@ function updateCurrLocation(reading){
         var val = Math.round(reading*100);
         if (val <= 25){
             application.actmonitor.spacer.col.map.empty();
-            if (im1.container != undefined){
+            if (im1.container != undefined && im1.container != im1){
                 im1.container.remove(im1);
             }
             application.actmonitor.spacer.col.map.add(im1);
             currMarkerIm = im1;
         }else if (val > 25 && val <= 50){
             application.actmonitor.spacer.col.map.empty();
-            if (im2.container != undefined){
+            if (im2.container != undefined && im2.container != im2){
                 im2.container.remove(im2);
             }
             application.actmonitor.spacer.col.map.add(im2);
             currMarkerIm = im2;
         }else if (val > 50 && val <= 75){
             application.actmonitor.spacer.col.map.empty();
-            if (im3.container != undefined){
+            if (im3.container != undefined && im3.container != im3){
                 im3.container.remove(im3);
             }
             application.actmonitor.spacer.col.map.add(im3);
             currMarkerIm = im3;
         }else if (val > 75){
             application.actmonitor.spacer.col.map.empty();
-            if (im4.container != undefined){
+            if (im4.container != undefined && im4.container != im4){
                 im4.container.remove(im3);
             }
             application.actmonitor.spacer.col.map.add(im4);
