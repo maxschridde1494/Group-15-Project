@@ -7,11 +7,11 @@ export var displayWebcam = false;
 
 var peachSkin = new Skin({ fill: "#FFF8EE" });
 var darkPeachSkin = new Skin({ fill: "#FFE4B3" });
-var normalText = new Style( { font: "26px", color: "black" });
+var normalText = new Style( { font: "26px ABeeZee", color: "black" });
 
-var titleScreenStyle = new Style({font: 'bold 60px', color: 'blue'});
-var titleStyle = new Style({font: '26px', color: 'black'});
-var labelStyle = new Style({font: '20px', fill: "black", horizontal: "left"});
+var titleScreenStyle = new Style({font: 'bold 60px ABeeZee', color: 'blue'});
+var titleStyle = new Style({font: '26px ABeeZee', color: 'black'});
+var labelStyle = new Style({font: '20px ABeeZee', fill: "black", horizontal: "left"});
 
 var forwardIcon = Picture.template($ => ({
     left: $.leftDistance, height: 20, top: 15, url: "assets/forwardArrow.png"

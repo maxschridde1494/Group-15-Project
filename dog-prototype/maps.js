@@ -46,9 +46,10 @@ export function createMapsURLfromLatLon2(latlonarr, bool, markerarr, marker){
     */
     var requestURL = MAPSURLSTART + "&size=400x400";
     if (bool){
-        requestURL += "&markers=color:blue|label:" + marker + "|" + markerarr[0] + "," + markerarr[1];
+        requestURL += "&markers=color:0xff7e3e|label:" + marker + "|" + markerarr[0] + "," + markerarr[1];
     }
-    requestURL += "&path=color:0x0000ff80|weight:3|";
+    // requestURL += "&path=color:0x0000ff80|weight:3|";
+    requestURL += "&path=color:0xff7e3e|weight:4|";
     for (var i = 0; i < latlonarr.length; i++){
         requestURL += latlonarr[i] + "|";
         if (i == latlonarr.length - 1){

@@ -3,8 +3,8 @@ export let yellowSkin = new Skin({fill: "#ffd359"});
 export let whiteSkin = new Skin({fill: "white"});
 export let titleFont = new Style({ font: "30px ABeeZee", color: "white" });
 
-let smallTextStyle = new Style({ font: "bold 15px", color: "white" });
-let smallTextStyleBlack = new Style({ font: "bold 15px", color: "black" });
+let smallTextStyle = new Style({ font: "bold 15px ABeeZee", color: "white" });
+let smallTextStyleBlack = new Style({ font: "bold 15px ABeeZee", color: "black" });
 
 export var currentScreen = null;
 export var settingsOverlayScreen = null; 
@@ -305,24 +305,39 @@ function updateCurrLocation(reading){
     // }
     if (reading == 0 || reading == 1){
         application.actmonitor.spacer.col.map.empty();
+        if (homeimage.container != undefined){
+                homeimage.container.remove(im3);
+            }
         application.actmonitor.spacer.col.map.add(homeimage);
         currMarkerIm = homeimage;
     }else{
         var val = Math.round(reading*100);
         if (val <= 25){
             application.actmonitor.spacer.col.map.empty();
+            if (im1.container != undefined){
+                im1.container.remove(im1);
+            }
             application.actmonitor.spacer.col.map.add(im1);
             currMarkerIm = im1;
         }else if (val > 25 && val <= 50){
             application.actmonitor.spacer.col.map.empty();
+            if (im2.container != undefined){
+                im2.container.remove(im2);
+            }
             application.actmonitor.spacer.col.map.add(im2);
             currMarkerIm = im2;
         }else if (val > 50 && val <= 75){
             application.actmonitor.spacer.col.map.empty();
+            if (im3.container != undefined){
+                im3.container.remove(im3);
+            }
             application.actmonitor.spacer.col.map.add(im3);
             currMarkerIm = im3;
         }else if (val > 75){
             application.actmonitor.spacer.col.map.empty();
+            if (im4.container != undefined){
+                im4.container.remove(im3);
+            }
             application.actmonitor.spacer.col.map.add(im4);
             currMarkerIm = im4;
         }
@@ -424,7 +439,7 @@ class AppBehavior extends Behavior{
 application.behavior = new AppBehavior();
 
 
-let small = new Style({ font: "18px", color: "black" });
+let small = new Style({ font: "18px ABeeZee", color: "black" });
 export var borderedSkin = new Skin({
     fill: "white",
     borders: {left: 3, right: 3, top: 3, bottom: 3}, 
