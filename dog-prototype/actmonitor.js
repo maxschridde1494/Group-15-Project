@@ -10,7 +10,7 @@ let largeTextStyle = new Style({ font: "bold 30px", color: "white"});
 let orangeSkinBorder = new Skin({fill: "#ff7e3e", borders: {left:1, right:1, top:1, bottom:1}, stroke: "black"});
 
 export var ActMonitorScreen = Column.template($ => ({
-    name: "main", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
+    name: "actmonitor", top: 0, bottom: 0, left: 0, right: 0, skin: yellowSkin,
     contents: [
         new NavTop({txt: "Activities Monitor"}),
         new spacer(),
@@ -25,14 +25,24 @@ var NavBot = Line.template($ => ({
     ]
 }));
 
-function closeAnalogs(){
-    if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
+export function closeAnalogs(){
+    if (analogReader1){
+        trace("closing analog 1\n");
         analogReader1.close();
         analogReader1 = undefined;
+    }
+    if (analogReader2){
+        trace("closing analog 2\n");
         analogReader2.close();
         analogReader2 = undefined;
+    }
+    if (analogReader3){
+        trace("closing analog 3\n");
         analogReader3.close();
         analogReader3 = undefined;
+    }
+    if (analogReader4){
+        trace("closing analog 4\n");
         analogReader4.close();
         analogReader4 = undefined;
     }

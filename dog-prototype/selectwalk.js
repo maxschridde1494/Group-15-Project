@@ -137,8 +137,8 @@ var selectRouteIcon = Picture.template($ => ({
 }));
 
 export var walkName = "";
-export var home = "2302 Piedmont Ave";
-export var city = "Berkeley";
+export var home = "911 North Evergreen Street";
+export var city = "Burbank";
 export var state = "CA";
 var stops = [["", ""], ["", ""], ["", ""], ["", ""]];
 export var stopsExport = [];
@@ -260,7 +260,7 @@ var MyField = Container.template($ => ({
                             label.container.hint.visible = (data.name.length == 0);
                             trace(data.name+"\n");
 
-                            if ($.targetID == 'home') home == data.name;
+                            if ($.targetID == 'home') home = data.name;
                             else if ($.targetID == 'walkName'){
                                 walkName = data.name;
                             }
@@ -289,10 +289,10 @@ var MyField = Container.template($ => ({
                                     stops[3] = [stops[3][0], data.name];
                             }
                             else if ($.targetID == 'city') {
-                                city == data.name;
+                                city = data.name;
                             }
                             else if ($.targetID == 'state') {
-                                state == data.name;
+                                state = data.name;
                             }
                         }
                     },
@@ -336,23 +336,23 @@ export var NewRouteContainer = Column.template($ => ({
             left: 5, top: 5, right: 5, width: 50,
             contents: [
                 new textLabel({txt: "Home:"}),
-                new MyField({name: "2302 Piedmont Ave", targetID: "home"}),
+                new MyField({name: "911 North Evergreen Street", targetID: "home"}),
             ]
         }),
-        // new NewRouteBox({txt: "Stop 1", txt1: 'w clark ave', txt2: 'evergreen street', targetID: 'stop1'}),
-        // new NewRouteBox({txt: "Stop 2",txt1: 'w magnolia blvd', txt2: 'evergreen street', targetID: 'stop2'}),
-        // new NewRouteBox({txt: "Stop 3",txt1: 'n pass ave', txt2: 'w magnolia blvd', targetID: 'stop3'}),
-        // new NewRouteBox({txt: "Stop 4",txt1: 'w clark ave', txt2: 'n pass ave', targetID: 'stop4'}),
-        new NewRouteBox({txt: "Stop 1", txt1: 'Piedmont Ave', txt2: 'Bancroft Way', targetID: 'stop1'}),
-        new NewRouteBox({txt: "Stop 2",txt1: 'Bancroft Way', txt2: 'College Ave', targetID: 'stop2'}),
-        new NewRouteBox({txt: "Stop 3",txt1: 'College Ave', txt2: 'Durant Ave', targetID: 'stop3'}),
-        new NewRouteBox({txt: "Stop 4",txt1: 'Piedmont Ave', txt2: 'Durant Ave', targetID: 'stop4'}),
+        new NewRouteBox({txt: "Stop 1",txt1: 'w magnolia blvd', txt2: 'evergreen street', targetID: 'stop1'}),
+        new NewRouteBox({txt: "Stop 2",txt1: 'n pass ave', txt2: 'w magnolia blvd', targetID: 'stop2'}),
+        new NewRouteBox({txt: "Stop 3",txt1: 'w clark ave', txt2: 'n pass ave', targetID: 'stop3'}),
+        new NewRouteBox({txt: "Stop 4", txt1: 'w clark ave', txt2: 'evergreen street', targetID: 'stop4'}),
+        // new NewRouteBox({txt: "Stop 1", txt1: 'Piedmont Ave', txt2: 'Bancroft Way', targetID: 'stop1'}),
+        // new NewRouteBox({txt: "Stop 2",txt1: 'Bancroft Way', txt2: 'College Ave', targetID: 'stop2'}),
+        // new NewRouteBox({txt: "Stop 3",txt1: 'College Ave', txt2: 'Durant Ave', targetID: 'stop3'}),
+        // new NewRouteBox({txt: "Stop 4",txt1: 'Piedmont Ave', txt2: 'Durant Ave', targetID: 'stop4'}),
         new Line({
             left: 5, top: 10, right: 5, height: 26,
             contents: [
                 new textLabel({txt: "City:"}),
-                // new MyField({name: "Burbank", targetID: "city"}),
-                new MyField({name: "Berkeley", targetID: "city"}),
+                new MyField({name: "Burbank", targetID: "city"}),
+                // new MyField({name: "Berkeley", targetID: "city"}),
                 new textLabel({txt: "State:"}),
                 new MyField({name: "CA", targetID: "state"})
             ]
@@ -374,21 +374,6 @@ var freq1 = Picture.template($ => ({
     left: 5, right: 0, top: 5, bottom: 5, height: 200, aspect: 'fit', url: $.url
 }));
 
-// var freq1 = Picture.template($ => ({
-//     left: 1, right: 1, top: 1, bottom: 1, height: 150, aspect: 'fill', url: "assets/freq1.jpg"
-// }));
-
-// var freq2 = Picture.template($ => ({
-//     left: 1, right: 1, top: 1, bottom: 1,  height: 150, aspect: 'fill', url: "assets/freq2.jpg"
-// }));
-
-// var FrequentMaps = Container.template($ => ({
-//     name: $.name, left: 0, top: 10, right: 0, height:175, skin: blackBorder,
-//     contents: [
-//         $.pic,
-//         $.lab
-//     ]
-// }));
 var FrequentMaps = Line.template($ => ({
     name: $.name, left: 0, top: 10, right: 0, height:210, skin: blackBorder, active: true,
     contents: [
@@ -415,25 +400,11 @@ var FrequentContainer = Column.template($ => ({
 export var RouteScreenContent = Column.template($ => ({
     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: new Skin({fill: "#ffd359"}),
     contents: [
-        // new routeLogo(),
-        // new RouteLabels(),
         new routeLogo({top: 10}),
         new RouteLabels({top: -27, bottom: 20}),
         new NewRouteContainer(),
     ]
 }));
-
-/* Select Route Screen */
-// export var RouteScreen = Column.template($ => ({
-//     name: "routeScreen", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin,
-//     contents: [
-//         new NavTop({txt: "Select Route"}),
-//         new routeLogo(),
-//         new RouteLabels(),
-//         $.routeSelect,
-//         new NavBot({txt: "Next"}),
-//     ]
-// }));
 
 var RouteScreenFrequent = Container.template($ => ({
     name: "routeScreenFrequent", left: 0, right: 0, top: 0, bottom: 0, skin: yellowSkin, active: true, 

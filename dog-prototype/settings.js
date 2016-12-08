@@ -1,5 +1,6 @@
 import { currentScreen, orangeSkin, whiteSkin, settingsOverlayScreen, loadRobot, loadAccount, loadWebcam, loadEric, loadAddDog} from "main";
 import { NavTop} from "selectwalk"; 
+import { closeAnalogs } from "actmonitor";
 import { SettingsOverlay } from "settingsoverlay"; 
 import { ButtonBehavior } from 'buttons';
 export var displayWebcam = false; 
@@ -27,7 +28,7 @@ var AccountButtons = Line.template($ => ({
     ],
     Behavior: class extends ButtonBehavior {
         onTap(button){
-        	loadAccount();  
+            loadAccount();  
         }
     }
 }));

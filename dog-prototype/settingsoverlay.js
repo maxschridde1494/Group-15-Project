@@ -3,6 +3,7 @@ import {
 } from 'buttons';
 
 import { settingsOverlayScreen, loadEric, loadSettings} from "main"; 
+import { closeAnalogs } from "actmonitor";
 
 var blackSkin = new Skin({ fill:"#E6000000" });
 var normalText = new Style( { font: "40px", color: "#bababa" });
@@ -16,8 +17,10 @@ export var SettingsOverlay = Column.template($ => ({
     ]
 }));
 
-var homeLabel = Label.template($=>({ left: 10, top: 10,string: "Home",     		style: normalText }))
-var settingsLabel = Label.template($=>({ left: 10, top: 10,string: "Settings",     		style: normalText }))		
+var homeLabel = Label.template($=>({ left: 10, top: 10,string: "Home", 
+    		style: normalText }))
+var settingsLabel = Label.template($=>({ left: 10, top: 10,string: "Settings", 
+    		style: normalText }))		
 
 var settingsBackButton = Picture.template($ => ({
     left: 7, height: 35, top: 4, url: "assets/settingsBack.png", active: true, 
@@ -45,6 +48,7 @@ var homeButtons = Line.template($ => ({
         onTap(button){
         	application.remove(settingsOverlayScreen);
         	settingsOverlayScreen = null; 
+            closeAnalogs();
           	loadEric();  
         }
     }
@@ -60,6 +64,7 @@ var settingsButtons = Line.template($ => ({
         onTap(button){
         	application.remove(settingsOverlayScreen);
         	settingsOverlayScreen = null; 
+            closeAnalogs();
           	loadSettings();   
         }
     }

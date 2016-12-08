@@ -75,6 +75,7 @@ export function loadEric(){
     }
     currentScreen = new MainContainerTemplate();
     application.add(currentScreen);
+    currentWalk = "";
     // deleteDirectory(".routes/");
     // deleteDirectory(".dogs/");
 }
@@ -127,72 +128,84 @@ export function loadScheduleWalk(){
 
 export function loadActMonitor(corners){
     //corners - array of 4 corner strings
+    currMarkerIm = undefined;
     application.remove(currentScreen);
     currentScreen = new ActMonitorScreen();
     application.add(currentScreen);
     let dogIm = new Picture({left: 200, height: 80, bottom: 0, url: "assets/flippedDogMain.png"});
-    application.main.spacer.add(dogIm);
-    application.main.spacer.col.line1.completed.innercol.line.label2.string = "%";
-    application.main.spacer.col.line1.distance.innercol.line.label2.string = "miles";
-    application.main.spacer.col.line2.heartrate.innercol.line.label2.string = "bpm";
+    application.actmonitor.spacer.add(dogIm);
+    application.actmonitor.spacer.col.line1.completed.innercol.line.label2.string = "%";
+    application.actmonitor.spacer.col.line1.distance.innercol.line.label2.string = "miles";
+    application.actmonitor.spacer.col.line2.heartrate.innercol.line.label2.string = "bpm";
     //KEEP THIS - REPLACE THE CORNERURLS BELOW
     // var cornerURLs = [];
     // for (var i=0; i<corners.length; i++){
     //     var url = createLatLongURLfromCorner(corners[i], "|");
     //     cornerURLs.push(url);
     // }
+    var maps = readSavedRoutes();
     if (currentWalk == ""){
         trace("Inside empty currentWalk\n");
-        var maps = readSavedRoutes();
         if (maps.length > 0){
             var mapUrl = maps[0].url;
             var markersURLArray = maps[0].markers;
             trace("markers array: " + markersURLArray + "\n");
             var mapName = maps[0].name;
-            application.main.spacer.col.title.string = mapName;
+            application.actmonitor.spacer.col.title.string = mapName;
             getMapsImg(mapUrl, function(image){
                 let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-                application.main.spacer.col.map.add(mapIm);
+                application.actmonitor.spacer.col.map.add(mapIm);
             });
             generateMarkerImages(markersURLArray);
         }
     }else{
-        var cornerURL1 = createLatLongURLfromCorner("W Clark Ave|N Pass Ave,Burbank,CA", "|");
-        var cornerURL2 = createLatLongURLfromCorner("W Clark Ave|Evergreen Street,Burbank,CA", "|");
-        var cornerURL3 = createLatLongURLfromCorner("W Magnolia Blvd|Evergreen Street,Burbank,CA", "|");
-        var cornerURL4 = createLatLongURLfromCorner("N Pass Ave|W Magnolia Blvd,Burbank,CA", "|");
-        var cornerURLs = [cornerURL1, cornerURL2, cornerURL3, cornerURL4]
-        getMapNoMarkers(cornerURLs);
+        trace("Inside Current Walk\n");
+        for (var m=0; m < maps.length; m++){
+            if (maps[m].name == currentWalk){
+                var mapUrl = maps[m].url;
+                var markersURLArray = maps[m].markers;
+                var mapName = maps[m].name;
+                application.actmonitor.spacer.col.title.string = mapName;
+                getMapsImg(mapUrl, function(image){
+                    let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+                    application.actmonitor.spacer.col.map.add(mapIm);
+                });
+                generateMarkerImages(markersURLArray);
+            }
+        }
     }
     var moved = false;
     if (remotePins){
-        if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
-            trace(application.main.spacer.col.line1.completed.innercol.line.label.string + "\n");
-            trace(application.main.spacer.col.line1.distance.innercol.line.label.string + "\n");
-            trace(application.main.spacer.col.line2.steps.innercol.line.label.string + "\n");
-            trace(application.main.spacer.col.line2.heartrate.innercol.line.label.string + "\n");
+        // if (analogReader1 == undefined && analogReader2 == undefined && analogReader3 == undefined && analogReader4 == undefined){
+        if (analogReader1 == undefined){ 
             analogReader1 = remotePins.repeat("/analog1/read", 10, function(result){
-                    application.main.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100));
+                    application.actmonitor.spacer.col.line1.completed.innercol.line.label.string = String(Math.round(result*100));
                     if (Math.round(result*100) != 50){
                         moved = true;
                     }
-                    if (imageCount > 3 && moved == true){
+                    if (imageCount > 4 && moved == true){
                         updateCurrLocation(result);
                     }
                 });
+        }
+        if (analogReader2 == undefined){
             analogReader2 = remotePins.repeat("/analog2/read", 10, function(result){
-                    application.main.spacer.col.line1.distance.innercol.line.label.string = String((result*10).toFixed(1))});
+                    application.actmonitor.spacer.col.line1.distance.innercol.line.label.string = String((result*10).toFixed(1))});
+        }
+        if (analogReader3 == undefined){
             analogReader3 = remotePins.repeat("/analog3/read", 10, function(result){
-                    application.main.spacer.col.line2.steps.innercol.line.label.string = String(Math.round(result*1000))});
+                    application.actmonitor.spacer.col.line2.steps.innercol.line.label.string = String(Math.round(result*1000))});
+        }
+        if (analogReader4 == undefined){
             analogReader4 = remotePins.repeat("/analog4/read", 10, function(result){
-                    application.main.spacer.col.line2.heartrate.innercol.line.label.string = String(Math.round(result*100))});
+                    application.actmonitor.spacer.col.line2.heartrate.innercol.line.label.string = String(Math.round(result*100))});
         }
     }
 }
-export var analogReader1;
-export var analogReader2;
-export var analogReader3;
-export var analogReader4;
+export var analogReader1 = undefined;
+export var analogReader2 = undefined;
+export var analogReader3 = undefined;
+export var analogReader4 = undefined;
 
 export var markersURLArray = []; //array of urls for 4 intersection marker maps
 export var markersImageArray = []; //array of images for 4 intersection marker maps
@@ -202,7 +215,7 @@ function getMapNoMarkers(cornersArr){
         var mapurl = createMapsURLfromLatLon2(array, false, "", "");
         getMapsImg(mapurl, function(image){
             let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-            application.main.spacer.col.map.add(mapIm);
+            application.actmonitor.spacer.col.map.add(mapIm);
         });
         markersURLArray = getMapswithMarkersURLs(array);
         saveRoute({name: "test1", url: mapurl, markersArray: markersURLArray});
@@ -227,66 +240,68 @@ var im1;
 var im2; 
 var im3;
 var im4;
+var homeimage;
 var imageCount = 0;
+var currMarkerIm = undefined;
 
 function generateMarkerImages(urlArr){
     //urlArr - array of urls for Google Maps Static API
     getMapsImg(urlArr[0], function(image){
         im1 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
-        trace("image Counte: " + imageCount + "\n");
     });
     getMapsImg(urlArr[1], function(image){
         im2 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
-        trace("image Counte: " + imageCount + "\n");
     });
     getMapsImg(urlArr[2], function(image){
         im3 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
-        trace("image Counte: " + imageCount + "\n");
     });
     getMapsImg(urlArr[3], function(image){
         im4 = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
         imageCount++;
-        trace("image Counte: " + imageCount + "\n");
+    });
+    getMapsImg(urlArr[4], function(image){
+        homeimage = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
+        imageCount++;
     });
 }
 
 function updateCurrLocation(reading){
     //simulate location service (update map with % distance walked)
-    var val = Math.round(reading*100);
-    trace("VALUE: " + val + "\n");
-    if (val <= 25){
-        application.main.spacer.col.map.empty();
-        application.main.spacer.col.map.add(im1);
-    }else if (val > 25 && val <= 50){
-        application.main.spacer.col.map.empty();
-        application.main.spacer.col.map.add(im2);
-    }else if (val > 50 && val <= 75){
-        application.main.spacer.col.map.empty();
-        application.main.spacer.col.map.add(im3);
-    }else if (val > 75){
-        application.main.spacer.col.map.empty();
-        application.main.spacer.col.map.add(im4);
+    if (currMarkerIm){
+        application.actmonitor.spacer.col.map.remove(currMarkerIm);
+    }
+    if (reading == 0 || reading == 1){
+        application.actmonitor.spacer.col.map.empty();
+        application.actmonitor.spacer.col.map.add(homeimage);
+        currMarkerIm = homeimage;
+    }else{
+        var val = Math.round(reading*100);
+        if (val <= 25){
+            application.actmonitor.spacer.col.map.empty();
+            application.actmonitor.spacer.col.map.add(im1);
+            currMarkerIm = im1;
+        }else if (val > 25 && val <= 50){
+            application.actmonitor.spacer.col.map.empty();
+            application.actmonitor.spacer.col.map.add(im2);
+            currMarkerIm = im2;
+        }else if (val > 50 && val <= 75){
+            application.actmonitor.spacer.col.map.empty();
+            application.actmonitor.spacer.col.map.add(im3);
+            currMarkerIm = im3;
+        }else if (val > 75){
+            application.actmonitor.spacer.col.map.empty();
+            application.actmonitor.spacer.col.map.add(im4);
+            currMarkerIm = im4;
+        }
     }
 }
 
-// export function closeAnalogs(){
-//     if (analogReader1 && analogReader2 && analogReader3 && analogReader4){
-//         analogReader1.close();
-//         analogReader1 = undefined;
-//         analogReader2.close();
-//         analogReader2 = undefined;
-//         analogReader3.close();
-//         analogReader3 = undefined;
-//         analogReader4.close();
-//         analogReader4 = undefined;
-//     }
-// }
-
 export function loadMax(){
     application.remove(currentScreen);
+    application.empty();
     var dash = new dashboardScreen();
     currentScreen = dash;
     application.add(currentScreen);
