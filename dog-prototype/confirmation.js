@@ -59,7 +59,7 @@ export function saveWalk(dict){
         time: dict.time,
         duration: dict.duration
     };
-    var walkFileName = walkJson.month + ".json";
+    var walkFileName = walkJson.name + ".json";
     trace("walk file name: " + walkFileName + "\n");
     var uriWalk = mergeURI(Files.preferencesDirectory, application.di + ".scheduledwalks/" + walkFileName);
     Files.writeJSON(uriWalk, walkJson);
