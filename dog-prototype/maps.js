@@ -11,7 +11,6 @@ var testAddress2 = "Bob's Big Boy,Burbank,CA";
 var testAddress3 = "Warner Brother's Studio Tour,Burbank,CA";
 var testAddress4 = "CORNER%20W+Clark+Ave+%20AND%20N+Pass+Ave,Burbank,CA";
 
-import { markersImageArray } from "main";
 import { newRouteURLObject, frequentContainerSelected, frequentContainerSelectedRoute } from "selectwalk";
 
 export function createLatLongURLfromAddress(address){
@@ -110,24 +109,6 @@ export function parseAddress(address){
     return returnAddress;
 }
 
-// export function getLatLon(url, uiCallback){
-//     var message = new Message(url);
-//     var promise = message.invoke(Message.JSON);
-//     promise.then(json => {
-//         if (0 == message.error && 200 == message.status){
-//             try {
-//                 trace(json.status + "\n");
-//                 uiCallback(json)
-//             }
-//             catch (e) {
-//                 throw('Web service responded with invalid JSON!\n');
-//             }
-//         }
-//         else{
-//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
-//         }
-//     })
-// }
 function latlongHelper(json, arr){
     var temp = [];
     temp.push(json.results[0].geometry.location.lat);
@@ -279,66 +260,3 @@ export function readSavedRoutes(){
     }
     return mapObjects;
 }
-
-// export function getMarkerMaps(urls, uiCallback){
-//     //Generate all 4 LAT LNG pairs given list of GEOCODE API URLS
-//     var arr = [];
-//     var message = new Message(urls[0]);
-//     var promise = message.invoke(Message.JSON);
-//     promise.then(json => {
-//         if (0 == message.error && 200 == message.status){
-//             try {
-//                 arr.push(json);
-//                 message = new Message(urls[1]);
-//                 return message.invoke(Message.JSON);
-//             }
-//             catch (e) {
-//                 throw('Web service responded with invalid JSON!\n');
-//             }
-//         }
-//         else{
-//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
-//         }
-//     }).then(json => {
-//         if (0 == message.error && 200 == message.status){
-//             try {
-//                 arr.push(json);
-//                 message = new Message(urls[2]);
-//                 return message.invoke(Message.JSON);
-//             }
-//             catch (e) {
-//                 throw('Web service responded with invalid JSON!\n');
-//             }
-//         }
-//         else{
-//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
-//         }
-//     }).then(json => {
-//         if (0 == message.error && 200 == message.status){
-//             try {
-//                 arr.push(json);
-//                 message = new Message(urls[3]);
-//                 return message.invoke(Message.JSON);
-//             }
-//             catch (e) {
-//                 throw('Web service responded with invalid JSON!\n');
-//             }
-//         }
-//         else{
-//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
-//         }
-//     }).then(json => {
-//         if (0 == message.error && 200 == message.status){
-//             try {
-//                 arr.push(json);
-//                 uiCallback(arr);
-//             }
-//             catch (e) {
-//                 throw('Web service responded with invalid JSON!\n');
-//             }
-//         }
-//         else{
-//             trace('Request Failed - Raw Response Body: *' + '\n' +text+'*'+'\n');
-//         }
-//     })
-// }

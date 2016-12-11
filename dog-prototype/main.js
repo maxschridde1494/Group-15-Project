@@ -167,12 +167,7 @@ export function loadActMonitor(corners){
     application.actmonitor.spacer.col.line1.completed.innercol.line.label2.string = "%";
     application.actmonitor.spacer.col.line1.distance.innercol.line.label2.string = "miles";
     application.actmonitor.spacer.col.line2.heartrate.innercol.line.label2.string = "bpm";
-    //KEEP THIS - REPLACE THE CORNERURLS BELOW
-    // var cornerURLs = [];
-    // for (var i=0; i<corners.length; i++){
-    //     var url = createLatLongURLfromCorner(corners[i], "|");
-    //     cornerURLs.push(url);
-    // }
+
     var maps = readSavedRoutes();
     if (currentWalk == ""){
         trace("Inside empty currentWalk\n");
@@ -238,34 +233,7 @@ export var analogReader3 = undefined;
 export var analogReader4 = undefined;
 
 export var markersURLArray = []; //array of urls for 4 intersection marker maps
-export var markersImageArray = []; //array of images for 4 intersection marker maps
-function getMapNoMarkers(cornersArr){
-    // cornersArr - array of intersection strings for geocode api to get lats / lons
-    getLatLonFourCorners(cornersArr, function(array){
-        var mapurl = createMapsURLfromLatLon2(array, false, "", "");
-        getMapsImg(mapurl, function(image){
-            let mapIm = new Picture({height: 200, width: 200, right: 0, left: 0, bottom: 15, top:0, url: image});
-            application.actmonitor.spacer.col.map.add(mapIm);
-        });
-        markersURLArray = getMapswithMarkersURLs(array);
-        saveRoute({name: "test1", url: mapurl, markersArray: markersURLArray});
-        generateMarkerImages(markersURLArray);
-    });
-}
-function getMapswithMarkersURLs(latlonarr){
-    //latlonarr - array of intersection lat lon pairs (not urls)
-    var imageArr = [];
-    var urlsArr = [];
-    for (var i=0; i < latlonarr.length; i++){
-        if (i == latlonarr.length - 1){
-            var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]], "S");
-        }else{
-            var url = createMapsURLfromLatLon2(latlonarr, true,[latlonarr[i][0], latlonarr[i][1]], "C");
-        }
-        urlsArr.push(url);
-    }
-    return urlsArr;
-}
+
 var im1;
 var im2; 
 var im3;
@@ -299,10 +267,6 @@ function generateMarkerImages(urlArr){
 }
 
 function updateCurrLocation(reading){
-    //simulate location service (update map with % distance walked)
-    // if (currMarkerIm){
-    //     application.actmonitor.spacer.col.map.remove(currMarkerIm);
-    // }
     if (reading == 0 || reading == 1){
         application.actmonitor.spacer.col.map.empty();
         if (homeimage.container != undefined && homeimage.container != homeimage){
